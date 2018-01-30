@@ -17,7 +17,10 @@ class CreateDoctorsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('gender');
+            $table->string('speciality');
+            $table->string('email')->nullable();
             $table->string('phone');
+            $table->text('bio');
             $table->string('location');
             $table->text('description')->nullable();
             $table->timestamps();
