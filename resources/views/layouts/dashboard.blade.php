@@ -12,6 +12,7 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/floating-labels.css') }}" rel="stylesheet">
 </head>
 <body>
 <div id="app">
@@ -27,12 +28,9 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 <ul class="navbar-nav">
-                    @if (Auth::guest())
-                        <li class="nav-item"><a href="{{ route('login') }}" class="nav-link">Login</a></li>
-                        <li class="nav-item"><a href="{{ route('register') }}" class="nav-link">Register</a></li>
-                    @else
+                    @if (!Auth::guest())
                         <li  class="nav-item">
-                            <a href="#" class="nav-link">Register Doctor </a>    
+                            <a href="{{ route('create.doctor') }}" class="nav-link">Register Doctor </a>    
                         </li>
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown"

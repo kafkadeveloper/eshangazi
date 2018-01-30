@@ -21,3 +21,9 @@ Route::get('/botman/tinker', 'BotManController@tinker');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/doctor/register', 'DoctorController@create')->name('create.doctor');
+
