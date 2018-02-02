@@ -6,7 +6,7 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">Register Doctor</h5>
+          <h5 class="card-title"><i class="fas fa-edit fa-lg" style="color:#7CB9E8"></i> Edit Doctor Information</h5>
 
             @if (session('status'))
               <div class="alert alert-success">
@@ -15,10 +15,11 @@
             @endif
 
             <!-- Doctor reg form -->
-            {!! Form::open(['url' => 'doctor/register', 'method' => 'POST']) !!}
+            {!! Form::open(['route' => ['update.doctor', $doctor->id], 'method' => 'POST']) !!}
+            {{ method_field('PATCH') }}
             
             <div class="form-label-group{{ $errors->has('name') ? ' has-error' : '' }}">
-              <input type="text" name="name" id="inputName" value="{{old('name')}}" class="form-control" placeholder="Full name" required autofocus>
+              {!! Form::text('name',$doctor->name, ['class'=>'form-control','id'=>'inputName', 'placeholder'=>'Full name', 'required']) !!}
               <label for="inputName">Full name</label>
 
               @if ($errors->has('middle_name'))
@@ -29,13 +30,13 @@
             </div>
             <div class="form-label-group{{ $errors->has('gender') ? ' has-error' : '' }}">
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="gender" id="gender" value="Male" {{ old('gender') == "Male" ? "checked":"" }}>
+                <input class="form-check-input" type="radio" name="gender" id="gender" value="Male" {{ $doctor->gender == "Male" ? "checked":"" }}>
                 <label class="form-check-label" for="gender">
                   Male
                 </label>
               </div>
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="gender" id="fgender" value="Female" {{ old('gender') == "Female" ? "checked":"" }}>
+                <input class="form-check-input" type="radio" name="gender" id="fgender" value="Female" {{ $doctor->gender == "Female" ? "checked":"" }}>
                 <label class="form-check-label" for="fgender">
                   Female
                 </label>
@@ -46,13 +47,13 @@
                 </span>
               @endif
             </div>
-            <div class="form-group{{ $errors->has('speciality') ? ' has-error' : '' }}">
+            <div class="form-group{{ $errors->has('speciality') ? ' invalid-feedback' : '' }}">
             <label>Speciality <span style="color:red;"> *</span></label>
             <select name="speciality" class="form-control" title="Select speciality">
               <option value=""> Select speciality </option>
               @foreach($specialities as $speciality)
-								<option value="{{$speciality->name}}" {{ old("speciality") == $speciality->name ? "selected":"" }}>
-									{{ $speciality->name }} - {{$speciality->description}}
+								<option value="{{$speciality->name}}" {{ $doctor->speciality == $speciality->name ? "selected":"" }}>
+									{{ $speciality->name }}
 								</option>
               @endforeach
             </select>
@@ -64,8 +65,8 @@
               @endif
           </div>
 
-            <div class="form-label-group{{ $errors->has('email') ? ' is-invalid' : '' }}">
-              <input type="email" name="email" value="{{old('email')}}" id="inputEmail" class="form-control" placeholder="Email address" required>
+            <div class="form-label-group{{ $errors->has('email') ? ' has-error' : '' }}">
+              {!! Form::text('email',$doctor->email, ['class'=>'form-control','id'=>'inputEmail', 'placeholder'=>'Email address', 'required']) !!}
               <label for="inputEmail">Email address</label>
 
               @if ($errors->has('email'))
@@ -76,7 +77,7 @@
             </div>
 
             <div class="form-label-group{{ $errors->has('phone') ? ' has-error' : '' }}">
-              <input type="text" name="phone" value="{{old('phone')}}" id="phone" class="form-control" placeholder="Phone number" required>
+              {!! Form::text('phone',$doctor->phone, ['class'=>'form-control','id'=>'phone', 'placeholder'=>'Phone number', 'required']) !!}
               <label for="phone">Phone number</label>
 
               @if ($errors->has('phone'))
@@ -86,27 +87,27 @@
               @endif
             </div>
             <div class="form-label-group{{ $errors->has('location') ? ' has-error' : '' }}">
-              <input type="text" name="location" value="{{old('location')}}" id="location" class="form-control" placeholder="Location" required>
+              {!! Form::text('location',$doctor->location, ['class'=>'form-control','id'=>'location', 'placeholder'=>'Location', 'required']) !!}
               <label for="location">Location</label>
-
+              
               @if ($errors->has('location'))
 								<span class="help-block">
-												<strong>{{ $errors->first('location') }}</strong>
+												<strong>{{ $errors->first('locatiuon') }}</strong>
 								</span>
               @endif
             </div>
             <div class="form-group{{ $errors->has('bio') ? ' has-error' : '' }}">
               <label for="bio">Bio</label>
-              <textarea name="bio" class="form-control" id="bio" rows="3">{{old('bio')}}</textarea>
+              {!! Form::textarea('bio',$doctor->bio, ['class'=>'form-control', 'rows'=>'3', 'required']) !!}
 
               @if ($errors->has('bio'))
-								<span class="help-block invalid-feedback">
+								<span class="help-block">
 												<strong>{{ $errors->first('bio') }}</strong>
 								</span>
               @endif
             </div>
 
-            <button class="btn btn-lg btn-primary" type="submit">Register</button>
+            <button class="btn btn-lg btn-success" type="submit">Save Changes</button>
           {!! Form::close() !!}
         </div>
       </div>

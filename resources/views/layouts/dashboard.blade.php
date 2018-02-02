@@ -13,6 +13,7 @@
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link href="{{ asset('css/floating-labels.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/fontawesome-all.min.css') }}" rel="stylesheet">
 </head>
 <body>
 <div id="app">
@@ -28,8 +29,14 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-outo">
-                    <li  class="nav-item">
-                        <a href="{{ route('create.doctor') }}" class="nav-link">Register Doctor </a>    
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="doctors" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Doctors
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="doctors">
+                            <a class="dropdown-item" href="{{ route('index.doctor') }}">View list of Doctors</a>
+                            <a class="dropdown-item" href="{{ route('create.doctor') }}">Add new Doctor</a>
+                        </div>
                     </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
@@ -41,7 +48,7 @@
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                             <a href="{{ route('logout') }}" class="dropdown-item"
                                 onclick="event.preventDefault();document.getElementById('logout-form').submit();">
-                                Logout
+                                <i class="fas fa-chevron-circle-left fa-lg" style="color:Red"></i> Logout
                             </a>
 
                             <form id="logout-form" action="{{ route('logout') }}" method="POST"
