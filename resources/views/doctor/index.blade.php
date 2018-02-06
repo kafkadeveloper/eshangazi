@@ -6,11 +6,14 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title"> <i class="fas fa-user-md fa-2x" style="color:#7CB9E8"></i> List of Doctors</h5>
-
+          <h5 class="card-title"> <i class="fas fa-user-md fa-lg" style="color:#7CB9E8"></i> List of Experts</h5>
+          <hr>
             @if (session('status'))
               <div class="alert alert-success">
                 {{ session('status') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
               </div>
             @endif
 
@@ -42,11 +45,21 @@
                   <td>{{$doctor->email}}</td>
                   <td>{{$doctor->location}}</td>
                   <td>
-                    <div class="btn-group" role="group" aria-label="Options group">
-                      <a href="#" type="button" class="btn btn-success btn-sm">view</a>
-                      <a href="{{route('edit.doctor', $doctor->id)}}" type="button" class="btn btn-primary btn-sm">edit</a>
-                      <a href="#" type="button" class="btn btn-danger btn-sm">delete</a>
-                    </div>
+                    <form method="POST" action="{{ route('destroy.doctor',$doctor->id) }}">
+                      {{ csrf_field() }}
+                      {{ method_field('DELETE') }}
+                      <div class="btn-group" role="group" aria-label="Options group">
+                      <a href="{{ route('show.doctor',$doctor->id) }}" title="View expert info" class="btn btn-success btn-sm">
+                        View
+                      </a>
+                      <a href="{{ route('edit.doctor',$doctor->id) }}" title="Edit expert info" class="btn btn-warning btn-sm">
+                        Edit
+                      </a>
+                      <button type="submit" title="Delete expert" class="btn btn-danger btn-sm">
+                        Delete
+                      </button>
+                      </div>
+                    </form>
                   </td>
                 </tr>
                 @endforeach

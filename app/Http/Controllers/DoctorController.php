@@ -76,7 +76,7 @@ class DoctorController extends Controller
         
         $doctor->save();
         return redirect()->back()
-                        ->with('status','Doctor added successfully');
+                        ->with('status','Expert added successfully');
     }
 
     /**
@@ -146,6 +146,8 @@ class DoctorController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $doctor = $this->doctor->findOrFail($id);
+        $doctor->delete();
+        return back()->with('status', 'Expert deleted!');
     }
 }

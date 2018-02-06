@@ -6,11 +6,14 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title"><i class="fas fa-edit fa-lg" style="color:#7CB9E8"></i> Edit Doctor Information</h5>
+          <h5 class="card-title"><i class="fas fa-edit fa-lg" style="color:#7CB9E8"></i> Edit Expert Information</h5>
 
             @if (session('status'))
               <div class="alert alert-success">
                 {{ session('status') }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
               </div>
             @endif
 
