@@ -7,6 +7,22 @@
             <div class="card">
                 <div class="card-header">Login</div>
                 <div class="card-body">
+                @if (session('status'))
+                    <div class="alert alert-success">
+                        <span class="text-center">{{ session('status') }}</span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
+                @if (session('warning'))
+                    <div class="alert alert-warning">
+                        <span class="text-center">{{ session('warning') }}</span>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                @endif
                     <form class="form-horizontal" method="POST" action="{{ route('login') }}">
                         {{ csrf_field() }}
 

@@ -12,6 +12,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Auth::routes();
+Route::get('/user/verify/{token}', 'Auth\RegisterController@verifyUser');
 
 Route::view('/test', 'test');
 Route::get('/home', 'HomeController@index')->name('home');
