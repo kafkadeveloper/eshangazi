@@ -6,7 +6,7 @@
     <div class="col-md-12">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title"> <i class="fas fa-user-md fa-lg" style="color:#7CB9E8"></i> List of Experts</h5>
+          <h5 class="card-title"> <i class="fas fa-user-md fa-lg" style="color:#7CB9E8"></i> List of SRH Experts</h5>
           <hr>
             @if (session('status'))
               <div class="alert alert-success">

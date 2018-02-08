@@ -31,11 +31,11 @@
                 <ul class="navbar-nav mr-outo">
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="doctors" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Doctors
+                            SRH Experts
                         </a>
                         <div class="dropdown-menu" aria-labelledby="doctors">
-                            <a class="dropdown-item" href="{{ route('index.doctor') }}">View list of Doctors</a>
-                            <a class="dropdown-item" href="{{ route('create.doctor') }}">Add new Doctor</a>
+                            <a class="dropdown-item" href="{{ route('index.doctor') }}">View list of Experts</a>
+                            <a class="dropdown-item" href="{{ route('create.doctor') }}">Add new Expert</a>
                         </div>
                     </li>
                 </ul>
