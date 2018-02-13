@@ -21,19 +21,22 @@
             <!-- Doctor reg form -->
             {!! Form::open(['url' => 'doctor/register', 'method' => 'POST']) !!}
             
-            <div class="form-label-group{{ $errors->has('name') ? ' has-error' : '' }}">
-              <input type="text" name="name" id="inputName" value="{{old('name')}}" class="form-control" placeholder="Full name" required autofocus>
+            <div class="form-label-group">
+              <input type="text" name="name" 
+                            id="inputName" value="{{old('name')}}" 
+                            class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" placeholder="Full name" 
+                            required autofocus>
               <label for="inputName">Full name</label>
 
-              @if ($errors->has('middle_name'))
-                <span class="help-block">
+              @if ($errors->has('name'))
+                <div class="invalid-feedback">
                   <strong>{{ $errors->first('name') }}</strong>
-                </span>
+                </div>
               @endif
             </div>
-            <div class="form-label-group{{ $errors->has('gender') ? ' has-error' : '' }}">
+            <div class="form-label-group">
               <div class="form-check">
-                <input class="form-check-input" type="radio" name="gender" id="gender" value="Male" {{ old('gender') == "Male" ? "checked":"" }}>
+                <input class="form-check-input{{ $errors->has('gender') ? ' is-invalid' : '' }}" type="radio" name="gender" id="gender" value="Male" {{ old('gender') == "Male" ? "checked":"" }}>
                 <label class="form-check-label" for="gender">
                   Male
                 </label>
@@ -45,14 +48,14 @@
                 </label>
               </div>
               @if ($errors->has('gender'))
-                <span class="help-block">
+                <div class="invalid-feedback">
                     <strong>{{ $errors->first('gender') }}</strong>
-                </span>
+                </div>
               @endif
             </div>
-            <div class="form-group{{ $errors->has('speciality') ? ' has-error' : '' }}">
+            <div class="form-group">
             <label>Speciality <span style="color:red;"> *</span></label>
-            <select name="speciality" class="form-control" title="Select speciality">
+            <select name="speciality" class="form-control{{ $errors->has('speciality') ? ' is-invalid' : '' }}" title="Select speciality">
               <option value=""> Select speciality </option>
               @foreach($specialities as $speciality)
 								<option value="{{$speciality->name}}" {{ old("speciality") == $speciality->name ? "selected":"" }}>
@@ -62,51 +65,55 @@
             </select>
           
               @if ($errors->has('speciality'))
-								<span class="help-block">
+								<div class="invalid-feedback">
 												<strong>{{ $errors->first('speciality') }}</strong>
-								</span>
+								</div>
               @endif
           </div>
 
-            <div class="form-label-group{{ $errors->has('email') ? ' is-invalid' : '' }}">
-              <input type="email" name="email" value="{{old('email')}}" id="inputEmail" class="form-control" placeholder="Email address" required>
+            <div class="form-label-group">
+              <input type="email" name="email" value="{{old('email')}}" id="inputEmail" 
+                      class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" 
+                      placeholder="Email address" required>
               <label for="inputEmail">Email address</label>
 
               @if ($errors->has('email'))
-								<span class="help-block">
+								<div class="invalid-feedback">
 												<strong>{{ $errors->first('email') }}</strong>
-								</span>
+								</div>
               @endif
             </div>
 
-            <div class="form-label-group{{ $errors->has('phone') ? ' has-error' : '' }}">
+            <div class="form-label-group{{ $errors->has('phone') ? ' is-invalid' : '' }}">
               <input type="text" name="phone" value="{{old('phone')}}" id="phone" class="form-control" placeholder="Phone number" required>
               <label for="phone">Phone number</label>
 
               @if ($errors->has('phone'))
-								<span class="help-block">
+								<div class="invalid-feedback">
 												<strong>{{ $errors->first('phone') }}</strong>
-								</span>
+								</div>
               @endif
             </div>
-            <div class="form-label-group{{ $errors->has('location') ? ' has-error' : '' }}">
-              <input type="text" name="location" value="{{old('location')}}" id="location" class="form-control" placeholder="Location" required>
+            <div class="form-label-group">
+              <input type="text" name="location" value="{{old('location')}}" id="location"
+                     class="form-control{{ $errors->has('location') ? ' is-invalid' : '' }}" placeholder="Location" required>
               <label for="location">Location</label>
 
               @if ($errors->has('location'))
-								<span class="help-block">
+								<div class="invalid-feedback">
 												<strong>{{ $errors->first('location') }}</strong>
-								</span>
+								</div>
               @endif
             </div>
-            <div class="form-group{{ $errors->has('bio') ? ' has-error' : '' }}">
+            <div class="form-group">
               <label for="bio">Bio</label>
-              <textarea name="bio" class="form-control" id="bio" rows="3">{{old('bio')}}</textarea>
+              <textarea name="bio" class="form-control{{ $errors->has('bio') ? ' is-invalid' : '' }}" 
+                        id="bio" rows="3">{{old('bio')}}</textarea>
 
               @if ($errors->has('bio'))
-								<span class="help-block invalid-feedback">
+								<div class="invalid-feedback">
 												<strong>{{ $errors->first('bio') }}</strong>
-								</span>
+								</div>
               @endif
             </div>
 

@@ -38,6 +38,11 @@
                             <a class="dropdown-item" href="{{ route('create.doctor') }}">Add new Expert</a>
                         </div>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('index.item-category') }}">
+                            Item Categories
+                        </a>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">

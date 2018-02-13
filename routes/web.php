@@ -24,3 +24,9 @@ Route::get('/doctor/show/{id}', 'DoctorController@show')->name('show.doctor');
 Route::get('/doctor/index', 'DoctorController@index')->name('index.doctor');
 Route::delete('/doctor/destroy/{id}', 'DoctorController@destroy')->name('destroy.doctor');
 
+/*--item-categories routes--*/
+Route::get('/item-categories/index', 'ItemCategoryController@index')->name('index.item-category');
+Route::post('/item-categories/create', 'ItemCategoryController@store')->name('create.item-category');
+Route::get('/item-categories/edit/{id}', 'ItemCategoryController@edit')->name('edit.item-category');
+Route::patch('/item-categories/update/{id}', 'ItemCategoryController@update')->name('update.item-category');
+Route::delete('/item-categories/destroy/{id}', 'ItemCategoryController@destroy')->name('destroy.item-category');

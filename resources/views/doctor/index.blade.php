@@ -18,7 +18,7 @@
             @endif
 
             @if($doctors->isEmpty())
-
+              <p class""> No experts registered at the moment. </p>
             @else
             <div class="table-responsive">
               <table class="table">
