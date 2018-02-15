@@ -43,6 +43,15 @@
                             Item Categories
                         </a>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="items" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Items
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="items">
+                            <a class="dropdown-item" href="{{ route('index.item') }}">View list of Items</a>
+                            <a class="dropdown-item" href="{{ route('create.item') }}">Add new Item</a>
+                        </div>
+                    </li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item dropdown">
