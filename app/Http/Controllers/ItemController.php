@@ -192,6 +192,13 @@ class ItemController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $item = $this->item->findOrFail($id);
+        /*---Deleting image file--*/
+        if(! is_null($item->thumbnail))
+        {
+            Storage::delete($item->thumbnail);
+        }
+        $item->delete();
+        return redirect()->back()->with('status', 'Item deleted!');
     }
 }

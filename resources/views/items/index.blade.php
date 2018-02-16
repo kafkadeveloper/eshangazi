@@ -49,7 +49,7 @@
                     {{ csrf_field() }}
                     {{ method_field('DELETE') }}
                     <div class="btn-group" role="group" aria-label="Options group">
-                    <a href="{{ route('show.item',$item->id) }}" title="Edit item info" class="btn btn-primary btn-sm">
+                    <a href="{{ route('edit.item',$item->id) }}" title="Edit item info" class="btn btn-primary btn-sm">
                       View
                     </a>
                     <a href="{{ route('edit.item',$item->id) }}" title="Edit item info" class="btn btn-warning btn-sm">
