@@ -61,10 +61,10 @@ class CenterController extends Controller
      */
     public function store(Request $request)
     {
-        $thumbnail_path = env("APP_URL") . '/img/logo.jpg'; 
+        $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/center-thumbnails'));
+            $thumbnail_path = Storage::disk('s3')->putFile('public/center-thumbnails', $request->file('thumbnail'), 'public');
 
         Center::create([
             'name'          => $request->name,
@@ -123,10 +123,10 @@ class CenterController extends Controller
      */
     public function update(Request $request, Center $center)
     {
-        $thumbnail_path = null; 
+        $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/center-thumbnails'));
+            $thumbnail_path = Storage::disk('s3')->putFile('public/center-thumbnails', $request->file('thumbnail'), 'public');
 
         $center->update([
             'name'          => $request->name,
@@ -153,22 +153,13 @@ class CenterController extends Controller
      */
     public function destroy(Center $center)
     {
+        if(Storage::disk('s3')->exists($center->thumbnail))
+            Storage::disk('s3')->delete($center->thumbnail);
+
         $center->delete();
 
         return back();
-    }        
-
-    /**
-     * Return proper URI for thumbnail.
-     *
-     * @param  String $path
-     * 
-     * @return String
-     */
-    public function getThumbnailPath($path)
-    {
-        return substr($path, 7);
-    }    
+    }
 
     /**
      * Display Generic Template .

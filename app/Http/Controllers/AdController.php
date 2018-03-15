@@ -51,10 +51,10 @@ class AdController extends Controller
      */
     public function store(Request $request)
     {
-        $thumbnail_path = env("APP_URL") . '/img/logo.jpg'; 
+        $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/ad-thumbnails'));
+            $thumbnail_path = Storage::disk('s3')->putFile('public/ad-thumbnails', $request->file('thumbnail'), 'public');
 
         Ad::create([
             'title'         => $request->title,
@@ -111,15 +111,15 @@ class AdController extends Controller
      */
     public function update(Request $request, Ad $ad)
     {
-        $thumbnail_path = null; 
+        $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/ad-thumbnails'));
+            $thumbnail_path = Storage::disk('s3')->putFile('public/ad-thumbnails', $request->file('thumbnail'), 'public');
 
         $ad->update([
             'title'         => $request->title,
             'description'   => $request->description,
-            'thumbnail'     => $thumbnail_path,
+            'thumbnail'     => $thumbnail_path ? $thumbnail_path : $ad->thumbnail,
             'minimum_age'   => $request->minimum_age ? $request->minimum_age : 13,
             'gender'        => $request->gender,
             'mode'          => $request->mode,
@@ -133,40 +133,6 @@ class AdController extends Controller
     }
 
     /**
-     * Upload the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function upload(Request $request, Ad $ad)
-    {
-        $request->validate([
-            'thumbnail' => 'required|image|mimes:jpeg,jpg,bmp,png||max:2048'
-        ]);
-
-        if ($request->hasFile('thumbnail')) {
-            $thumbnail = $request->file('thumbnail');
-            $ext = $thumbnail->getClientOriginalExtension();
-            $file_name = "ad_".time().".".$ext;
-            $path = $request->thumbnail->storeAs('images/ads', $file_name);
-
-            /*--Deleting image if exist---*/
-            if(!is_null($ad->thumbnail))
-            {
-                Storage::delete($ad->thumbnail);
-            }
-            $ad->thumbnail = $path;
-            $ad->updated_by = auth()->id();
-
-            $ad->update();
-            return redirect()->back()->with('image', 'Image uploaded successfully');
-        }
-
-        return redirect()->back()->with('image', 'Something went wrong with image.');
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  Ad  $ad
@@ -175,20 +141,11 @@ class AdController extends Controller
      */
     public function destroy(Ad $ad)
     {
+        if(Storage::disk('s3')->exists($ad->thumbnail))
+            Storage::disk('s3')->delete($ad->thumbnail);
+
         $ad->delete();
 
         return back();
-    }
-
-    /**
-     * Return proper URI for thumbnail.
-     *
-     * @param  String $path
-     * 
-     * @return String
-     */
-    public function getThumbnailPath($path)
-    {
-        return substr($path, 7);
     }
 }
