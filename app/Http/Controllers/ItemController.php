@@ -2,28 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\Request;
 use App\Item;
 use App\ItemCategory;
-use Auth;
+use BotMan\BotMan\BotMan;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use BotMan\Drivers\Facebook\Extensions\Element;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\Drivers\Facebook\Extensions\ElementButton;
+use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 
 class ItemController extends Controller
 {
     /**
-     * @var Item
-     */
-    private $item;
-
-    /**
-     * Contructor to initiolize object
+     * Item Controller constructor
      * 
-     * @param Item $item
      */
-    public function __construct(Item $item)
+    public function __construct()
     {
         $this->middleware('auth');
-        $this->item = $item;
     }
 
     /**
@@ -33,8 +30,9 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = $this->item->all();
-        return view('items.index', compact('items'));
+        $items = Item::paginate(5);
+
+        return view('items.index', ['items' => $items ]);
     }
 
     /**
@@ -45,108 +43,131 @@ class ItemController extends Controller
     public function create()
     {
         $item_categories = ItemCategory::all('id', 'name');
-        return view('items.create', compact('item_categories'));
+
+        return view('items.create', ['item_categories' => $item_categories]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     * 
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'item_category_id' => 'required|numeric',
-            'title' => 'required|unique:items|max:255',
-            'description' => 'required',
-            'age' => 'required|numeric',
-            'gender' => 'required',
-            'thumbnail' => 'image|mimes:jpeg,jpg,bmp,png||max:2048'
-        ]);
+        $thumbnail_path = env("APP_URL") . '/img/logo.jpg'; 
+
+        if ($request->hasFile('thumbnail'))
+            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/item-thumbnails'));
         
-        if ($request->hasFile('thumbnail')) {
-            $thumbnail = $request->file('thumbnail');
-            $ext = $thumbnail->getClientOriginalExtension();
-            $file_name = "item_".time().".".$ext;
-            $path = $request->thumbnail->storeAs('images/items', $file_name);
+        Item::create([
+            'title'             => $request->title,
+            'description'       => $request->description,
+            'thumbnail'         => $thumbnail_path,
+            'gender'            => $request->gender,
+            'minimum_age'       => $request->minimum_age,
+            'item_category_id'  => $request->item_category_id,
+            'created_by'        => auth()->id()
+        ]);
 
-            $item = new Item();
-            $item->item_category_id = $request->get('item_category_id');
-            $item->title = $request->get('title');
-            $item->description = $request->get('description');
-            $item->age = $request->get('age');
-            $item->gender = $request->get('gender');
-            $item->thumbnail = $path;
-
-            $item->save();
-            return redirect()->back()->with('status', 'Item added successfully');
-        }
-        /*--This will be executed if no image file detected--*/
-        $item = new Item();
-        $item->item_category_id = $request->get('item_category_id');
-        $item->title = $request->get('title');
-        $item->description = $request->get('description');
-        $item->age = $request->get('age');
-        $item->gender = $request->get('gender');
-        $item->created_by = Auth::user()->id;
-        $item->updated_by = Auth::user()->id;
-
-        $item->save();
-        return redirect()->back()->with('status', 'Item added successfully, without image.');
+        return back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  Item $item
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Item $item)
     {
-        //
+        return view('items.show', ['item' => $item]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  Item $item
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Item $item)
     {
-        $item = $this->item->findOrFail($id);
         $item_categories = ItemCategory::all('id', 'name');
-        return view('items.edit', compact('item', 'item_categories'));
+
+        return view('items.edit', [
+            'item'              => $item, 
+            'item_categories'   => $item_categories
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  Item $item
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Item $item)
     {
-        $request->validate([
-            'item_category_id' => 'required|numeric',
-            'title' => 'required|unique:items|max:255',
-            'description' => 'required',
-            'age' => 'required|numeric',
-            'gender' => 'required'
+        $thumbnail_path = null; 
+
+        if ($request->hasFile('thumbnail'))
+            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/item-thumbnails'));
+
+        $item->update([
+            'title'             => $request->title,
+            'description'       => $request->description,
+            'thumbnail'         => $thumbnail_path,
+            'gender'            => $request->gender,
+            'minimum_age'       => $request->minimum_age,
+            'item_category_id'  => $request->item_category_id,
+            'updated_by'        => auth()->id()
         ]);
 
-        $item = $this->item->findOrFail($id);
-        $item->item_category_id = $request->get('item_category_id');
-        $item->title = $request->get('title');
-        $item->description = $request->get('description');
-        $item->age = $request->get('age');
-        $item->gender = $request->get('gender');
-        $item->updated_by = Auth::user()->id;
+        return redirect()->route('show-item', $item);
+    }
 
-        $item->update();
-        return redirect()->back()->with('status', 'Item updated successfully.');
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  Item $item
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(Item $item)
+    {
+        $item->delete();
+
+        return back();
+    }
+
+    /**
+     * Return proper URI for thumbnail.
+     *
+     * @param  String $path
+     * 
+     * @return String
+     */
+    public function getThumbnailPath($path)
+    {
+        return substr($path, 7);
+    }
+
+     /**
+     * Delete thumbnail file.
+     *
+     * @param  String $thumbnail
+     * 
+     * @return void
+     */
+    public function deleteFile($thumbnail)
+    {        
+        if(! is_null($thumbnail))
+            Storage::delete($item->thumbnail);
     }
 
     /**
@@ -154,6 +175,7 @@ class ItemController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
+     * 
      * @return \Illuminate\Http\Response
      */
     public function upload(Request $request, $id)
@@ -178,27 +200,25 @@ class ItemController extends Controller
             $item->updated_by = Auth::user()->id;
 
             $item->update();
-            return redirect()->back()->with('image', 'Image uploaded successfully');
+            return redirect()->back();
         }
 
-        return redirect()->back()->with('image', 'Something went wrong with image.');
+        return back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function showBotMan(BotMan $bot)
     {
-        $item = $this->item->findOrFail($id);
-        /*---Deleting image file--*/
-        if(! is_null($item->thumbnail))
-        {
-            Storage::delete($item->thumbnail);
-        }
-        $item->delete();
-        return redirect()->back()->with('status', 'Item deleted!');
+        $extras = $bot->getMessage()->getExtras();        
+        $apiReply = $extras['apiReply'];
+
+        $title = $extras['apiParameters']['whitelabel-items'];
+
+        $item = Item::where('title', '=', $title)->first();
+
+        $bot->typesAndWaits(1);
+        $bot->reply($item->title);
+
+        $bot->typesAndWaits(1);
+        $bot->reply($item->description);
     }
 }

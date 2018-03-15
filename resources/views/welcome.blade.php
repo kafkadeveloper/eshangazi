@@ -1,95 +1,82 @@
-<!doctype html>
-<html lang="{{ app()->getLocale() }}">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Laravel</title>
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" type="text/css">
 
-    <!-- Styles -->
-    <style>
-        html, body {
-            background-color: #fff;
-            color: #636b6f;
-            font-family: 'Raleway', sans-serif;
-            font-weight: 100;
-            height: 100vh;
-            margin: 0;
-        }
+        <!-- Styles -->
+        <style>
+            body {
+                font-family: "Varela Round", sans-serif;
+                margin: 0;
+                padding: 0;
+                background: radial-gradient(#f2f2f2, #45a6b3);
+            }
 
-        .full-height {
-            height: 100vh;
-        }
+            .container {
+                display: flex;
+                height: 100vh;
+                align-items: center;
+                justify-content: center;
+            }
 
-        .flex-center {
-            align-items: center;
-            display: flex;
-            justify-content: center;
-        }
+            .content {
+                text-align: center;
+            }
 
-        .position-ref {
-            position: relative;
-        }
+            .logo {
+                margin-right: 40px;
+                margin-bottom: 20px;
+            }
 
-        .top-right {
-            position: absolute;
-            right: 10px;
-            top: 18px;
-        }
+            .links a {
+                font-size: 1.25rem;
+                text-decoration: none;
+                color: white;
+                margin: 10px;
+            }
 
-        .content {
-            text-align: center;
-        }
+            @media all and (max-width: 500px) {
 
-        .title {
-            font-size: 84px;
-        }
+                .links {
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+        </style>
+    </head>
+    
+    <body>
+        <div class="container">
+            <div class="content">
+                <div class="logo">
+                    <img src="{{ asset('img/logo.png') }}" height="300" alt="Index Labs TZ Company Limited">
+                </div>
 
-        .links > a {
-            color: #636b6f;
-            padding: 0 25px;
-            font-size: 12px;
-            font-weight: 600;
-            letter-spacing: .1rem;
-            text-decoration: none;
-            text-transform: uppercase;
-        }
+                <div class="links">
+                    <a href="/botman/tinker">
+                        Test on the Web
+                    </a>
 
-        .m-b-md {
-            margin-bottom: 30px;
-        }
-    </style>
-</head>
-<body>
-    <div class="flex-center position-ref full-height">
-        @if (Route::has('login'))
-            <div class="top-right links">
-                @auth
-                    <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                        @endauth
-            </div>
-        @endif
+                    <a href="{{ route('login') }}">
+                        Login
+                    </a>
 
-        <div class="content">
-            <div class="title m-b-md">
-                Laravel
-            </div>
+                    <a href="https://www.messenger.com/t/1452245748218037" target="_blank">
+                        Messenger
+                    </a>
 
-            <div class="links">
-                <a href="https://laravel.com/docs">Documentation</a>
-                <a href="https://laracasts.com">Laracasts</a>
-                <a href="https://laravel-news.com">News</a>
-                <a href="https://forge.laravel.com">Forge</a>
-                <a href="https://github.com/laravel/laravel">GitHub</a>
+                    <a href="http://indexlabs.co.tz" target="_blank">
+                        Index Labs
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</body>
+    </body>
 </html>

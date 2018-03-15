@@ -25,4 +25,14 @@ class HomeController extends Controller
     {
         return view('home');
     }
+    
+    /**
+     * Show the application Integrations.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function integrations()
+    {
+        return view('integrations.index');
+    }
 }

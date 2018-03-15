@@ -1,43 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>BotMan Studio</title>
+        <!-- CSRF Token -->
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
+        <title>{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Styles -->
-    <style>
-        body {
-            font-family: "Source Sans Pro", sans-serif;
-            margin: 0;
-            padding: 0;
-            background: radial-gradient(#57bfc7, #45a6b3);
-        }
+        <!-- Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css">
 
-        .container {
-            display: flex;
-            height: 100vh;
-            align-items: center;
-            justify-content: center;
-        }
+        <!-- Styles -->
+        <style>
+            body {
+                font-family: "Source Sans Pro", sans-serif;
+                margin: 0;
+                padding: 0;
+                background: radial-gradient(#f2f2f2, #45a6b3);
+            }
 
-        .content {
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-<div class="container">
-    <div class="content" id="app">
-        <botman-tinker></botman-tinker>
-    </div>
-</div>
+            .container {
+                display: flex;
+                height: 100vh;
+                align-items: center;
+                justify-content: center;
+            }
 
-<script src="/js/app.js"></script>
-</body>
+            .content {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="content" id="app">
+                <botman-tinker api-endpoint="/botman"></botman-tinker>
+            </div>
+        </div>
+
+        <script src="/js/app.js"></script>
+    </body>
 </html>
