@@ -1,5 +1,13 @@
 <?php
 
+    /*
+    |--------------------------------------------------------------------------
+    | Database connection for Heroku
+    |--------------------------------------------------------------------------
+    |
+    */
+    $url = parse_url(getenv("DATABASE_URL"));
+
 return [
 
     /*
@@ -56,11 +64,11 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'host' => isset($url["host"]) ? parse_url(getenv("DATABASE_URL"))["host"] : env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'database' => isset($url["path"]) ? substr(parse_url(getenv("DATABASE_URL"))["path"], 1) : env('DB_DATABASE'),
+            'username' => isset($url["user"]) ? parse_url(getenv("DATABASE_URL"))["user"] : env('DB_USERNAME'),
+            'password' => isset($url["pass"]) ? parse_url(getenv("DATABASE_URL"))["pass"] : env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'schema' => 'public',

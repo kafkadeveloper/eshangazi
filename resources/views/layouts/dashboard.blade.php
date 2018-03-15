@@ -17,7 +17,7 @@
 </head>
 <body>
 <div id="app">
-    <nav class="navbar navbar-expand-lg navbar-light" style="background-color: #e3f2fd;">
+    <nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
         <div class="container">
             <a class="navbar-brand" href="{{ url('/') }}">
                 {{ config('app.name', 'eShangazi') }}
@@ -29,17 +29,8 @@
 
             <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-outo">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="doctors" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            SRH Experts
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="doctors">
-                            <a class="dropdown-item" href="{{ route('index.doctor') }}">View list of Experts</a>
-                            <a class="dropdown-item" href="{{ route('create.doctor') }}">Add new Expert</a>
-                        </div>
-                    </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('index.item-category') }}">
+                        <a class="nav-link" href="{{ route('index-item-category') }}">
                             Item Categories
                         </a>
                     </li>
@@ -48,8 +39,17 @@
                             Items
                         </a>
                         <div class="dropdown-menu" aria-labelledby="items">
-                            <a class="dropdown-item" href="{{ route('index.item') }}">View list of Items</a>
-                            <a class="dropdown-item" href="{{ route('create.item') }}">Add new Item</a>
+                            <a class="dropdown-item" href="{{ route('index-item') }}">View list of Items</a>
+                            <a class="dropdown-item" href="{{ route('create-item') }}">Add new Item</a>
+                        </div>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="{{ route('index-ad') }}" id="ads" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Ads
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="items">
+                            <a class="dropdown-item" href="{{ route('index-ad') }}">View list of Ads</a>
+                            <a class="dropdown-item" href="{{ route('create-ad') }}">Add new Ad</a>
                         </div>
                     </li>
                 </ul>
@@ -77,7 +77,9 @@
         </div>
     </nav>
 
-    @yield('content')
+    <main class="py-2">
+        @yield('content')
+    </main>
 </div>
 
 <!-- Scripts -->

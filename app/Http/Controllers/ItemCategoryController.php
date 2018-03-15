@@ -2,27 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\ItemCategory;
-use Auth;
+use BotMan\BotMan\BotMan;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use BotMan\Drivers\Facebook\Extensions\Element;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\Drivers\Facebook\Extensions\ElementButton;
+use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 
 class ItemCategoryController extends Controller
 {
     /**
-     * @var ItemCategory
-     */
-    private $item_category;
-
-    /**
-     * Contractor to initioalize object
+     * Item category constructor
      * 
-     * @param ItemCategory $item_category
      */
-    public function __construct(ItemCategory $item_category)
+    public function __construct()
     {
-        $this->middleware('auth');
-        $this->item_category = $item_category;
+        $this->middleware('auth')->except('showBotMan');
     }
+    
     /**
      * Display a listing of the resource.
      *
@@ -30,8 +29,11 @@ class ItemCategoryController extends Controller
      */
     public function index()
     {
-        $item_categories = $this->item_category->all();
-        return view('item-categories.index', compact('item_categories'));
+        $item_categories = ItemCategory::paginate(5);
+
+        return view('item-categories.index', [
+                'item_categories' => $item_categories
+            ]);
     }
 
     /**
@@ -41,7 +43,7 @@ class ItemCategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('item-categories.create');
     }
 
     /**
@@ -52,79 +54,144 @@ class ItemCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'description' => 'required'
-            ]);
-        
-        $category = new ItemCategory();
+        $thumbnail_path = env("APP_URL") . '/img/logo.jpg'; 
 
-        $category->name = $request->get('name');
-        $category->description = $request->get('description');
-        $category->created_by = Auth::user()->id;
-        $category->updated_by = Auth::user()->id;
-        
-        $category->save();
-        return redirect()->route('index.item-category')
-                        ->with('status','Item Category saved!');
+        if ($request->hasFile('thumbnail'))
+            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/item-category-thumbnails'));
+
+        ItemCategory::create([
+            'name'          => $request->name,
+            'description'   => $request->description,
+            'thumbnail'     => $thumbnail_path,
+            'created_by'    => auth()->id()
+        ]);
+
+        return back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  ItemCategory $item_category
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(ItemCategory $item_category)
     {
-        //
+        return view('item-categories.show', ['item_category' => $item_category]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  ItemCategory $item_category
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(ItemCategory $item_category)
     {
-        $item_category = $this->item_category->findOrFail($id);
-        return view('item-categories.edit', compact('item_category'));
+        return view('item-categories.edit', ['item_category' => $item_category]);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  ItemCategory $item_category
+     * 
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, ItemCategory $item_category)
     {
-        $request->validate([
-            'name' => 'required|string',
-            'description' => 'required'
-            ]);
+        $thumbnail_path = null; 
 
-        $category = $this->item_category->findOrFail($id);
-        $category->name = $request->get('name');
-        $category->description = $request->get('description');
-        $category->updated_by = Auth::user()->id;
+        if ($request->hasFile('thumbnail'))
+            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/item-thumbnails'));
 
-        $category->update();
-        return redirect()->back()->with('status', 'Item Category is updated successfully!');
+        $item_category->update([
+            'name'          => $request->name,
+            'description'   => $request->description,
+            'thumbnail'     => $thumbnail_path,
+            'updated_by'    => auth()->id()
+        ]);
+
+        return redirect()->route('show-item-category', $item_category);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  ItemCategory $item_category
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ItemCategory $item_category)
     {
-        $category = $this->item_category->findOrFail($id);
-        $category->delete();
-        return redirect()->back()->with('status', 'Item Category deleted!');
+        $item_category->delete();
+
+        return back();
+    }    
+
+    /**
+     * Return proper URI for thumbnail.
+     *
+     * @param  String $path
+     * 
+     * @return String
+     */
+    public function getThumbnailPath($path)
+    {
+        return substr($path, 7);
+    }
+
+
+    public function showBotMan(BotMan $bot)
+    {
+        $extras = $bot->getMessage()->getExtras();        
+        $apiReply = $extras['apiReply'];
+
+        $name = $extras['apiParameters']['whitelabel-item-categories'];
+
+        $category = ItemCategory::with('items')->where('name', '=', $name)->first();
+
+        $bot->typesAndWaits(1);
+        $bot->reply($category->description);
+
+        $bot->typesAndWaits(2);
+        $bot->reply($this->items($category));
+
+        $this->conversation();
+    }
+
+    public function items($category)
+    {                           
+        $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
+             
+        foreach($category->items as $item)
+        {
+            $template_list->addElements([
+                Element::create($item->title)
+                    ->subtitle($item->description)
+                    ->image('https://white-label-bot.herokuapp.com/img/demo.jpg')
+                    ->addButton(ElementButton::create('View Details')
+                        ->payload($item->title)->type('postback'))
+            ]);
+        } 
+
+        return $template_list;
+    }
+
+    public function conversation()
+    {
+        $user = $bot->getUser();
+
+        $member = Member::where('user_platform_id', '=', $user->getId());
+
+        if($member)
+        {
+            Conversation::create([
+                'intent'    => $extras['apiIntent'],
+                'member_id' => $member->id
+            ]);
+        }
     }
 }

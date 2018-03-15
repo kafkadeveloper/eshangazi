@@ -19,4 +19,19 @@ abstract class TestCase extends BaseTestCase
      * @var BotManTester
      */
     protected $bot;
+
+    protected function setUp()
+    {
+        parent::setUp();
+        
+        $this->withoutExceptionHandling();
+    }
+
+    protected function signIn($user = null)
+    {
+        $user = $user ?: create('App\User');
+        $this->actingAs($user);
+
+        return $this;
+    }
 }
