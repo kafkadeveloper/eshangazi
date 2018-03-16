@@ -6,9 +6,7 @@ use App\Member;
 use App\District;
 use App\ItemCategory;
 use BotMan\BotMan\BotMan;
-use Illuminate\Http\Request;
 use BotMan\Drivers\Facebook\Extensions\Element;
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 
@@ -62,6 +60,13 @@ class MemberController extends Controller
         }
     }
 
+    /**
+     * Reply to a member who reject ot give data
+     *
+     * @param BotMan $bot
+     *
+     * @return void
+     */
     public function reject(BotMan $bot)
     {
         $extras = $bot->getMessage()->getExtras();
@@ -85,6 +90,13 @@ class MemberController extends Controller
         return $member ? true : false;        
     }
 
+    /**
+     * Listen for Get Started action for new Member.
+     *
+     * @param BotMan $bot
+     *
+     * @return void
+     */
     public function started(BotMan $bot)
     {
         $user = $bot->getUser();            
@@ -106,6 +118,14 @@ class MemberController extends Controller
         }
     }
 
+    /**
+     * Subscribe new Member
+     *
+     * @param $user
+     * @param $extras
+     *
+     * @return void
+     */
     public function subscribe($user, $extras)
     {
         $profile_pic = $user->getInfo()["profile_pic"];
@@ -127,6 +147,13 @@ class MemberController extends Controller
         ]);
     }
 
+    /**
+     * Unsubscribe Member from receiving updates from the System0
+     * .
+     * @param BotMan $bot
+     *
+     * @return void
+     */
     public function unsubscribe(BotMan $bot)
     {
         $user = $bot->getUser();
@@ -138,6 +165,8 @@ class MemberController extends Controller
             $extras = $bot->getMessage()->getExtras();
 
             $apiReply = $extras['apiReply'];
+            $bot->typesAndWaits(1);
+            $bot->reply($apiReply);
             
             $member->update([
                 'status' => 0
@@ -145,6 +174,11 @@ class MemberController extends Controller
         }
     }
 
+    /**
+     * Display a list of bot features in a Generic Template.
+     *
+     * @return \BotMan\Drivers\Facebook\Extensions\GenericTemplate
+     */
     public function features()
     {
         $categories = ItemCategory::all();
@@ -153,10 +187,14 @@ class MemberController extends Controller
              
         foreach($categories as $category)
         {
+            $url = $category->thumbnail
+                ? (env('AWS_URL') . '/' . $category->thumbnail)
+                : (env('APP_URL') . '/img/logo.jpg');
+
             $template_list->addElements([
                 Element::create($category->name)
                     ->subtitle($category->description)
-                    ->image('https://white-label-bot.herokuapp.com/img/demo.jpg')
+                    ->image($url)
                     ->addButton(ElementButton::create('View Details')
                         ->payload($category->name)->type('postback'))
             ]);

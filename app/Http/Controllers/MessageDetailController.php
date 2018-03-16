@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class MessageDetailController extends Controller
 {
     /**
-     * Messsage Detail Controller constructor.
+     * Message Detail Controller constructor.
      *
      */
     public function __construct()
@@ -24,7 +24,7 @@ class MessageDetailController extends Controller
      */
     public function index()
     {
-        $message_detail = MessageDetail::paginate(3);
+        $message_detail = MessageDetail::paginate(10);
 
         return view('message-details.index', ['message_details' => $message_detail]);
     }
@@ -50,10 +50,13 @@ class MessageDetailController extends Controller
      */
     public function store(Request $request)
     {
-        $thumbnail_path = env("APP_URL") . '/img/logo.jpg'; 
+        $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/message-thumbnails'));
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/message-detail-thumbnails', $request->file('thumbnail'), 'public');
+        }
 
         MessageDetail::create([
             'title'         => $request->title,
@@ -105,10 +108,13 @@ class MessageDetailController extends Controller
      */
     public function update(Request $request, MessageDetail $message_detail)
     {
-        $thumbnail_path = null; 
+        $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/message-detail-thumbnails'));
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/message-detail-thumbnails', $request->file('thumbnail'), 'public');
+        }
 
         $message_detail->update([
             'title'         => $request->title,
@@ -136,23 +142,17 @@ class MessageDetailController extends Controller
     }
 
     /**
-     * Return proper URI for thumbnail.
+     * Display Message Details to a Member.
      *
-     * @param  String $path
-     * 
-     * @return String
+     * @param BotMan $bot
+     *
+     * @return void
      */
-    public function getThumbnailPath($path)
-    {
-        return substr($path, 7);
-    }   
-
     public function showBotMan(BotMan $bot)
     {
-        $extras = $bot->getMessage()->getExtras();        
-        $apiReply = $extras['apiReply'];
+        $extras = $bot->getMessage()->getExtras();
 
-        $title = $extras['apiParameters']['whitelabel-message-details'];
+        $title = $extras['apiParameters'][env('APP_ACTION') . '-message-details'];
 
         $item = MessageDetail::where('title', '=', $title)->first();
 

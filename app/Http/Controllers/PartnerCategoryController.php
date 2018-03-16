@@ -23,7 +23,7 @@ class PartnerCategoryController extends Controller
      */
     public function index()
     {
-        $partner_categories = PartnerCategory::paginate(5);
+        $partner_categories = PartnerCategory::paginate(10);
 
         return view('partner-categories.index', [
             'partner_categories' => $partner_categories
@@ -61,9 +61,10 @@ class PartnerCategoryController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  PartnerCategory $category
-     * 
+     * @param PartnerCategory $partner_category
+     *
      * @return \Illuminate\Http\Response
+     *
      */
     public function show(PartnerCategory $partner_category)
     {
@@ -73,7 +74,7 @@ class PartnerCategoryController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  PartnerCategory $category
+     * @param  PartnerCategory $partner_category
      * 
      * @return \Illuminate\Http\Response
      */
@@ -104,7 +105,7 @@ class PartnerCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  PartnerCategory $category
+     * @param  PartnerCategory $partner_category
      * 
      * @return \Illuminate\Http\Response
      */

@@ -30,8 +30,11 @@
                 <thead>
                     <tr>
                         <th>Thumbnail</th>
+
                         <th>Name</th>
+
                         <th>Center</th>
+
                         <th class="text-center">Actions</th>
                     </tr>
                 </thead>
@@ -40,8 +43,7 @@
                     @foreach($services as $service)
                         <tr>
                             <td class="align-middle">
-                                <!-- asset("storage/$service->thumbnail") -->
-                                <img src="{{ asset('img/demo.jpg') }}" height="50" alt="{{ $service->name }}">
+                                <img src="{{ $service->thumbnail ? (env('AWS_URL') . '/' . $service->thumbnail) : '/img/demo.jpg' }}" height="50" alt="{{ $service->name }}">
                             </td>
 
                             <td class="align-middle">

@@ -6,18 +6,16 @@ use App\Member;
 use App\Message;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use BotMan\Drivers\Facebook\FacebookDriver;
 use BotMan\Drivers\Facebook\Extensions\Element;
-use BotMan\BotMan\Messages\Attachments\Location;
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 
 class MessageController extends Controller
 {
     /**
-     * Messsage Controller constructor.
+     * Message Controller constructor.
      */
     public function __construct()
     {
@@ -31,7 +29,7 @@ class MessageController extends Controller
      */
     public function index()
     {
-        $messages = Message::paginate(3);
+        $messages = Message::paginate(10);
 
         return view('messages.index', ['messages' => $messages]);
     }
@@ -55,10 +53,13 @@ class MessageController extends Controller
      */
     public function store(Request $request)
     {
-        $thumbnail_path = env("APP_URL") . '/img/logo.jpg'; 
+        $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/message-thumbnails'));
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/message-thumbnails', $request->file('thumbnail'), 'public');
+        }
 
         Message::create([
             'title'         => $request->title,
@@ -106,10 +107,13 @@ class MessageController extends Controller
      */
     public function update(Request $request, Message $message)
     {
-        $thumbnail_path = null; 
+        $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/message-thumbnails'));
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/message-thumbnails', $request->file('thumbnail'), 'public');
+        }
 
         $message->update([
             'title'         => $request->title,
@@ -138,26 +142,13 @@ class MessageController extends Controller
     }
 
     /**
-     * Return proper URI for thumbnail.
-     *
-     * @param  String $path
-     * 
-     * @return String
-     */
-    public function getThumbnailPath($path)
-    {
-        return substr($path, 7);
-    }
-
-    /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @param  Message $message
      * 
      * @return \Illuminate\Http\Response
      */
-    public function publish(Request $request, Message $message)
+    public function publish(Message $message)
     {      
         $bot = app('botman');
 
@@ -177,7 +168,7 @@ class MessageController extends Controller
     }
 
     /**
-     * Display Generic Template .
+     * Get a particular Message that has contents requested by Member..
      *
      * @param  BotMan $bot
      * 
@@ -188,10 +179,10 @@ class MessageController extends Controller
         $extras = $bot->getMessage()->getExtras();        
         $apiReply = $extras['apiReply'];
 
-        $title = $extras['apiParameters']['whitelabel-messages'];
+        $title = $extras['apiParameters'][env('APP_ACTION') . '-messages'];
 
         $bot->typesAndWaits(1);
-        $bot->reply($apiReply);  
+        $bot->reply($apiReply);
 
         $message = Message::with('details')->where('title', '=', $title)->first();            
             
@@ -209,20 +200,24 @@ class MessageController extends Controller
     }
 
     /**
-     * Message Generic Template.
+     * Display particular Message to a Member in Generic Template.
      *
      * @param  Message $message
      * 
-     * @return BotMan\Drivers\Facebook\Extensions\GenericTemplate
+     * @return \BotMan\Drivers\Facebook\Extensions\GenericTemplate
      */
     public function message($message)
     {
+        $url = $message->thumbnail
+            ? (env('AWS_URL') . '/' . $message->thumbnail)
+            : (env('APP_URL') . '/img/logo.jpg');
+
         $message = GenericTemplate::create()
                     ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
                     ->addElements([
                         Element::create($message->title)
                             ->subtitle($message->description)
-                            ->image('https://white-label-bot.herokuapp.com/img/demo.jpg')
+                            ->image($url)
                             ->addButton(ElementButton::create('View Details')
                                 ->payload($message->title)->type('postback'))
                     ]);
@@ -231,11 +226,11 @@ class MessageController extends Controller
     }
 
     /**
-     * Details Generic Template.
+     * Display a list of details for a particular Message to a Member in Generic Template.
      *
      * @param  Message $message
      * 
-     * @return BotMan\Drivers\Facebook\Extensions\GenericTemplate
+     * @return \BotMan\Drivers\Facebook\Extensions\GenericTemplate
      */
     public function details($message)
     {                           
@@ -243,10 +238,14 @@ class MessageController extends Controller
              
         foreach($message->details as $detail)
         {
+            $url = $message->thumbnail
+                ? (env('AWS_URL') . '/' . $message->thumbnail)
+                : (env('APP_URL') . '/img/logo.jpg');
+
             $template_list->addElements([
                 Element::create($detail->title)
                     ->subtitle($detail->description)
-                    ->image('https://white-label-bot.herokuapp.com/img/demo.jpg')
+                    ->image($url)
                     ->addButton(ElementButton::create('View Details')
                         ->payload($detail->title)->type('postback'))
             ]);

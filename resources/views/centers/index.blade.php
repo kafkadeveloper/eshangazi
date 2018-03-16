@@ -43,7 +43,7 @@
                     @foreach($centers as $center)
                         <tr>
                             <td class="align-middle">
-                                <img src="{{ asset('img/demo.jpg') }}" height="50" alt="{{ $center->name }}">
+                                <img src="{{ $center->thumbnail ? (env('AWS_URL') . '/' . $center->thumbnail) : '/img/demo.jpg' }}" height="50" alt="{{ $center->name }}">
                             </td>
 
                             <td class="align-middle">

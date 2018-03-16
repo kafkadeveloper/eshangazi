@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Storage;
 class AdController extends Controller
 {
     /**
-     * Ad Contoller constructor
+     * Ad Controller constructor
      * 
      */
     public function __construct()
@@ -54,7 +54,10 @@ class AdController extends Controller
         $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = Storage::disk('s3')->putFile('public/ad-thumbnails', $request->file('thumbnail'), 'public');
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/ad-thumbnails', $request->file('thumbnail'), 'public');
+        }
 
         Ad::create([
             'title'         => $request->title,
@@ -114,7 +117,10 @@ class AdController extends Controller
         $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = Storage::disk('s3')->putFile('public/ad-thumbnails', $request->file('thumbnail'), 'public');
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/ad-thumbnails', $request->file('thumbnail'), 'public');
+        }
 
         $ad->update([
             'title'         => $request->title,

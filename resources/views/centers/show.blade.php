@@ -69,7 +69,7 @@
                                 @foreach($center->services as $service)
                                     <tr>
                                         <td class="align-middle">
-                                            <img src="{{ asset('img/demo.jpg') }}" height="50" alt="{{ $service->title }}">
+                                            <img src="{{ $service->thumbnail ? (env('AWS_URL') . '/' . $service->thumbnail) : '/img/demo.jpg' }}" height="50" alt="{{ $service->title }}">
                                         </td>
 
                                         <td class="align-middle">

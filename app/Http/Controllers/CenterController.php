@@ -10,7 +10,6 @@ use App\District;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use BotMan\Drivers\Facebook\Extensions\Element;
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 
@@ -64,7 +63,10 @@ class CenterController extends Controller
         $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = Storage::disk('s3')->putFile('public/center-thumbnails', $request->file('thumbnail'), 'public');
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/center-thumbnails', $request->file('thumbnail'), 'public');
+        }
 
         Center::create([
             'name'          => $request->name,
@@ -126,7 +128,10 @@ class CenterController extends Controller
         $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = Storage::disk('s3')->putFile('public/center-thumbnails', $request->file('thumbnail'), 'public');
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/center-thumbnails', $request->file('thumbnail'), 'public');
+        }
 
         $center->update([
             'name'          => $request->name,
@@ -170,10 +175,9 @@ class CenterController extends Controller
      */
     public function showBotMan(BotMan $bot)
     {
-        $extras = $bot->getMessage()->getExtras();        
-        $apiReply = $extras['apiReply'];
+        $extras = $bot->getMessage()->getExtras();
 
-        $name = $extras['apiParameters']['whitelabel-centers'];
+        $name = $extras['apiParameters'][env('APP_ACTION') . '-centers'];
 
         if($name)
         {
@@ -182,7 +186,7 @@ class CenterController extends Controller
             $bot->typesAndWaits(1);
             $bot->reply('Services offered at ' . $center->name);
 
-            $bot->typesAndWaits(2);
+            $bot->typesAndWaits(1);
             $bot->reply($this->services($center));
         } 
         else
@@ -211,16 +215,28 @@ class CenterController extends Controller
         }        
     }
 
+    /**
+     * Show a list of Centers in a Generic Template.
+     *
+     * @param $centers
+     *
+     * @return \BotMan\Drivers\Facebook\Extensions\GenericTemplate
+     *
+     */
     public function centers($centers)
     {                           
         $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
              
         foreach($centers as $center)
         {
+            $url = $center->thumbnail
+                ? (env('AWS_URL') . '/' . $center->thumbnail)
+                : (env('APP_URL') . '/img/logo.jpg');
+
             $template_list->addElements([
                 Element::create($center->name)
                     ->subtitle($center->description)
-                    ->image('https://white-label-bot.herokuapp.com/img/demo.jpg')
+                    ->image($url)
                     ->addButton(ElementButton::create('View Details')
                         ->payload($center->name)->type('postback'))
             ]);
@@ -229,16 +245,28 @@ class CenterController extends Controller
         return $template_list;
     }
 
+    /**
+     * Show a list of Services for a particular center in a Generic Template.
+     *
+     * @param $center
+     *
+     * @return \BotMan\Drivers\Facebook\Extensions\GenericTemplate
+     *
+     */
     public function services($center)
     {                           
         $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
              
         foreach($center->services as $service)
         {
+            $url = $center->thumbnail
+                ? (env('AWS_URL') . '/' . $center->thumbnail)
+                : (env('APP_URL') . '/img/logo.jpg');
+
             $template_list->addElements([
                 Element::create($service->name)
                     ->subtitle($service->description)
-                    ->image('https://white-label-bot.herokuapp.com/img/demo.jpg')
+                    ->image($url)
                     ->addButton(ElementButton::create('View Details')
                         ->payload($service->name)->type('postback'))
             ]);

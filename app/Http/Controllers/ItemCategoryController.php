@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Member;
 use App\Conversation;
 use App\ItemCategory;
 use BotMan\BotMan\BotMan;
@@ -50,6 +51,7 @@ class ItemCategoryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -57,7 +59,11 @@ class ItemCategoryController extends Controller
         $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = Storage::disk('s3')->putFile('public/item-category-thumbnails', $request->file('thumbnail'), 'public');
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/item-category-thumbnails', $request->file('thumbnail'), 'public');
+
+        }
 
         ItemCategory::create([
             'name'          => $request->name,
@@ -106,7 +112,10 @@ class ItemCategoryController extends Controller
         $thumbnail_path = null; 
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = Storage::disk('s3')->putFile('public/item-category-thumbnails', $request->file('thumbnail'), 'public');
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/item-category-thumbnails', $request->file('thumbnail'), 'public');
+        }
 
         $item_category->update([
             'name'          => $request->name,
@@ -122,6 +131,7 @@ class ItemCategoryController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  ItemCategory $item_category
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(ItemCategory $item_category)
@@ -143,7 +153,7 @@ class ItemCategoryController extends Controller
     {
         $extras = $bot->getMessage()->getExtras();
 
-        $name = $extras['apiParameters']['whitelabel-item-categories'];
+        $name = $extras['apiParameters'][env('APP_ACTION') . '-item-categories'];
 
         $category = ItemCategory::with('items')->where('name', '=', $name)->first();
 
@@ -157,9 +167,10 @@ class ItemCategoryController extends Controller
     }
 
     /**
-     * Show a list of Items found in a particular category.
+     * Show a list of Items found for a particular category in a Generic Template.
      *
      * @param $category
+     *
      * @return \BotMan\Drivers\Facebook\Extensions\GenericTemplate
      */
     public function items($category)
@@ -168,10 +179,14 @@ class ItemCategoryController extends Controller
              
         foreach($category->items as $item)
         {
+            $url = $item->thumbnail
+                ? (env('AWS_URL') . '/' . $item->thumbnail)
+                : (env('APP_URL') . '/img/logo.jpg');
+
             $template_list->addElements([
                 Element::create($item->title)
                     ->subtitle($item->description)
-                    ->image($item->thumbnail ? (env('AWS_URL') . '/' . $item->thumbnail) : (env('APP_URL') . '/img/logo.jpg'))
+                    ->image($url)
                     ->addButton(ElementButton::create('View Details')
                         ->payload($item->title)->type('postback'))
             ]);

@@ -32,7 +32,9 @@
                         <th>Thumbnail</th>
 
                         <th>Title</th>
+
                         <th>Partner</th>
+
                         <th>Status</th>
 
                         <th class="text-center">Actions</th>
@@ -43,7 +45,7 @@
                     @foreach($ads as $ad)
                         <tr>
                             <td class="align-middle">
-                                <img src="{{ asset('img/demo.jpg') }}" height="50" alt="{{ $ad->title }}">
+                                <img src="{{ $ad->thumbnail ? (env('AWS_URL') . '/' . $ad->thumbnail) : '/img/demo.jpg' }}" height="50" alt="{{ $ad->title }}">
                             </td>
 
                             <td class="align-middle">

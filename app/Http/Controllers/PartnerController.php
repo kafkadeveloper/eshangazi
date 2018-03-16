@@ -9,7 +9,6 @@ use App\PartnerCategory;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use BotMan\Drivers\Facebook\Extensions\Element;
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 
@@ -30,7 +29,7 @@ class PartnerController extends Controller
      */
     public function index()
     {
-        $partners = Partner::paginate(5);
+        $partners = Partner::paginate(10);
         
         return view('partners.index', ['partners' => $partners]);
     }
@@ -108,8 +107,7 @@ class PartnerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $
-     * 
+     * @param  \Illuminate\Http\Request  $request     *
      * @param  Partner $partner
      * 
      * @return \Illuminate\Http\Response
@@ -162,29 +160,19 @@ class PartnerController extends Controller
 
         $user = $bot->getUser();
 
-        $member = Member::with('district')->where('user_platform_id', '=', $user->getId())->first();
+        $member = Member::with('district')
+            ->where('user_platform_id', '=', $user->getId())->first();
 
-        $partners = Partner::where('district_id', $member->district_id)->where('partner_category_id', 2)->take(5)->get();            
+        $partners = Partner::where('district_id', $member->district_id)
+            ->where('partner_category_id', 2)->take(5)->get();
             
-        $bot->typesAndWaits(1);        
+        $bot->typesAndWaits(1);
 
-        if(! $partners->isEmpty())
-        {
-            $bot->reply($this->partners($partners));
-        }
-        else
-        {
-            $bot->reply('Hey ' . $user->getFirstName() . ', I could not find Experts at ' . $member->district->name . ', I have these suggestions.');
-
-            $partners = Partner::inRandomOrder()->take(5)->get();; 
-
-            $bot->typesAndWaits(2);
-            $bot->reply($this->partners($partners));
-        }        
+        $this->getNearExperts($bot, $partners, $user, $member);
     }
 
     /**
-     * Display Generic Template .
+     * Get a list of Experts based on District as Location for a Member..
      *
      * @param  BotMan $bot
      * 
@@ -195,7 +183,7 @@ class PartnerController extends Controller
         $extras = $bot->getMessage()->getExtras();        
         $apiReply = $extras['apiReply'];
 
-        $district = $extras['apiParameters']['whitelabel-districts'];
+        $district = $extras['apiParameters'][env('APP_ACTION') . '-districts'];
 
         $bot->typesAndWaits(1);
         $bot->reply($apiReply);
@@ -213,30 +201,69 @@ class PartnerController extends Controller
         {           
             $user = $bot->getUser();
 
-            $bot->reply('Hey ' . $user->getFirstName() . ', I could not find Experts at ' . $district . ', I have these suggestions.');
+            $bot->reply('Hey ' . $user->getFirstName() .
+                ', I could not find Experts at ' . $district .
+                ', I have these suggestions.');
 
             $partners = Partner::where('district_id', '=', $district->id)->inRandomOrder()->take(5)->get();         
             
-            $bot->typesAndWaits(2);
+            $bot->typesAndWaits(1);
             $bot->reply($this->partners($partners));                      
         }        
     }
 
+    /**
+     * Display a list of Experts near a particular Member in Generic Template.
+     *
+     * @param $partners
+     *
+     * @return \BotMan\Drivers\Facebook\Extensions\GenericTemplate
+     */
     public function partners($partners)
     {                           
         $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
              
         foreach($partners as $partner)
         {
+            $url = $partner->thumbnail
+                ? (env('AWS_URL') . '/' . $partner->thumbnail)
+                : (env('APP_URL') . '/img/logo.jpg');
+
             $template_list->addElements([
                 Element::create($partner->name)
                     ->subtitle($partner->bio)
-                    ->image('https://white-label-bot.herokuapp.com/img/demo.jpg')
+                    ->image($url)
                     ->addButton(ElementButton::create('Call Now')
                         ->payload($partner->phone)->type('phone_number'))
             ]);
-        } 
+        }
 
         return $template_list;
+    }
+
+    /**
+     * Display a list of Experts found near particular Member.
+     *
+     * @param BotMan $bot
+     * @param $partners
+     * @param $user
+     * @param $member
+     *
+     * @return void
+     */
+    public function getNearExperts(BotMan $bot, $partners, $user, $member)
+    {
+        if (!$partners->isEmpty()) {
+            $bot->reply($this->partners($partners));
+        } else {
+            $bot->reply('Hey ' . $user->getFirstName() .
+                ', I could not find Experts at ' . $member->district->name .
+                ', I have these suggestions.');
+
+            $partners = Partner::inRandomOrder()->take(5)->get();;
+
+            $bot->typesAndWaits(1);
+            $bot->reply($this->partners($partners));
+        }
     }
 }

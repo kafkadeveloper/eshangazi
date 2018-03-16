@@ -56,29 +56,29 @@
             @else
               <table class="table table-striped table-sm">
                 <thead>
-                <tr>
-                  <th>Thumbnail</th>
+                  <tr>
+                    <th>Reference</th>
 
-                  <th>Title</th>
+                    <th>Status</th>
 
-                  <th class="text-center">Actions</th>
-                </tr>
+                    <th class="text-center">Actions</th>
+                  </tr>
                 </thead>
 
                 <tbody>
-                @foreach($ad->payments as $detail)
-                  <tr>
+                  @foreach($ad->payments as $detail)
+                    <tr>
 
-                    <td class="align-middle">
-                      {{ $detail->reference }}
-                    </td>
+                      <td class="align-middle">
+                        {{ $detail->reference }}
+                      </td>
 
-                    <td class="align-middle">
-                      {{ $detail->status }}
-                    </td>
+                      <td class="align-middle">
+                        {{ $detail->status }}
+                      </td>
 
-                  </tr>
-                @endforeach
+                    </tr>
+                  @endforeach
                 </tbody>
               </table>
             @endif

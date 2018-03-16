@@ -24,7 +24,7 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $payments = Payment::paginate(5);
+        $payments = Payment::paginate(10);
 
         return view('payments.index', ['payments' => $payments]);
     }
@@ -113,6 +113,7 @@ class PaymentController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Payment  $payment
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Payment $payment)

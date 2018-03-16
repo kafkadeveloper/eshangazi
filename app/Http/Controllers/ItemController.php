@@ -7,10 +7,6 @@ use App\ItemCategory;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use BotMan\Drivers\Facebook\Extensions\Element;
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use BotMan\Drivers\Facebook\Extensions\ElementButton;
-use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 
 class ItemController extends Controller
 {
@@ -30,7 +26,7 @@ class ItemController extends Controller
      */
     public function index()
     {
-        $items = Item::paginate(5);
+        $items = Item::paginate(10);
 
         return view('items.index', ['items' => $items ]);
     }
@@ -56,10 +52,13 @@ class ItemController extends Controller
      */
     public function store(Request $request)
     {
-        $thumbnail_path = env("APP_URL") . '/img/logo.jpg'; 
+        $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/item-thumbnails'));
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/item-thumbnails', $request->file('thumbnail'), 'public');
+        }
         
         Item::create([
             'title'             => $request->title,
@@ -113,15 +112,18 @@ class ItemController extends Controller
      */
     public function update(Request $request, Item $item)
     {
-        $thumbnail_path = null; 
+        $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/item-thumbnails'));
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/item-thumbnails', $request->file('thumbnail'), 'public');
+        }
 
         $item->update([
             'title'             => $request->title,
             'description'       => $request->description,
-            'thumbnail'         => $thumbnail_path,
+            'thumbnail'         => $thumbnail_path ? $thumbnail_path : $item->thumbnail,
             'gender'            => $request->gender,
             'minimum_age'       => $request->minimum_age,
             'item_category_id'  => $request->item_category_id,
@@ -140,78 +142,26 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
+        if(Storage::disk('s3')->exists($item->thumbnail))
+            Storage::disk('s3')->delete($item->thumbnail);
+
         $item->delete();
 
         return back();
     }
 
     /**
-     * Return proper URI for thumbnail.
+     * Show particular Item requested by a member.
      *
-     * @param  String $path
-     * 
-     * @return String
-     */
-    public function getThumbnailPath($path)
-    {
-        return substr($path, 7);
-    }
-
-     /**
-     * Delete thumbnail file.
+     * @param BotMan $bot
      *
-     * @param  String $thumbnail
-     * 
      * @return void
      */
-    public function deleteFile($thumbnail)
-    {        
-        if(! is_null($thumbnail))
-            Storage::delete($item->thumbnail);
-    }
-
-    /**
-     * Upload the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * 
-     * @return \Illuminate\Http\Response
-     */
-    public function upload(Request $request, $id)
-    {
-        $request->validate([
-            'thumbnail' => 'required|image|mimes:jpeg,jpg,bmp,png||max:2048'
-        ]);
-
-        if ($request->hasFile('thumbnail')) {
-            $thumbnail = $request->file('thumbnail');
-            $ext = $thumbnail->getClientOriginalExtension();
-            $file_name = "item_".time().".".$ext;
-            $path = $request->thumbnail->storeAs('images/items', $file_name);
-
-            $item = $this->item->findOrFail($id);
-            /*--Deleting image if exist---*/
-            if(!is_null($item->thumbnail))
-            {
-                Storage::delete($item->thumbnail);
-            }
-            $item->thumbnail = $path;
-            $item->updated_by = Auth::user()->id;
-
-            $item->update();
-            return redirect()->back();
-        }
-
-        return back();
-    }
-
     public function showBotMan(BotMan $bot)
     {
-        $extras = $bot->getMessage()->getExtras();        
-        $apiReply = $extras['apiReply'];
+        $extras = $bot->getMessage()->getExtras();
 
-        $title = $extras['apiParameters']['whitelabel-items'];
+        $title = $extras['apiParameters'][env('APP_ACTION') . '-items'];
 
         $item = Item::where('title', '=', $title)->first();
 

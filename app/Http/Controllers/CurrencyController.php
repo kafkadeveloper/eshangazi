@@ -65,6 +65,7 @@ class CurrencyController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Currency  $currency
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Currency $currency)
@@ -76,6 +77,7 @@ class CurrencyController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Currency  $currency
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Currency $currency)

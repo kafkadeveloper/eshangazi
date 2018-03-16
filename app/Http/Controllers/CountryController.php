@@ -22,7 +22,7 @@ class CountryController extends Controller
      */
     public function index()
     {
-        $countries = Country::paginate(5);
+        $countries = Country::paginate(10);
 
         return view('countries.index', ['countries' => $countries]);
     }
@@ -41,6 +41,7 @@ class CountryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -84,6 +85,7 @@ class CountryController extends Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Country  $country
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Country $country)

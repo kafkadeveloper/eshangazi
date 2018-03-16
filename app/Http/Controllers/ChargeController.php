@@ -23,7 +23,7 @@ class ChargeController extends Controller
      */
     public function index()
     {
-        $charges = Charge::paginate(5);
+        $charges = Charge::paginate(10);
 
         return view('charges.index', ['charges' => $charges]);
     }
@@ -47,14 +47,13 @@ class ChargeController extends Controller
      */
     public function store(Request $request)
     {
-        Ad::create([
+        Charge::create([
             'name'          => $request->name,
             'description'   => $request->description,
             'amount'        => $request->amount,
             'duration'      => $request->duration,
             'starts'        => $request->starts,
             'ends'          => $request->ends,
-            'partner_id'    => $request->partner_id,
             'created_by'    => auth()->id()
         ]);
 
@@ -77,12 +76,11 @@ class ChargeController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  \App\Charge  $charge
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Charge $charge)
     {
-        $partners = Partner::all('id', 'name');
-
         return view('ads.edit', ['charge' => $charge]);
     }
 
@@ -103,7 +101,6 @@ class ChargeController extends Controller
             'duration'      => $request->duration,
             'starts'        => $request->starts,
             'ends'          => $request->ends,
-            'partner_id'    => $request->partner_id,
             'updated_by'    => auth()->id()
         ]);
 
@@ -114,6 +111,7 @@ class ChargeController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  \App\Charge  $charge
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Charge $charge)

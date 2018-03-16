@@ -38,7 +38,7 @@
           @foreach($item_categories as $item_category)
             <tr>
               <td class="align-middle">
-                <img src="{{ asset('img/demo.jpg') }}" height="50" alt="{{ $item_category->name }}">
+                <img src="{{ $item_category->thumbnail ? (env('AWS_URL') . '/' . $item_category->thumbnail) : '/img/demo.jpg' }}" height="50" alt="{{ $item_category->name }}">
               </td>
 
               <td class="align-middle">

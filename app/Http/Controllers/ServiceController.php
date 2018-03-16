@@ -50,10 +50,14 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        $thumbnail_path = env("APP_URL") . '/img/logo.jpg'; 
+        $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/service-thumbnails'));
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/service-thumbnails', $request->file('thumbnail'), 'public');
+
+        }
 
         Service::create([
             'name'          => $request->name,
@@ -105,10 +109,14 @@ class ServiceController extends Controller
      */
     public function update(Request $request, Service $service)
     {
-        $thumbnail_path = null; 
+        $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail'))
-            $thumbnail_path = $this->getThumbnailPath($request->file('thumbnail')->store('public/service-thumbnails'));
+        {
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/service-thumbnails', $request->file('thumbnail'), 'public');
+
+        }
 
         $service->update([
             'name'          => $request->name,
@@ -133,19 +141,7 @@ class ServiceController extends Controller
         $service->delete();
 
         return back();
-    }    
-
-    /**
-     * Return proper URI for thumbnail.
-     *
-     * @param  String $path
-     * 
-     * @return String
-     */
-    public function getThumbnailPath($path)
-    {
-        return substr($path, 7);
-    } 
+    }
 
     /**
      * Display Generic Template .
@@ -156,10 +152,9 @@ class ServiceController extends Controller
      */
     public function showBotMan(BotMan $bot)
     {
-        $extras = $bot->getMessage()->getExtras();        
-        $apiReply = $extras['apiReply'];
+        $extras = $bot->getMessage()->getExtras();
 
-        $name = $extras['apiParameters']['whitelabel-services'];
+        $name = $extras['apiParameters'][env('APP_ACTION') . '-services'];
 
         $service = Service::where('name', '=', $name)->first();
 

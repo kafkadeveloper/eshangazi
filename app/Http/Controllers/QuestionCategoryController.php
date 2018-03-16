@@ -22,7 +22,7 @@ class QuestionCategoryController extends Controller
      */
     public function index()
     {
-        $question_categories = QuestionCategory::paginate(3);
+        $question_categories = QuestionCategory::paginate(10);
 
         return view('question-categories.index', ['question_categories' => $question_categories]);
     }
@@ -41,6 +41,7 @@ class QuestionCategoryController extends Controller
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
