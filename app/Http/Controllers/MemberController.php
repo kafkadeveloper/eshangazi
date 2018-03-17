@@ -120,9 +120,9 @@ class MemberController extends Controller
             $bot->reply($this->features());
 
 
-            $member = Member::where('user_platform_id', $user->getId());
+            $member = Member::where('user_platform_id', $user->getId())->get();
 
-            $bot->reply($user->getId());
+            $bot->reply($member->id);
 //
 //            if($member)
 //            {
