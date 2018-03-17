@@ -117,13 +117,12 @@ class MemberController extends Controller
         {
             $bot->reply('Welcome back ' .  $user->getFirstName());
 
-            //$bot->reply($this->features());
+            $bot->reply($this->features());
 
-            //$extras = $bot->getMessage()->getExtras();
 
-            //$bot->reply($extras['apiIntent']);
+            $member = Member::where('user_platform_id', $user->getId());
 
-//            $member = Member::where('user_platform_id', $user->getId());
+            $bot->reply($member->id);
 //
 //            if($member)
 //            {
