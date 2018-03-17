@@ -103,15 +103,10 @@ class MemberController extends Controller
         $user = $bot->getUser();
         $user_id = $user->getId();
 
-        $bot->typesAndWaits(1);
-
         $extras = $bot->getMessage()->getExtras();
-        $apiReply = $extras['apiReply'];
-        $bot->reply($apiReply);
-        $apiAction = $extras['apiAction'];
-        $bot->reply($apiAction);
         $apiIntent = $extras['apiIntent'];
-        $bot->reply($apiIntent);
+
+        $bot->typesAndWaits(1);
 
         if($this->check($user)) 
         {
@@ -123,11 +118,14 @@ class MemberController extends Controller
             $member = Member::where('user_platform_id', '=', $user_id)->first();
 
             $bot->reply($member->id);
-//
-//            if($member)
-//            {
-//                Conversation::record($member->id, 'Hello');
-//            }
+
+            if($member)
+            {
+                $this->create([
+                    'intent'    => $apiIntent,
+                    'member_id' => $member->id
+                ]);
+            }
         } 
         else 
         {
