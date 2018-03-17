@@ -27,4 +27,21 @@ class Conversation extends Model
     {
         return $this->belongsTo(Member::class);
     }
+
+
+    /**
+     * Record member conversation intent.
+     *
+     * @param $member_id
+     * @param $intent
+     *
+     * @return void
+     */
+    public function record($member_id, $intent)
+    {
+        $this->create([
+            'intent'    => $intent,
+            'member_id' => $member_id
+        ]);
+    }
 }

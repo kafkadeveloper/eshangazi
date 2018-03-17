@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Conversation;
 use App\Member;
 use App\District;
 use App\ItemCategory;
@@ -107,6 +108,15 @@ class MemberController extends Controller
             $bot->reply('Welcome back ' .  $user->getFirstName());            
 
             $bot->reply($this->features());
+
+            $member = Member::where('user_platform_id', $user->getId());
+
+            if($member)
+            {
+                $extras = $bot->getMessage()->getExtras();
+                
+                Conversation::record($member->id, $extras['apiIntent']);
+            }
         } 
         else 
         {
