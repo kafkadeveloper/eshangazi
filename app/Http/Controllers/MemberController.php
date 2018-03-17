@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Conversation;
 use App\Member;
 use App\District;
 use App\ItemCategory;
+use App\Conversation;
 use BotMan\BotMan\BotMan;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
@@ -100,10 +100,10 @@ class MemberController extends Controller
      */
     public function started(BotMan $bot)
     {
-        $user = $bot->getUser();            
+        $user = $bot->getUser();
+        $user_id = $user->getId();
+
         $bot->typesAndWaits(1);
-
-
 
         $extras = $bot->getMessage()->getExtras();
         $apiReply = $extras['apiReply'];
@@ -120,7 +120,7 @@ class MemberController extends Controller
             $bot->reply($this->features());
 
 
-            $member = Member::where('user_platform_id', '=', $user->getId())->get();
+            $member = Member::where('user_platform_id', '=', $user_id)->first();
 
             $bot->reply($member->id);
 //
