@@ -114,8 +114,8 @@ class MemberController extends Controller
             if($member)
             {
                 $extras = $bot->getMessage()->getExtras();
-                
-                Conversation::record($member->id, $extras['apiIntent']);
+
+                Conversation::record($member->id, 'Hello');
             }
         } 
         else 

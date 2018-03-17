@@ -40,7 +40,9 @@ class Conversation extends Model
     public function record($member_id, $intent)
     {
         $this->create([
-            'intent'    => $intent,
+            'message'   => 'Hey',
+            'reply'     => 'Hey',
+            'intent'    => 'Hey',
             'member_id' => $member_id
         ]);
     }
