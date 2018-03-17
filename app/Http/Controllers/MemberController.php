@@ -122,7 +122,7 @@ class MemberController extends Controller
 
             $member = Member::where('user_platform_id', $user->getId());
 
-            $bot->reply($member->id);
+            $bot->reply($user->getId());
 //
 //            if($member)
 //            {
