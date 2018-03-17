@@ -109,14 +109,12 @@ class MemberController extends Controller
 
             $bot->reply($this->features());
 
-            $member = Member::where('user_platform_id', $user->getId());
-
-            if($member)
-            {
-                $extras = $bot->getMessage()->getExtras();
-
-                Conversation::record($member->id, 'Hello');
-            }
+//            $member = Member::where('user_platform_id', $user->getId());
+//
+//            if($member)
+//            {
+//                Conversation::record($member->id, 'Hello');
+//            }
         } 
         else 
         {
@@ -191,7 +189,7 @@ class MemberController extends Controller
      */
     public function features()
     {
-        $categories = ItemCategory::all();
+        $categories = ItemCategory::inRandomOrder();
                             
         $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
              
