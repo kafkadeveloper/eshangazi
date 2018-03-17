@@ -260,7 +260,7 @@ class PartnerController extends Controller
                 ', I could not find Experts at ' . $member->district->name .
                 ', I have these suggestions.');
 
-            $partners = Partner::inRandomOrder()->take(5)->get();;
+            $partners = Partner::inRandomOrder()->take(5)->get();
 
             $bot->typesAndWaits(1);
             $bot->reply($this->partners($partners));

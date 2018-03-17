@@ -28,6 +28,8 @@ class MemberController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * @param BotMan $bot
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(BotMan $bot)
@@ -116,8 +118,6 @@ class MemberController extends Controller
 
             $member = Member::where('user_platform_id', '=', $user_id)->first();
 
-            $bot->reply($member->id);
-
             if($member)
             {
                 Conversation::create([
@@ -199,7 +199,7 @@ class MemberController extends Controller
      */
     public function features()
     {
-        $categories = ItemCategory::inRandomOrder();
+        $categories = ItemCategory::inRandomOrder()->take(5)->get();
                             
         $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
              

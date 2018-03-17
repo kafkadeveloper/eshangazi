@@ -1,13 +1,16 @@
 <?php
 
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\MessageController;
 use BotMan\BotMan\Middleware\Dialogflow;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\CenterController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PartnerController;
+use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ItemCategoryController;
+use App\Http\Controllers\MessageDetailController;
 
 $botman = resolve('botman');
 
@@ -37,3 +40,5 @@ $botman->hears(env('APP_ACTION') . '.experts.district', PartnerController::class
 $botman->hears(env('APP_ACTION') . '.messages', MessageController::class.'@showBotMan')->middleware($dialogflow);
 
 $botman->hears(env('APP_ACTION') . '.message.details', MessageDetailController::class.'@showBotMan')->middleware($dialogflow);
+
+$botman->hears(env('APP_ACTION') . '.feedback', FeedbackController::class.'@feedback')->middleware($dialogflow);

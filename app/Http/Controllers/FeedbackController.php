@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Conversation;
 use App\Feedback;
 use Illuminate\Http\Request;
 
@@ -30,12 +31,39 @@ class FeedbackController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param BotMan $bot
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(BotMan $bot)
     {
-        //
+        $user = $bot->getUser();
+        $user_id = $user->getId();
+
+        $extras = $bot->getMessage()->getExtras();
+
+        $apiIntent = $extras['apiIntent'];
+        $apiReply = $extras['apiReply'];
+
+        $bot->typesAndWaits(1);
+
+        $bot->reply($apiReply);
+
+
+
+        Feedback::create([
+            'feeback'    => $apiIntent,
+            'member_id'  => $member->id
+        ]);
+
+        $member = Member::where('user_platform_id', '=', $user_id)->first();
+
+        if($member)
+        {
+            Conversation::create([
+                'intent'    => $apiIntent,
+                'member_id' => $member->id
+            ]);
+        }
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Conversations\FeedbackConversation;
 use BotMan\BotMan\BotMan;
 use App\Http\Conversations\QuizConversation;
 
@@ -33,6 +34,16 @@ class BotManController extends Controller
     public function quizConversation(BotMan $bot)
     {
         $bot->startConversation(new QuizConversation());
+    }
+
+    /**
+     * Loaded through routes/botman.php
+     *
+     * @param  BotMan $bot
+     */
+    public function feedback(BotMan $bot)
+    {
+        $bot->startConversation(new FeedbackConversation());
     }
 
     public function listener(BotMan $bot)
