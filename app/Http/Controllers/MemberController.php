@@ -101,17 +101,27 @@ class MemberController extends Controller
     public function started(BotMan $bot)
     {
         $user = $bot->getUser();            
-        $bot->typesAndWaits(1);   
+        $bot->typesAndWaits(1);
+
+
+
+        $extras = $bot->getMessage()->getExtras();
+        $apiReply = $extras['apiReply'];
+        $bot->reply($apiReply);
+        $apiAction = $extras['apiAction'];
+        $bot->reply($apiAction);
+        $apiIntent = $extras['apiIntent'];
+        $bot->reply($apiIntent);
 
         if($this->check($user)) 
         {
-            $bot->reply('Welcome back ' .  $user->getFirstName());            
+            $bot->reply('Welcome back ' .  $user->getFirstName());
 
-            $bot->reply($this->features());
+            //$bot->reply($this->features());
 
-            $extras = $bot->getMessage()->getExtras();
+            //$extras = $bot->getMessage()->getExtras();
 
-            $bot->reply($extras['apiIntent']);
+            //$bot->reply($extras['apiIntent']);
 
 //            $member = Member::where('user_platform_id', $user->getId());
 //
