@@ -166,15 +166,15 @@ class ItemCategoryController extends Controller
         $user = $bot->getUser();
         //$extras = $bot->getMessage()->getExtras();
 
-        $member = Member::where('user_platform_id', $user->getId());
+        //$member = Member::where('user_platform_id', $user->getId());
 
-        if($member)
-        {
-            Conversation::create([
-                'intent'    => 'Hey',
-                'member_id' => $member->id
-            ]);
-        }
+//        if($member)
+//        {
+//            Conversation::create([
+//                'intent'    => 'Hey',
+//                'member_id' => $member->id
+//            ]);
+//        }
     }
 
     /**
