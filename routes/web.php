@@ -156,3 +156,11 @@ Route::get('/centers/{center}/edit', 'CenterController@edit')->name('edit-center
 Route::patch('/centers/{center}', 'CenterController@update')->name('update-center');
 Route::post('/centers', 'CenterController@store')->name('store-center');
 Route::delete('/centers/{center}', 'CenterController@destroy')->name('delete-center');
+
+Route::get('/users', 'UserController@index')->name('index-user');
+Route::get('/users/create', 'UserController@create')->name('create-user');
+Route::get('/users/{user}', 'UserController@show')->name('show-user');
+Route::get('/users/{user}/edit', 'UserController@edit')->name('edit-user');
+Route::patch('/users/{user}', 'UserController@update')->name('update-user');
+Route::post('/users', 'UserController@store')->name('store-user');
+Route::delete('/users/{user}', 'UserController@destroy')->name('delete-user');
