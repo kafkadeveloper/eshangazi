@@ -18,7 +18,7 @@
         "botman/tinker": "~1.0",
         "clue/stdio-react": "^1.0",
         "fideloper/proxy": "~4.0",
-        "laravel/framework": "5.6.*",
+        "laravel/framework": "5.6.7",
         "laravel/passport": "^5.0",
         "laravel/tinker": "~1.0",
         "laravelcollective/html": "^5.4.0",
