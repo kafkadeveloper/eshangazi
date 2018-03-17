@@ -22,7 +22,9 @@ class CurrencyController extends Controller
      */
     public function index()
     {
-        //
+        $currencies = Currency::paginate(10);
+
+        return view('currencies.index', ['currencies' => $currencies]);
     }
 
     /**
@@ -32,40 +34,50 @@ class CurrencyController extends Controller
      */
     public function create()
     {
-        //
+        return view('currencies.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        Currency::create([
+            'name'          => $request->name,
+            'short_name'    => $request->short_name,
+            'symbol'        => $request->symbol,
+            'created_by'    => auth()->id(),
+        ]);
+
+        return back();
     }
 
     /**
      * Display the specified resource.
      *
      * @param  \App\Currency  $currency
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Currency $currency)
     {
-        //
+        return view('countries.show', ['currency' => $currency]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Currency  $currency
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Currency $currency)
     {
-        //
+        return view('currencies.edit', ['currency' => $currency]);
     }
 
     /**
@@ -78,7 +90,14 @@ class CurrencyController extends Controller
      */
     public function update(Request $request, Currency $currency)
     {
-        //
+        $currency->update([
+            'name'          => $request->name,
+            'short_name'    => $request->short_name,
+            'symbol'        => $request->symbol,
+            'created_by'    => auth()->id(),
+        ]);
+
+        return redirect()->route('show-currency', $currency);
     }
 
     /**
@@ -90,6 +109,8 @@ class CurrencyController extends Controller
      */
     public function destroy(Currency $currency)
     {
-        //
+        $currency->delete();
+
+        return back();
     }
 }

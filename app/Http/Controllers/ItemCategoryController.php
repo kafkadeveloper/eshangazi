@@ -163,7 +163,18 @@ class ItemCategoryController extends Controller
         $bot->typesAndWaits(2);
         $bot->reply($this->items($category));
 
-        $this->conversation($bot);
+        $user = $bot->getUser();
+        $extras = $bot->getMessage()->getExtras();
+
+        $member = Member::where('user_platform_id', '=', $user->getId());
+
+        if($member)
+        {
+            Conversation::create([
+                'intent'    => $extras['apiIntent'],
+                'member_id' => $member->id
+            ]);
+        }
     }
 
     /**
@@ -200,19 +211,19 @@ class ItemCategoryController extends Controller
      *
      * @param $bot
      */
-    public function conversation($bot)
-    {
-        $user = $bot->getUser();
-        $extras = $bot->getMessage()->getExtras();
-
-        $member = Member::where('user_platform_id', '=', $user->getId());
-
-        if($member)
-        {
-            Conversation::create([
-                'intent'    => $extras['apiIntent'],
-                'member_id' => $member->id
-            ]);
-        }
-    }
+//    public function conversation($bot)
+//    {
+//        $user = $bot->getUser();
+//        $extras = $bot->getMessage()->getExtras();
+//
+//        $member = Member::where('user_platform_id', '=', $user->getId());
+//
+//        if($member)
+//        {
+//            Conversation::create([
+//                'intent'    => $extras['apiIntent'],
+//                'member_id' => $member->id
+//            ]);
+//        }
+//    }
 }
