@@ -163,18 +163,24 @@ class ItemCategoryController extends Controller
         $bot->typesAndWaits(2);
         $bot->reply($this->items($category));
 
-        $user = $bot->getUser();
         $extras = $bot->getMessage()->getExtras();
+        $apiIntent = $extras['apiIntent'];
 
-        //$member = Member::where('user_platform_id', $user->getId());
+        $user = $bot->getUser();
+        $user_id = $user->getId();
 
-//        if($member)
-//        {
-//            Conversation::create([
-//                'intent'    => 'Hey',
-//                'member_id' => $member->id
-//            ]);
-//        }
+        $member = Member::where('user_platform_id', '=', $user_id)->first();
+
+        $bot->reply($member->id);
+
+        if($member)
+        {
+            Conversation::create([
+                'message'   => 'Test',
+                'intent'    => $apiIntent,
+                'member_id' => $member->id
+            ]);
+        }
     }
 
     /**

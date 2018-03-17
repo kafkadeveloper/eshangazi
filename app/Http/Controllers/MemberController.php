@@ -114,7 +114,6 @@ class MemberController extends Controller
 
             $bot->reply($this->features());
 
-
             $member = Member::where('user_platform_id', '=', $user_id)->first();
 
             $bot->reply($member->id);
@@ -122,6 +121,7 @@ class MemberController extends Controller
             if($member)
             {
                 Conversation::create([
+                    'message'   => 'Test',
                     'intent'    => $apiIntent,
                     'member_id' => $member->id
                 ]);
