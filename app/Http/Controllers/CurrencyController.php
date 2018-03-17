@@ -7,6 +7,14 @@ use Illuminate\Http\Request;
 
 class CurrencyController extends Controller
 {
+    /*
+     * Currency Controller Constructor
+    */
+    public  function  __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
