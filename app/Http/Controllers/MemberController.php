@@ -109,6 +109,10 @@ class MemberController extends Controller
 
             $bot->reply($this->features());
 
+            $extras = $bot->getMessage()->getExtras();
+
+            $bot->reply($extras['apiIntent']);
+
 //            $member = Member::where('user_platform_id', $user->getId());
 //
 //            if($member)
