@@ -16,7 +16,6 @@ class CreateConversationsTable extends Migration
         Schema::create('conversations', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->text('message')->nullable();
             $table->string('intent')->nullable();
 
             $table->integer('member_id')->unsigned();

@@ -121,7 +121,6 @@ class MemberController extends Controller
             if($member)
             {
                 Conversation::create([
-                    'message'   => 'Test',
                     'intent'    => $apiIntent,
                     'member_id' => $member->id
                 ]);
