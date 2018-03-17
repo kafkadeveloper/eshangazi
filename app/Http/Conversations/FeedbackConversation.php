@@ -2,8 +2,8 @@
 
 namespace App\Http\Conversations;
 
-use App\Feedback;
 use App\Member;
+use App\Feedback;
 use BotMan\BotMan\Messages\Conversations\Conversation;
 
 class FeedbackConversation extends Conversation
