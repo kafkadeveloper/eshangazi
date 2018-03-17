@@ -41,4 +41,4 @@ $botman->hears(env('APP_ACTION') . '.messages', MessageController::class.'@showB
 
 $botman->hears(env('APP_ACTION') . '.message.details', MessageDetailController::class.'@showBotMan')->middleware($dialogflow);
 
-$botman->hears(env('APP_ACTION') . '.feedback', FeedbackController::class.'@feedback')->middleware($dialogflow);
+$botman->hears(env('APP_ACTION') . '.feedback', BotManController::class.'@feedback')->middleware($dialogflow);
