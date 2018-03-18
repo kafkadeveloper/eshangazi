@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Member;
 use App\Message;
+use App\Conversation;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -196,7 +197,14 @@ class MessageController extends Controller
         {            
             $user = $bot->getUser();
             $bot->reply('Hey ' . $user->getFirstName() . ', something went wrong, you can proceed with something else while my team fixing this issue.');
-        }        
+        }
+
+        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
+
+        if($member)
+        {
+            (new Conversation())->record($title, $member->id);
+        }
     }
 
     /**

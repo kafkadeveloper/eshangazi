@@ -8,13 +8,23 @@ use Illuminate\Http\Request;
 class ConversationController extends Controller
 {
     /**
+     * Center Controller constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        //
+        $conversations = Conversation::paginate(10);
+
+        return view('conversation.index', ['conversations' => $conversations]);
     }
 
     /**

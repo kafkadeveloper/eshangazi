@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Item;
+use App\Member;
+use App\Conversation;
 use App\ItemCategory;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
@@ -170,5 +172,12 @@ class ItemController extends Controller
 
         $bot->typesAndWaits(1);
         $bot->reply($item->description);
+
+        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
+
+        if($member)
+        {
+            (new Conversation())->record($title, $member->id);
+        }
     }
 }

@@ -9,9 +9,7 @@
 
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group">
-                <a href="#" class="btn btn-sm btn-outline-secondary">
-                    Unsubscribed Members
-                </a>
+
             </div>
         </div>
     </div>    
@@ -20,11 +18,7 @@
         @if($members->isEmpty())
             <p class="lead text-muted">
                 No data to display at the moment.
-            </p>                   
-
-            <a href="#" class="btn btn-primary">
-                Click here to view Unsubscribed Members
-            </a>                     
+            </p>
         @else
             <table class="table table-striped table-sm">
                 <thead>
@@ -43,7 +37,11 @@
                     @foreach($members as $member)
                         <tr>
                             <td class="align-middle">
-                                <img src="{{ $member->avatar }}" height="50" alt="{{ $member->name }}">
+                                <img
+                                    src="{{ $member->avatar ? $member->avatar : '/img/logo.png' }}"
+                                    height="50"
+                                    alt="{{ $member->name }}"
+                                >
                             </td>
 
                             <td class="align-middle">

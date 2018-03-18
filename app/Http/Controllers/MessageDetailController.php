@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Message;
+use App\Conversation;
 use App\MessageDetail;
 use Illuminate\Http\Request;
 
@@ -161,5 +162,12 @@ class MessageDetailController extends Controller
 
         $bot->typesAndWaits(1);
         $bot->reply($item->description);
+
+        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
+
+        if($member)
+        {
+            (new Conversation())->record($title, $member->id);
+        }
     }
 }

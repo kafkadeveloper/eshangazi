@@ -103,10 +103,6 @@ class MemberController extends Controller
     public function started(BotMan $bot)
     {
         $user = $bot->getUser();
-        $user_id = $user->getId();
-
-        $extras = $bot->getMessage()->getExtras();
-        $apiIntent = $extras['apiIntent'];
 
         $bot->typesAndWaits(1);
 
@@ -115,16 +111,6 @@ class MemberController extends Controller
             $bot->reply('Welcome back ' .  $user->getFirstName());
 
             $bot->reply($this->features());
-
-            $member = Member::where('user_platform_id', '=', $user_id)->first();
-
-            if($member)
-            {
-                Conversation::create([
-                    'intent'    => $apiIntent,
-                    'member_id' => $member->id
-                ]);
-            }
         } 
         else 
         {
@@ -152,17 +138,21 @@ class MemberController extends Controller
         $age = $extras['apiParameters']['age']->amount;
         $district = $extras['apiParameters']['district'];
 
+        $born_year = date('Y') - $age;
+
         $district = District::where('name', '=', $district)->first();
 
-        Member::create([
+        $member = Member::create([
             'user_platform_id'  => $user->getId(),
             'name'              => $user->getFirstName() . ' ' . $user->getLastName(),
             'avatar'            => $profile_pic,
-            'born_year'         => $age,
+            'born_year'         => $born_year,
             'gender'            => $gender,
             'platform_id'       => null,
             'district_id'       => $district->id,
         ]);
+
+        (new Conversation())->record('Subscribe', $member->id);
     }
 
     /**
@@ -189,6 +179,8 @@ class MemberController extends Controller
             $member->update([
                 'status' => 0
             ]);
+
+            (new Conversation())->record('Unsubscribe', $member->id);
         }
     }
 

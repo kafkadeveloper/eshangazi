@@ -25,4 +25,12 @@ class Conversation extends Model
     {
         return $this->belongsTo(Member::class);
     }
+
+    public function record($intent, $member)
+    {
+        $this->create([
+            'intent'    => $intent,
+            'member_id' => $member
+        ]);
+    }
 }

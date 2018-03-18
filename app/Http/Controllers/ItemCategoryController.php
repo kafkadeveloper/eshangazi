@@ -163,23 +163,12 @@ class ItemCategoryController extends Controller
         $bot->typesAndWaits(2);
         $bot->reply($this->items($category));
 
-        $extras = $bot->getMessage()->getExtras();
-        $apiIntent = $extras['apiIntent'];
-
         $user = $bot->getUser();
         $user_id = $user->getId();
 
         $member = Member::where('user_platform_id', '=', $user_id)->first();
 
-        $bot->reply($member->id);
-
-        if($member)
-        {
-            Conversation::create([
-                'intent'    => $apiIntent,
-                'member_id' => $member->id
-            ]);
-        }
+        (new Conversation())->record($name, $member->id);
     }
 
     /**
@@ -210,25 +199,4 @@ class ItemCategoryController extends Controller
 
         return $template_list;
     }
-
-    /**
-     * Record member and bot conversation.
-     *
-     * @param $bot
-     */
-//    public function conversation($bot)
-//    {
-//        $user = $bot->getUser();
-//        $extras = $bot->getMessage()->getExtras();
-//
-//        $member = Member::where('user_platform_id', '=', $user->getId());
-//
-//        if($member)
-//        {
-//            Conversation::create([
-//                'intent'    => $extras['apiIntent'],
-//                'member_id' => $member->id
-//            ]);
-//        }
-//    }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Conversation;
 use App\Ward;
 use App\Center;
 use App\Member;
@@ -212,7 +213,10 @@ class CenterController extends Controller
                 $bot->typesAndWaits(1);
                 $bot->reply($this->centers($centers));
             }            
-        }        
+        }
+
+        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
+        (new Conversation())->record('Centers', $member->id);
     }
 
     /**
