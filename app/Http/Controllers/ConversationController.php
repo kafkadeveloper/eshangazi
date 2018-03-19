@@ -24,7 +24,7 @@ class ConversationController extends Controller
     {
         $conversations = Conversation::paginate(10);
 
-        return view('conversation.index', ['conversations' => $conversations]);
+        return view('conversations.index', ['conversations' => $conversations]);
     }
 
     /**

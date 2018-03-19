@@ -4,7 +4,7 @@
     <div class="card-body">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
             <h1 class="h2">
-                Members
+                Conversations
             </h1>
 
             <div class="btn-toolbar mb-2 mb-md-0">
@@ -15,7 +15,7 @@
         </div>
 
         <div class="table-responsive">
-            @if($members->isEmpty())
+            @if($conversations->isEmpty())
                 <p class="lead text-muted">
                     No data to display at the moment.
                 </p>
