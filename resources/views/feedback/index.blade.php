@@ -62,7 +62,7 @@
                     </tbody>
                 </table>
 
-                {{ $feedback->links() }}
+                {{ $feedbacks->links() }}
             @endif
         </div>
     </div>
