@@ -6,6 +6,7 @@ use App\Message;
 use App\Conversation;
 use App\MessageDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MessageDetailController extends Controller
 {
