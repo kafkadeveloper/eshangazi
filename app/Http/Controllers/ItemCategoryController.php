@@ -160,15 +160,15 @@ class ItemCategoryController extends Controller
         $bot->typesAndWaits(1);
         $bot->reply($category->description);
 
-        $bot->typesAndWaits(2);
+        $bot->typesAndWaits(1);
         $bot->reply($this->items($category));
 
-        $user = $bot->getUser();
-        $user_id = $user->getId();
-
-        $member = Member::where('user_platform_id', '=', $user_id)->first();
-
-        (new Conversation())->record($name, $member->id);
+//        $user = $bot->getUser();
+//        $user_id = $user->getId();
+//
+//        $member = Member::where('user_platform_id', '=', $user_id)->first();
+//
+//        (new Conversation())->record($name, $member->id);
     }
 
     /**
