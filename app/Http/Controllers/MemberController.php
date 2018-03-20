@@ -152,7 +152,15 @@ class MemberController extends Controller
             'district_id'       => $district->id,
         ]);
 
-        (new Conversation())->record('Subscribe', $member->id);
+        if ($member)
+        {
+            Conversation::create([
+                'intent'    => 'Subscribe',
+                'member_id' => $member->id
+            ]);
+        }
+
+
     }
 
     /**
@@ -180,7 +188,10 @@ class MemberController extends Controller
                 'status' => 0
             ]);
 
-            (new Conversation())->record('Unsubscribe', $member->id);
+            Conversation::create([
+                'intent'    => 'Unsubscribe',
+                'member_id' => $member->id
+            ]);
         }
     }
 

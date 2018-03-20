@@ -177,7 +177,10 @@ class ItemController extends Controller
 
         if($member)
         {
-            (new Conversation())->record($title, $member->id);
+            Conversation::create([
+                'intent'    => $title,
+                'member_id' => $member->id
+            ]);
         }
     }
 }

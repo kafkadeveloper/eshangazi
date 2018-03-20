@@ -169,7 +169,10 @@ class ServiceController extends Controller
         $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
 
         if($member) {
-            (new Conversation())->record($name, $member->id);
+            Conversation::create([
+                'intent'    => $name,
+                'member_id' => $member->id
+            ]);
         }
     }
 }
