@@ -108,7 +108,7 @@ class MemberController extends Controller
 
         if($this->check($user)) 
         {
-            $bot->reply('Welcome back ' .  $user->getFirstName());
+            $bot->reply('Karibu tena ' .  $user->getFirstName());
 
             $bot->reply($this->features());
         } 
@@ -159,8 +159,6 @@ class MemberController extends Controller
                 'member_id' => $member->id
             ]);
         }
-
-
     }
 
     /**
@@ -208,15 +206,18 @@ class MemberController extends Controller
              
         foreach($categories as $category)
         {
-            $url = $category->thumbnail
-                ? (env('AWS_URL') . '/' . $category->thumbnail)
-                : (env('APP_URL') . '/img/logo.jpg');
+            $url = null;
+
+            if ($category->thumbnail)
+                $url = env('AWS_URL') . '/' . $category->thumbnail;
+            else
+                $url = env('APP_URL') . '/img/logo.jpg';
 
             $template_list->addElements([
                 Element::create($category->name)
                     ->subtitle($category->description)
                     ->image($url)
-                    ->addButton(ElementButton::create('View Details')
+                    ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($category->name)->type('postback'))
             ]);
         } 

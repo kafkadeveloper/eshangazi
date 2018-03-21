@@ -168,7 +168,6 @@ class ItemCategoryController extends Controller
 
         $member = Member::where('user_platform_id', '=', $user_id)->first();
 
-        //(new Conversation())->record($name, $member->id);
         if($member)
         {
             Conversation::create([
@@ -192,15 +191,18 @@ class ItemCategoryController extends Controller
              
         foreach($category->items as $item)
         {
-//            $url = $item->thumbnail
-//                ? (env('AWS_URL') . '/' . $item->thumbnail)
-//                : (env('APP_URL') . '/img/logo.jpg');
+            $url = null;
+
+            if ($item->thumbnail)
+                $url = env('AWS_URL') . '/' . $item->thumbnail;
+            else
+                $url = env('APP_URL') . '/img/logo.jpg';
 
             $template_list->addElements([
                 Element::create($item->title)
                     ->subtitle($item->description)
-                    ->image(env('APP_URL') . '/img/logo.jpg')
-                    ->addButton(ElementButton::create('View Details')
+                    ->image($url)
+                    ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($item->title)->type('postback'))
             ]);
         } 

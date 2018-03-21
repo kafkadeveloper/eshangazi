@@ -157,7 +157,7 @@ class MessageController extends Controller
 
         foreach($members as $member)
         {
-            $bot->say($this->message($message), $member->user_platform_id, FacebookDriver::class);
+            $bot->say($this->message($message), $member->user_platform_id);
         }
 
         $message->update([
@@ -189,24 +189,26 @@ class MessageController extends Controller
             
         $bot->typesAndWaits(1);        
 
+        $user = $bot->getUser();
+        $member = Member::where('user_platform_id', '=', $user->getId())->first();
+
         if($message)
         {
             $bot->reply($this->details($message));
+
+            if($member)
+            {
+                Conversation::create([
+                    'intent'    => $title,
+                    'member_id' => $member->id
+                ]);
+            }
         }
         else
-        {            
-            $user = $bot->getUser();
-            $bot->reply('Hey ' . $user->getFirstName() . ', something went wrong, you can proceed with something else while my team fixing this issue.');
-        }
-
-        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
-
-        if($member)
         {
-            Conversation::create([
-                'intent'    => $title,
-                'member_id' => $member->id
-            ]);
+
+            $bot->reply('Oooh ' . $user->getFirstName() .
+                ', kuna tatizo la kiufundi, endelea na mengine wakati tunarekesha hili.');
         }
     }
 
@@ -219,9 +221,12 @@ class MessageController extends Controller
      */
     public function message($message)
     {
-        $url = $message->thumbnail
-            ? (env('AWS_URL') . '/' . $message->thumbnail)
-            : (env('APP_URL') . '/img/logo.jpg');
+        $url = null;
+
+        if ($message->thumbnail)
+            $url = env('AWS_URL') . '/' . $message->thumbnail;
+        else
+            $url = env('APP_URL') . '/img/logo.jpg';
 
         $message = GenericTemplate::create()
                     ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL)
@@ -229,7 +234,7 @@ class MessageController extends Controller
                         Element::create($message->title)
                             ->subtitle($message->description)
                             ->image($url)
-                            ->addButton(ElementButton::create('View Details')
+                            ->addButton(ElementButton::create('Fahamu zaidi')
                                 ->payload($message->title)->type('postback'))
                     ]);
 
@@ -249,9 +254,12 @@ class MessageController extends Controller
              
         foreach($message->details as $detail)
         {
-            $url = $message->thumbnail
-                ? (env('AWS_URL') . '/' . $message->thumbnail)
-                : (env('APP_URL') . '/img/logo.jpg');
+            $url = null;
+
+            if ($message->thumbnail)
+                $url = env('AWS_URL') . '/' . $message->thumbnail;
+            else
+                $url = env('APP_URL') . '/img/logo.jpg';
 
             $template_list->addElements([
                 Element::create($detail->title)
