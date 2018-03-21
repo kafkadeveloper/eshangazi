@@ -8,7 +8,6 @@ use App\Http\Controllers\MemberController;
 use App\Http\Controllers\CenterController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PartnerController;
-use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\MessageDetailController;
 

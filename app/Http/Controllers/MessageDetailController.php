@@ -6,6 +6,7 @@ use App\Member;
 use App\Message;
 use App\Conversation;
 use App\MessageDetail;
+use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
