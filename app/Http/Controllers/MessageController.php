@@ -265,7 +265,7 @@ class MessageController extends Controller
                 Element::create($detail->title)
                     ->subtitle($detail->description)
                     ->image($url)
-                    ->addButton(ElementButton::create('View Details')
+                    ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($detail->title)->type('postback'))
             ]);
         } 

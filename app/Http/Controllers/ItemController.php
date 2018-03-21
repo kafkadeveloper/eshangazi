@@ -167,8 +167,8 @@ class ItemController extends Controller
 
         $item = Item::where('title', '=', $title)->first();
 
-        $bot->typesAndWaits(1);
-        $bot->reply($item->title);
+        //$bot->typesAndWaits(1);
+        //$bot->reply($item->title);
 
         $bot->typesAndWaits(1);
         $bot->reply($item->description);

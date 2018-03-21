@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Member;
 use App\Message;
 use App\Conversation;
 use App\MessageDetail;
@@ -156,13 +157,13 @@ class MessageDetailController extends Controller
 
         $title = $extras['apiParameters'][env('APP_ACTION') . '-message-details'];
 
-        $item = MessageDetail::where('title', '=', $title)->first();
+        $message = MessageDetail::where('title', '=', $title)->first();
+
+//        $bot->typesAndWaits(1);
+//        $bot->reply($item->title);
 
         $bot->typesAndWaits(1);
-        $bot->reply($item->title);
-
-        $bot->typesAndWaits(1);
-        $bot->reply($item->description);
+        $bot->reply($message->description);
 
         $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
 

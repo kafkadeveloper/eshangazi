@@ -14,13 +14,6 @@ use App\Http\Controllers\MessageDetailController;
 
 $botman = resolve('botman');
 
-$botman->hears('Yesaya', function($bot) {
-    $bot->reply('Hello!');
-    $bot->ask('Whats your name?', function($answer, $bot) {
-        $bot->say('Welcome '.$answer->getText());
-    });
-});
-
 $dialogflow = Dialogflow::create(env('DIALOGFLOW_KEY'))->listenForAction();
 
 $botman->middleware->received($dialogflow);
