@@ -15,7 +15,6 @@
         "botman/driver-botframework": "^1.1",
         "botman/driver-facebook": "^1.4",
         "botman/driver-hangouts": "^1.0",
-        "botman/driver-slack": "^2.1",
         "botman/driver-telegram": "^1.5",
         "botman/driver-web": "~1.0",
         "botman/studio-addons": "~1.2.1",
