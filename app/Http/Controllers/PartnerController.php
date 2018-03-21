@@ -164,9 +164,15 @@ class PartnerController extends Controller
 //            ->where('user_platform_id', '=', $user->getId())->first();
 
         $partners = Partner::where('partner_category_id', 1)->take(5)->get();
+
+        foreach($partners as $partner)
+        {
+            $bot->typesAndWaits(1);
+            $bot->reply($partner->id);
+        }
             
-        $bot->typesAndWaits(1);
-        $bot->reply($this->partners($partners));
+
+        //$bot->reply($this->partners($partners));
 
         //$this->getNearExperts($bot, $partners, $user, $member);
     }
