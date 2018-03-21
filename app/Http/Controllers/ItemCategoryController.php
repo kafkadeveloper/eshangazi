@@ -192,14 +192,14 @@ class ItemCategoryController extends Controller
              
         foreach($category->items as $item)
         {
-            $url = $item->thumbnail
-                ? (env('AWS_URL') . '/' . $item->thumbnail)
-                : (env('APP_URL') . '/img/logo.jpg');
+//            $url = $item->thumbnail
+//                ? (env('AWS_URL') . '/' . $item->thumbnail)
+//                : (env('APP_URL') . '/img/logo.jpg');
 
             $template_list->addElements([
                 Element::create($item->title)
                     ->subtitle($item->description)
-                    ->image($url)
+                    ->image(env('APP_URL') . '/img/logo.jpg')
                     ->addButton(ElementButton::create('View Details')
                         ->payload($item->title)->type('postback'))
             ]);
