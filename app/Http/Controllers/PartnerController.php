@@ -158,17 +158,17 @@ class PartnerController extends Controller
         $bot->typesAndWaits(1);
         $bot->reply($apiReply);  
 
-        $user = $bot->getUser();
+//        $user = $bot->getUser();
 
-        $member = Member::with('district')
-            ->where('user_platform_id', '=', $user->getId())->first();
+//        $member = Member::with('district')
+//            ->where('user_platform_id', '=', $user->getId())->first();
 
-        $partners = Partner::where('district_id', $member->district_id)
-            ->where('partner_category_id', 2)->take(5)->get();
+        $partners = Partner::where('partner_category_id', 1)->take(5)->get();
             
         $bot->typesAndWaits(1);
+        $bot->reply($this->partners($partners));
 
-        $this->getNearExperts($bot, $partners, $user, $member);
+        //$this->getNearExperts($bot, $partners, $user, $member);
     }
 
     /**
