@@ -40,7 +40,10 @@ class BotManController extends Controller
         $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
 
         if($member) {
-            (new Conversation())->record('Question and Answers', $member->id);
+            Conversation::create([
+                'intent'    => 'Question and Answers',
+                'member_id' => $member->id
+            ]);
         }
     }
 
@@ -57,7 +60,10 @@ class BotManController extends Controller
 
         if($member)
         {
-            (new Conversation())->record('Feedback', $member->id);
+            Conversation::create([
+                'intent'    => 'Feedback',
+                'member_id' => $member->id
+            ]);
         }
     }
 

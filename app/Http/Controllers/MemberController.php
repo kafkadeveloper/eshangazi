@@ -108,7 +108,7 @@ class MemberController extends Controller
 
         if($this->check($user)) 
         {
-            $bot->reply('Welcome back ' .  $user->getFirstName());
+            $bot->reply('Karibu tena ' .  $user->getFirstName());
 
             $bot->reply($this->features());
         } 
@@ -152,7 +152,13 @@ class MemberController extends Controller
             'district_id'       => $district->id,
         ]);
 
-        (new Conversation())->record('Subscribe', $member->id);
+        if ($member)
+        {
+            Conversation::create([
+                'intent'    => 'Subscribe',
+                'member_id' => $member->id
+            ]);
+        }
     }
 
     /**
@@ -180,7 +186,10 @@ class MemberController extends Controller
                 'status' => 0
             ]);
 
-            (new Conversation())->record('Unsubscribe', $member->id);
+            Conversation::create([
+                'intent'    => 'Unsubscribe',
+                'member_id' => $member->id
+            ]);
         }
     }
 
@@ -197,15 +206,18 @@ class MemberController extends Controller
              
         foreach($categories as $category)
         {
-            $url = $category->thumbnail
-                ? (env('AWS_URL') . '/' . $category->thumbnail)
-                : (env('APP_URL') . '/img/logo.jpg');
+            $url = null;
+
+            if ($category->thumbnail)
+                $url = env('AWS_URL') . '/' . $category->thumbnail;
+            else
+                $url = env('APP_URL') . '/img/logo.jpg';
 
             $template_list->addElements([
                 Element::create($category->name)
                     ->subtitle($category->description)
                     ->image($url)
-                    ->addButton(ElementButton::create('View Details')
+                    ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($category->name)->type('postback'))
             ]);
         } 

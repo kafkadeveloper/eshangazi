@@ -167,8 +167,8 @@ class ItemController extends Controller
 
         $item = Item::where('title', '=', $title)->first();
 
-        $bot->typesAndWaits(1);
-        $bot->reply($item->title);
+        //$bot->typesAndWaits(1);
+        //$bot->reply($item->title);
 
         $bot->typesAndWaits(1);
         $bot->reply($item->description);
@@ -177,7 +177,10 @@ class ItemController extends Controller
 
         if($member)
         {
-            (new Conversation())->record($title, $member->id);
+            Conversation::create([
+                'intent'    => $title,
+                'member_id' => $member->id
+            ]);
         }
     }
 }

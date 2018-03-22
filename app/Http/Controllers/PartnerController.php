@@ -158,17 +158,23 @@ class PartnerController extends Controller
         $bot->typesAndWaits(1);
         $bot->reply($apiReply);  
 
-        $user = $bot->getUser();
+//        $user = $bot->getUser();
 
-        $member = Member::with('district')
-            ->where('user_platform_id', '=', $user->getId())->first();
+//        $member = Member::with('district')
+//            ->where('user_platform_id', '=', $user->getId())->first();
 
-        $partners = Partner::where('district_id', $member->district_id)
-            ->where('partner_category_id', 2)->take(5)->get();
+        $partners = Partner::where('partner_category_id', 1)->take(5)->get();
+
+        foreach($partners as $partner)
+        {
+            $bot->typesAndWaits(1);
+            $bot->reply($partner->id);
+        }
             
-        $bot->typesAndWaits(1);
 
-        $this->getNearExperts($bot, $partners, $user, $member);
+        //$bot->reply($this->partners($partners));
+
+        //$this->getNearExperts($bot, $partners, $user, $member);
     }
 
     /**
@@ -199,11 +205,11 @@ class PartnerController extends Controller
         } 
         else
         {           
-            $user = $bot->getUser();
+            //$user = $bot->getUser();
 
-            $bot->reply('Hey ' . $user->getFirstName() .
-                ', I could not find Experts at ' . $district .
-                ', I have these suggestions.');
+//            $bot->reply('Hey ' . $user->getFirstName() .
+//                ', I could not find Experts at ' . $district .
+//                ', I have these suggestions.');
 
             $partners = Partner::where('district_id', '=', $district->id)->inRandomOrder()->take(5)->get();         
             
@@ -225,15 +231,18 @@ class PartnerController extends Controller
              
         foreach($partners as $partner)
         {
-            $url = $partner->thumbnail
-                ? (env('AWS_URL') . '/' . $partner->thumbnail)
-                : (env('APP_URL') . '/img/logo.jpg');
+            $url = null;
+
+            if ($partner->thumbnail)
+                $url = env('AWS_URL') . '/' . $partner->thumbnail;
+            else
+                $url = env('APP_URL') . '/img/logo.jpg';
 
             $template_list->addElements([
                 Element::create($partner->name)
                     ->subtitle($partner->bio)
                     ->image($url)
-                    ->addButton(ElementButton::create('Call Now')
+                    ->addButton(ElementButton::create('Piga simu')
                         ->payload($partner->phone)->type('phone_number'))
             ]);
         }
@@ -256,9 +265,9 @@ class PartnerController extends Controller
         if (!$partners->isEmpty()) {
             $bot->reply($this->partners($partners));
         } else {
-            $bot->reply('Hey ' . $user->getFirstName() .
-                ', I could not find Experts at ' . $member->district->name .
-                ', I have these suggestions.');
+//            $bot->reply('Hey ' . $user->getFirstName() .
+//                ', I could not find Experts at ' . $member->district->name .
+//                ', I have these suggestions.');
 
             $partners = Partner::inRandomOrder()->take(5)->get();
 

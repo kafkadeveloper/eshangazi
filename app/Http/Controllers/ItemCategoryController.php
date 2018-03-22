@@ -160,7 +160,7 @@ class ItemCategoryController extends Controller
         $bot->typesAndWaits(1);
         $bot->reply($category->description);
 
-        $bot->typesAndWaits(2);
+        $bot->typesAndWaits(1);
         $bot->reply($this->items($category));
 
         $user = $bot->getUser();
@@ -168,7 +168,14 @@ class ItemCategoryController extends Controller
 
         $member = Member::where('user_platform_id', '=', $user_id)->first();
 
-        (new Conversation())->record($name, $member->id);
+        if($member)
+        {
+            Conversation::create([
+                'intent'    => $name,
+                'member_id' => $member->id
+            ]);
+        }
+
     }
 
     /**
@@ -184,15 +191,18 @@ class ItemCategoryController extends Controller
              
         foreach($category->items as $item)
         {
-            $url = $item->thumbnail
-                ? (env('AWS_URL') . '/' . $item->thumbnail)
-                : (env('APP_URL') . '/img/logo.jpg');
+            $url = null;
+
+            if ($item->thumbnail)
+                $url = env('AWS_URL') . '/' . $item->thumbnail;
+            else
+                $url = env('APP_URL') . '/img/logo.jpg';
 
             $template_list->addElements([
                 Element::create($item->title)
                     ->subtitle($item->description)
                     ->image($url)
-                    ->addButton(ElementButton::create('View Details')
+                    ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($item->title)->type('postback'))
             ]);
         } 
