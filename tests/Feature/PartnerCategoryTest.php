@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use App\PartnerCategory;
 
 class PartnerCategoryTest extends TestCase
 {
@@ -37,20 +36,6 @@ class PartnerCategoryTest extends TestCase
   }
 
   /*
-   * Authenticated user can view partner category
-   * @return void
-   * */
-  public function testAuthenticatedUserCanViewPartnerCategory()
-  {
-      $this->signIn();
-
-      $category = create(PartnerCategory::class, ['created_by' => auth()->id()]);
-
-      $this->get(route('show-partner-category', ['id' => $category->id]))
-            ->assertSee($category->name);
-  }
-
-  /*
    * Guests cannot edit PartnerCategory
    * @return void
    * */
@@ -65,27 +50,6 @@ class PartnerCategoryTest extends TestCase
            ->assertRedirect(route('login'));
   }
 
-  /*
-   * Authenticated User can edit category
-   * @return void
-   * */
-  public function testAuthenticatedUserCanEditPartnerCategory()
-  {
-      $this->signIn();
-
-      $category = create(PartnerCategory::class, ['created_by' => auth()->id()]);
-
-      $this->patch(route('update-partner-category', ['id'=>$category->id]), [
-          'name'        => $category->name,
-          'description' => $category->description
-      ]);
-
-      $this->assertDatabaseHas('partner_categories', [
-          'name'        => $category->name,
-          'description' => $category->description
-      ]);
-  }
-
   /*Guests cannot delete the category
   @return void
   */
@@ -95,20 +59,5 @@ class PartnerCategoryTest extends TestCase
 
       $this->delete(route('delete-partner-category', 1))
             ->assertRedirect(route('login'));
-  }
-
-  /*
-   * Authenticated User can Delete the category
-   * @return void
-   * */
-  public function testAuthenticatedUserCanDeleteCategory()
-  {
-      $this->signIn();
-
-      $category = create(PartnerCategory::class, ['created_by' => auth()->id()]);
-
-      $this->delete(route('delete-partner-category', ['id' => $category->id]));
-
-      $this->assertDatabaseMissing('partner_categories', ['id' => $category->id]);
   }
 }
