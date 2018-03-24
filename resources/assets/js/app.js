@@ -16,6 +16,7 @@ window.Vue = require('vue');
  */
 
 import {TinkerComponent} from 'botman-tinker';
+
 Vue.component('botman-tinker', TinkerComponent);
 
 Vue.component(
