@@ -10,6 +10,7 @@ use App\Partner;
 use App\District;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
