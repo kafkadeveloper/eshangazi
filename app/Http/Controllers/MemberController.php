@@ -54,7 +54,7 @@ class MemberController extends Controller
             {
                 $bot->reply($apiReply);
 
-                $bot->reply($this->features());
+                //$bot->reply($this->features());
 
                 $this->subscribe($user, $extras, $driver);
             }
