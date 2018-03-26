@@ -129,6 +129,7 @@ class MemberController extends Controller
      *
      * @param $user
      * @param $extras
+     * @param $driver
      *
      * @return void
      */
@@ -141,7 +142,7 @@ class MemberController extends Controller
         $district = $extras['apiParameters']['district'];
 
         $born_year = date('Y') - $age;
-        //$platform_id = $this->getPlatformId($driver);
+        $platform_id = $this->getPlatformId($driver);
 
         $district = District::where('name', '=', $district)->first();
 
@@ -151,7 +152,7 @@ class MemberController extends Controller
             'avatar'            => $profile_pic,
             'born_year'         => $born_year,
             'gender'            => $gender,
-            'platform_id'       => null,
+            'platform_id'       => $platform_id,
             'district_id'       => $district->id,
         ]);
 

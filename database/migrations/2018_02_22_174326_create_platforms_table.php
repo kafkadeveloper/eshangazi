@@ -17,6 +17,7 @@ class CreatePlatformsTable extends Migration
             $table->increments('id');
             
             $table->string('name');
+            $table->string('driver_class');
             $table->text('description');
 
             $table->integer('created_by')->unsigned();
