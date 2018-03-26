@@ -56,7 +56,7 @@ class MemberController extends Controller
 
                 $bot->reply($this->features());
 
-                //$this->subscribe($user, $extras, $driver);
+                $this->subscribe($user, $extras, $driver);
             }
         }
         else
