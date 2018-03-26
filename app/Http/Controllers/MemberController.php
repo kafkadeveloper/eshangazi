@@ -53,8 +53,6 @@ class MemberController extends Controller
             else
             {
                 $bot->reply($apiReply);
-                $bot->reply('driver is '.$driver);
-                $bot->reply('Gender is '.$user->getInfo()["gender"]);
 
                 $bot->reply($this->features());
 
