@@ -238,7 +238,7 @@ class MemberController extends Controller
      */
     public function getPlatformId($driver)
     {
-        $platform = Platform::where('name', $driver)->first();
+        $platform = Platform::where('name', '=', $driver)->first();
         if(!$platform){
             $platform_id = null;
         }else{
