@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Member;
+use App\Platform;
 use App\District;
 use App\ItemCategory;
 use App\Conversation;
@@ -35,6 +36,7 @@ class MemberController extends Controller
     public function store(BotMan $bot)
     {            
         $user = $bot->getUser();
+        $driver = $bot->getDriver()->getName();
         $extras = $bot->getMessage()->getExtras();        
         $apiReply = $extras['apiReply'];
 
@@ -54,7 +56,7 @@ class MemberController extends Controller
 
                 $bot->reply($this->features());
 
-                $this->subscribe($user, $extras);
+                $this->subscribe($user, $extras, $driver);
             }
         }
         else
@@ -130,7 +132,7 @@ class MemberController extends Controller
      *
      * @return void
      */
-    public function subscribe($user, $extras)
+    public function subscribe($user, $extras, $driver)
     {
         $profile_pic = $user->getInfo()["profile_pic"];
         $gender = $user->getInfo()["gender"];
@@ -139,12 +141,13 @@ class MemberController extends Controller
         $district = $extras['apiParameters']['district'];
 
         $born_year = date('Y') - $age;
+        //$platform_id = $this->getPlatformId($driver);
 
         $district = District::where('name', '=', $district)->first();
 
         $member = Member::create([
             'user_platform_id'  => $user->getId(),
-            'name'              => $user->getFirstName() . ' ' . $user->getLastName(),
+            'name'              => $user->getFirstName() . ' ' . $user->getLastName().' '. $driver,
             'avatar'            => $profile_pic,
             'born_year'         => $born_year,
             'gender'            => $gender,
@@ -223,5 +226,24 @@ class MemberController extends Controller
         } 
 
         return $template_list;
+    }
+
+    /**
+     * Get platform id of user based on driver
+     *
+     * @param $driver
+     *
+     * @return void
+     */
+    public function getPlatformId($driver)
+    {
+        $platform = Platform::where('name', $driver)->first();
+        if($platfom->isEmpty()){
+            $platform_id = null;
+        }else{
+            $platform_id = $platform->id;
+        }
+        
+        return $platform_id;
     }
 }
