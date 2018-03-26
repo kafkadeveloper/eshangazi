@@ -19,7 +19,7 @@ Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
 
 Auth::routes();
-
+Route::get('/noma/{driver}', 'MemberController@getPlatformId');
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::get('/feedback', 'FeedbackController@index')->name('index-feedback');
