@@ -148,7 +148,7 @@ class MemberController extends Controller
 
         $member = Member::create([
             'user_platform_id'  => $user->getId(),
-            'name'              => $user->getFirstName() . ' ' . $user->getLastName().' '. $driver,
+            'name'              => $user->getFirstName() . ' ' . $user->getLastName(),
             'avatar'            => $profile_pic,
             'born_year'         => $born_year,
             'gender'            => $gender,
