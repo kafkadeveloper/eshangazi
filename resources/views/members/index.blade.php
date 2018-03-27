@@ -28,6 +28,8 @@
                         <th>Name</th>
 
                         <th>Gender</th>
+
+                        <th>Platform</th>
                         
                         <th class="text-center">Actions</th>
                     </tr>
@@ -50,6 +52,10 @@
 
                             <td class="align-middle text-capitalize">
                                 {{ $member->gender }}
+                            </td>
+
+                            <td class="align-middle text-capitalize">
+                                {{ $member->platform->name }}
                             </td>
                             
                             <td class="text-center align-middle">
