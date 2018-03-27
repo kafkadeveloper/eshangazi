@@ -56,7 +56,7 @@ class MemberController extends Controller
 
                 $bot->reply($this->features());
                 if($driver === 'Slack'){
-                    $bot->reply(print_r($user->getInfo(), true));
+                    $bot->reply(print_r($user, true));
                 }
                 $this->subscribe($user, $extras, $driver);
                 
