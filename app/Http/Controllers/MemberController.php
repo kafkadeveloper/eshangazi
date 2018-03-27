@@ -138,14 +138,11 @@ class MemberController extends Controller
      */
     public function subscribe($user, $extras, $driver)
     {
-        $profile_pic = $user->getInfo()["profile_pic"];
-        $gender = $user->getInfo()["gender"];
-        
         $age = $extras['apiParameters']['age']->amount;
         $district = $extras['apiParameters']['district'];
-
         $born_year = date('Y') - $age;
         $platform_id = $this->getPlatformId($driver);
+        $this->getUserDetails($user, $driver);
 
         $district = District::where('name', '=', $district)->first();
 
@@ -237,7 +234,7 @@ class MemberController extends Controller
      *
      * @param $driver
      *
-     * @return void
+     * @return int or null
      */
     public function getPlatformId($driver)
     {
@@ -249,5 +246,28 @@ class MemberController extends Controller
         }
         
         return $platform_id;
+    }
+
+    /**
+     * return user credentials based on driver
+     * 
+     * @param $user
+     * @param $driver
+     * 
+     * @return void
+     * 
+     */
+    public function getUserDetails($user, $driver)
+    {
+        if($driver === 'Facebook')
+        {
+            $profile_pic = $user->getInfo()["profile_pic"];
+            $gender = $user->getInfo()["gender"];
+        }
+        elseif($driver === 'Slack')
+        {
+            $profile_pic = $user->getInfo()["profile"]["image_original"];
+            $gender = "male";
+        }
     }
 }
