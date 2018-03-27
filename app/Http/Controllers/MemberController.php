@@ -265,7 +265,7 @@ class MemberController extends Controller
         {
             return $profile_pic = $user->getInfo()["profile"]["image_original"];
         }
-        return;
+        return null;
     }
 
     /**
@@ -289,6 +289,6 @@ class MemberController extends Controller
            $gender = null;
            return $gender;
         }
-        return;
+        return null;
     }
 }
