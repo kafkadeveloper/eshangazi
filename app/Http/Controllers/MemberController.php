@@ -142,7 +142,8 @@ class MemberController extends Controller
         $district = $extras['apiParameters']['district'];
         $born_year = date('Y') - $age;
         $platform_id = $this->getPlatformId($driver);
-        $this->getUserDetails($user, $driver);
+        $profile_pic = $this->getUserProfilePic($user, $driver);
+        $gender = $this->getUserGender($user, $driver);
 
         $district = District::where('name', '=', $district)->first();
 
@@ -249,25 +250,48 @@ class MemberController extends Controller
     }
 
     /**
-     * return user credentials based on driver
+     * return user profile pic based on driver
      * 
      * @param $user
      * @param $driver
      * 
-     * @return void
+     * @return profile_pc
      * 
      */
-    public function getUserDetails($user, $driver)
+    public function getUserProfilePic($user, $driver)
     {
         if($driver === 'Facebook')
         {
-            $profile_pic = $user->getInfo()["profile_pic"];
-            $gender = $user->getInfo()["gender"];
+            return $profile_pic = $user->getInfo()["profile_pic"];
         }
         elseif($driver === 'Slack')
         {
-            $profile_pic = $user->getInfo()["profile"]["image_original"];
-            $gender = "male";
+            return $profile_pic = $user->getInfo()["profile"]["image_original"];
         }
+        return;
+    }
+
+    /**
+     * return user gender based on driver
+     * 
+     * @param $user
+     * @param $driver
+     * 
+     * @return gender
+     * 
+     */
+    public function getUserGender($user, $driver)
+    {
+        if($driver === 'Facebook')
+        {
+            $gender = $user->getInfo()["gender"];
+            return $gender;
+        }
+        elseif($driver === 'Slack')
+        {
+           $gender = "male";
+           return $gender;
+        }
+        return;
     }
 }
