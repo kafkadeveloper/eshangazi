@@ -286,7 +286,7 @@ class MemberController extends Controller
         }
         elseif($driver === 'Slack')
         {
-           $gender = "male";
+           $gender = null;
            return $gender;
         }
         return;

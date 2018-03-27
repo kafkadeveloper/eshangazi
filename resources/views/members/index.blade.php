@@ -51,7 +51,11 @@
                             </td>
 
                             <td class="align-middle text-capitalize">
-                                {{ $member->gender }}
+                                @if(is_null($member->gender))
+                                    Unknown
+                                @else
+                                    {{ $member->gender }}
+                                @endif
                             </td>
 
                             <td class="align-middle text-capitalize">
