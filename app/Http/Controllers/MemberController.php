@@ -261,10 +261,12 @@ class MemberController extends Controller
         {
             return $profile_pic = $user->getInfo()["profile_pic"];
         }
+
         elseif($driver === 'Slack')
         {
             return $profile_pic = $user->getInfo()["profile"]["image_original"];
         }
+        
         return null;
     }
 
@@ -281,14 +283,14 @@ class MemberController extends Controller
     {
         if($driver === 'Facebook')
         {
-            $gender = $user->getInfo()["gender"];
-            return $gender;
+            return $gender = $user->getInfo()["gender"];
         }
+
         elseif($driver === 'Slack')
         {
-           $gender = null;
-           return $gender;
+           return $gender = null;
         }
+
         return null;
     }
 }
