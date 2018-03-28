@@ -166,7 +166,7 @@ class ItemCategoryController extends Controller
             $bot->reply($this->items($category));
         }
         else{
-            $bot->reply('Sorry say that again...Item category issue ('.print_r($category,true).')');
+            $bot->reply('Sorry say that again...Item category issue ('.var_expor($category,true).')');
         }
 
         
