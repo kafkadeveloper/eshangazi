@@ -166,7 +166,7 @@ class ItemCategoryController extends Controller
             $bot->reply($this->items($category));
         }
         else{
-            $bot->reply('Sorry say that again...Item category issue ('.var_export($category,true).')');
+            $bot->reply('Sorry say that again...Item category issue ('.var_export($category,true).') value from dialogflow is ('.$name.')');
         }
 
         
