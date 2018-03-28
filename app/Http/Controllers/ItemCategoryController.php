@@ -155,13 +155,13 @@ class ItemCategoryController extends Controller
 
         $name = $extras['apiParameters'][env('APP_ACTION') . '-item-categories'];
 
-        $category = ItemCategory::with('items')->where('name', '=', $name)->first();
+        $category = ItemCategory::with('items')->where('name', 'like', '%' . $name . '%')->first();
 
         $bot->typesAndWaits(1);
         if($category)
         {
             $bot->reply($category->description);
-            
+
             $bot->typesAndWaits(1);
             $bot->reply($this->items($category));
         }
