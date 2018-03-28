@@ -161,13 +161,15 @@ class ItemCategoryController extends Controller
         if($category)
         {
             $bot->reply($category->description);
+            
+            $bot->typesAndWaits(1);
+            $bot->reply($this->items($category));
         }
         else{
             $bot->reply('Sorry say that again...Item category issue ('.$name.')');
         }
 
-        $bot->typesAndWaits(1);
-        $bot->reply($this->items($category));
+        
 
         $user = $bot->getUser();
         $user_id = $user->getId();
