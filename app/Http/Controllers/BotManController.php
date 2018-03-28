@@ -71,7 +71,7 @@ class BotManController extends Controller
     {
         $extras = $bot->getMessage()->getExtras();
 
-        $apiReply = $extras['apiReply']; 
+        $apiReply = nl2br($extras['apiReply']); 
 
         $bot->typesAndWaits(1);   
         
