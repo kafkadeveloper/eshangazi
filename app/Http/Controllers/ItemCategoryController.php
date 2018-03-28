@@ -217,4 +217,8 @@ class ItemCategoryController extends Controller
 
         return $template_list;
     }
+    public function test($name)
+    {
+        return $category = ItemCategory::with('items')->where('name', '=', $name)->first();
+    }
 }
