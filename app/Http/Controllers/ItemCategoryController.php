@@ -158,7 +158,13 @@ class ItemCategoryController extends Controller
         $category = ItemCategory::with('items')->where('name', '=', $name)->first();
 
         $bot->typesAndWaits(1);
-        $bot->reply($category->description);
+        if($category)
+        {
+            $bot->reply($item->description);
+        }
+        else{
+            $bot->reply('Sorry say that again...Item category issue ('.$name.')');
+        }
 
         $bot->typesAndWaits(1);
         $bot->reply($this->items($category));
