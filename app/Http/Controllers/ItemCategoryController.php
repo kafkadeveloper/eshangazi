@@ -160,7 +160,7 @@ class ItemCategoryController extends Controller
         $bot->typesAndWaits(1);
         if($category)
         {
-            $bot->reply($item->description);
+            $bot->reply($category->description);
         }
         else{
             $bot->reply('Sorry say that again...Item category issue ('.$name.')');
