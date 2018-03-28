@@ -71,10 +71,10 @@ class BotManController extends Controller
     {
         $extras = $bot->getMessage()->getExtras();
 
-        $apiReply = nl2br($extras['apiReply']); 
+        $apiReply = $extras['apiReply']; 
 
         $bot->typesAndWaits(1);   
         
-        $bot->reply($apiReply);
+        $bot->reply(nl2br($apiReply));
     }
 }
