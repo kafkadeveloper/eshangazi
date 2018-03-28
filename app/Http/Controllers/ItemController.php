@@ -171,7 +171,14 @@ class ItemController extends Controller
         //$bot->reply($item->title);
 
         $bot->typesAndWaits(1);
-        $bot->reply($item->description);
+        if($item)
+        {
+            $bot->reply($item->description);
+        }
+        else{
+            $bot->reply('Sorry say that again...Item issue');
+        }
+        
 
         $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
 
