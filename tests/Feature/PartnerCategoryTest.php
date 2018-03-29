@@ -3,42 +3,24 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class PartnerCategoryTest extends TestCase
 {
   /*
    * A Guest cannot create a partner_category
    * @return void
-   * */
+   *
+   */
 
   public function testUnauthenticatedUserCannotCreatePartnerCategory()
   {
       $this->withExceptionHandling();
 
-      $this->get(route('create-category'))
+      $this->get(route('create-partner-category'))
           ->assertRedirect(route('login'));
-      $this->post(route('store-category'))
+
+      $this->post(route('store-partner-category'))
            ->assertRedirect(route('login'));
-  }
-
-  /*
-   * Authenticated User Can Create Partner Category
-   *
-   * @return void
-   * */
-  public function testAuthenticatedUserCanCreatePartnerCategory()
-  {
-      $this->signIn();
-
-      $category = make(\App\PartnerCategory::class);
-      $this->post(route('store-category', $category->toArray()));
-
-      $this->assertDatabaseHas('partner_categories', [
-            'name'        => $category->name,
-            'description' => $category->description
-      ]);
   }
 
   /*
@@ -48,21 +30,9 @@ class PartnerCategoryTest extends TestCase
   public function testGuestsCannotViewPartnerCategory()
   {
       $this->withExceptionHandling();
-      $category = create(\App\PartnerCategory::class);
-      $this->get(route('show-category', ['id' => $category->id]))
-            ->assertRedirect(route('login'));
-  }
 
-  /*
-   * Authenticated user can view partner category
-   * @return void
-   * */
-  public function testAuthenticatedUserCanViewPartnerCategory()
-  {
-      $this->signIn();
-      $category = create(\App\PartnerCategory::class);
-      $this->get(route('show-category', ['id'=>$category->id]))
-            ->assertSee($category->name);
+      $this->get(route('show-partner-category', 1))
+            ->assertRedirect(route('login'));
   }
 
   /*
@@ -73,29 +43,11 @@ class PartnerCategoryTest extends TestCase
   {
       $this->withExceptionHandling();
 
-      $category = create(\App\PartnerCategory::class);
-      $this->get(route('edit-category', ['id'=>$category->id]))
+      $this->get(route('edit-partner-category', 1))
             ->assertRedirect(route('login'));
-      $this->patch(route('update-category', ['id' =>$category->id]))
-           ->assertRedirect(route('login'));
-  }
 
-  /*
-   * Authenticated User can edit category
-   * @return void
-   * */
-  public function testAuthenticatedUserCanEditPartnerCategory()
-  {
-      $this->signIn();
-      $category = create(\App\PartnerCategory::class);
-      $this->patch(route('update-category', ['id'=>$category->id]), [
-          'name' => $category->name,
-          'description' => $category->description
-      ]);
-      $this->assertDatabaseHas('partner_categories', [
-          'name' => $category->name,
-          'description' => $category->description
-      ]);
+      $this->patch(route('update-partner-category', 1))
+           ->assertRedirect(route('login'));
   }
 
   /*Guests cannot delete the category
@@ -105,21 +57,7 @@ class PartnerCategoryTest extends TestCase
   {
       $this->withExceptionHandling();
 
-      $category = create(\App\PartnerCategory::class);
-      $this->delete(route('delete-category', ['id' => $category->id]))
+      $this->delete(route('delete-partner-category', 1))
             ->assertRedirect(route('login'));
-  }
-
-  /*
-   * Authenticated User can Delete the category
-   * @return void
-   * */
-  public function testAuthenticatedUserCanDeleteCategory()
-  {
-      $this->signIn();
-
-      $category = create(\App\PartnerCategory::class);
-      $this->delete(route('delete-category', ['id'=>$category->id]));
-      $this->assertDatabaseMissing('partner_categories', ['id'=>$category->id]);
   }
 }

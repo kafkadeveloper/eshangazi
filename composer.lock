@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b353ecff632d87f8618ed70c885c0cae",
+    "content-hash": "31abf01cf755a8089e4bf50c3530052c",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.52.28",
+            "version": "3.52.30",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "4b8286d243ad9eeaaa1fccf312c1d9f920ef7cd0"
+                "reference": "4d51b552026aefc060f2b4f3bd19e33c98088c9c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4b8286d243ad9eeaaa1fccf312c1d9f920ef7cd0",
-                "reference": "4b8286d243ad9eeaaa1fccf312c1d9f920ef7cd0",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/4d51b552026aefc060f2b4f3bd19e33c98088c9c",
+                "reference": "4d51b552026aefc060f2b4f3bd19e33c98088c9c",
                 "shasum": ""
             },
             "require": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2018-03-16T20:40:34+00:00"
+            "time": "2018-03-21T21:17:52+00:00"
         },
         {
             "name": "botman/botman",
@@ -164,6 +164,64 @@
             "time": "2018-02-20T22:22:44+00:00"
         },
         {
+            "name": "botman/driver-botframework",
+            "version": "1.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/botman/driver-botframework.git",
+                "reference": "9c3fc249f6b66e5f3a548c3bd6cb628772f6862d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/botman/driver-botframework/zipball/9c3fc249f6b66e5f3a548c3bd6cb628772f6862d",
+                "reference": "9c3fc249f6b66e5f3a548c3bd6cb628772f6862d",
+                "shasum": ""
+            },
+            "require": {
+                "botman/botman": "~2.0",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "botman/studio-addons": "~1.0",
+                "ext-curl": "*",
+                "illuminate/contracts": "~5.5.0",
+                "mockery/mockery": "dev-master",
+                "phpunit/phpunit": "~5.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BotMan\\Drivers\\BotFramework\\Providers\\BotFrameworkServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BotMan\\Drivers\\BotFramework\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marcel Pociot",
+                    "email": "m.pociot@gmail.com"
+                }
+            ],
+            "description": "Microsoft Bot Framework driver for BotMan",
+            "homepage": "http://github.com/botman/driver-botframework",
+            "keywords": [
+                "Botman",
+                "bot",
+                "bot framework",
+                "botframework"
+            ],
+            "time": "2018-01-30T16:22:33+00:00"
+        },
+        {
             "name": "botman/driver-facebook",
             "version": "1.7.0",
             "source": {
@@ -221,6 +279,182 @@
                 "facebook messenger"
             ],
             "time": "2018-03-10T19:55:12+00:00"
+        },
+        {
+            "name": "botman/driver-hangouts",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/botman/driver-hangouts.git",
+                "reference": "2e88f1a1589d4d09e5626652a42fef843eef5600"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/botman/driver-hangouts/zipball/2e88f1a1589d4d09e5626652a42fef843eef5600",
+                "reference": "2e88f1a1589d4d09e5626652a42fef843eef5600",
+                "shasum": ""
+            },
+            "require": {
+                "botman/botman": "~2.0",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "botman/studio-addons": "~1.0",
+                "ext-curl": "*",
+                "illuminate/contracts": "~5.5.0",
+                "mockery/mockery": "dev-master",
+                "phpunit/phpunit": "~5.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BotMan\\Drivers\\Hangouts\\Providers\\HangoutsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BotMan\\Drivers\\Hangouts\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marcel Pociot",
+                    "email": "m.pociot@gmail.com"
+                }
+            ],
+            "description": "Google Hangouts driver for BotMan",
+            "homepage": "http://github.com/botman/driver-hangouts",
+            "keywords": [
+                "Botman",
+                "Hangouts",
+                "bot"
+            ],
+            "time": "2018-03-07T19:32:54+00:00"
+        },
+        {
+            "name": "botman/driver-slack",
+            "version": "2.1.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/botman/driver-slack.git",
+                "reference": "3da3b8b9c5f797a4bc0da39d3b0275d4a7abf376"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/botman/driver-slack/zipball/3da3b8b9c5f797a4bc0da39d3b0275d4a7abf376",
+                "reference": "3da3b8b9c5f797a4bc0da39d3b0275d4a7abf376",
+                "shasum": ""
+            },
+            "require": {
+                "botman/botman": "~2.1",
+                "mpociot/slack-client": "~1.0",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "botman/studio-addons": "~1.0",
+                "ext-curl": "*",
+                "illuminate/console": "~5.0",
+                "illuminate/support": "~5.0",
+                "mockery/mockery": "dev-master",
+                "phpunit/phpunit": "~5.0"
+            },
+            "suggest": {
+                "mpociot/slack-client": "Use the Slack RTM API with BotMan"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BotMan\\Drivers\\Slack\\Providers\\SlackServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BotMan\\Drivers\\Slack\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marcel Pociot",
+                    "email": "m.pociot@gmail.com"
+                }
+            ],
+            "description": "Slack driver for BotMan",
+            "homepage": "http://github.com/botman/driver-slack",
+            "keywords": [
+                "Botman",
+                "bot",
+                "slack"
+            ],
+            "time": "2018-03-02T14:19:34+00:00"
+        },
+        {
+            "name": "botman/driver-telegram",
+            "version": "1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/botman/driver-telegram.git",
+                "reference": "45ed1e875375c3015778259d29ddf75308a63aa4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/botman/driver-telegram/zipball/45ed1e875375c3015778259d29ddf75308a63aa4",
+                "reference": "45ed1e875375c3015778259d29ddf75308a63aa4",
+                "shasum": ""
+            },
+            "require": {
+                "botman/botman": "~2.0",
+                "php": ">=7.0"
+            },
+            "require-dev": {
+                "botman/studio-addons": "~1.0",
+                "ext-curl": "*",
+                "illuminate/contracts": "~5.5.0",
+                "mockery/mockery": "dev-master",
+                "phpunit/phpunit": "~5.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "BotMan\\Drivers\\Telegram\\Providers\\TelegramServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "BotMan\\Drivers\\Telegram\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marcel Pociot",
+                    "email": "m.pociot@gmail.com"
+                }
+            ],
+            "description": "Telegram driver for BotMan",
+            "homepage": "http://github.com/botman/driver-telegram",
+            "keywords": [
+                "Botman",
+                "bot",
+                "telegram"
+            ],
+            "time": "2018-03-15T08:36:02+00:00"
         },
         {
             "name": "botman/driver-web",
@@ -400,29 +634,29 @@
         },
         {
             "name": "clue/stdio-react",
-            "version": "v1.1.0",
+            "version": "v2.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/clue/php-stdio-react.git",
-                "reference": "f574375d23832c7a86019257238c62dfffa4b962"
+                "reference": "61d1ccdc3efa9521f5215665b69cd6b592880071"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/clue/php-stdio-react/zipball/f574375d23832c7a86019257238c62dfffa4b962",
-                "reference": "f574375d23832c7a86019257238c62dfffa4b962",
+                "url": "https://api.github.com/repos/clue/php-stdio-react/zipball/61d1ccdc3efa9521f5215665b69cd6b592880071",
+                "reference": "61d1ccdc3efa9521f5215665b69cd6b592880071",
                 "shasum": ""
             },
             "require": {
                 "clue/term-react": "^1.0 || ^0.1.1",
                 "clue/utf8-react": "^1.0 || ^0.1",
                 "php": ">=5.3",
-                "react/event-loop": "0.3.*|0.4.*",
-                "react/stream": "^0.4.2"
+                "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3",
+                "react/stream": "^1.0 || ^0.7 || ^0.6"
             },
             "require-dev": {
                 "clue/arguments": "^2.0",
                 "clue/commander": "^1.2",
-                "phpunit/phpunit": "^5.0 || ^4.8"
+                "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35"
             },
             "suggest": {
                 "ext-mbstring": "Using ext-mbstring should provide slightly better performance for handling I/O"
@@ -443,20 +677,22 @@
                     "email": "christian@lueck.tv"
                 }
             ],
-            "description": "Async, event-driven console input & output (STDIN, STDOUT), built on top of ReactPHP",
+            "description": "Async, event-driven console input & output (STDIN, STDOUT) for truly interactive CLI applications, built on top of ReactPHP",
             "homepage": "https://github.com/clue/php-stdio-react",
             "keywords": [
                 "async",
                 "autocomplete",
                 "autocompletion",
+                "cli",
                 "history",
+                "interactive",
                 "reactphp",
                 "readline",
                 "stdin",
                 "stdio",
                 "stdout"
             ],
-            "time": "2017-11-01T16:41:13+00:00"
+            "time": "2018-02-06T09:34:26+00:00"
         },
         {
             "name": "clue/term-react",
@@ -969,30 +1205,25 @@
         },
         {
             "name": "evenement/evenement",
-            "version": "v2.1.0",
+            "version": "v3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/igorw/evenement.git",
-                "reference": "6ba9a777870ab49f417e703229d53931ed40fd7a"
+                "reference": "531bfb9d15f8aa57454f5f0285b18bec903b8fb7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/igorw/evenement/zipball/6ba9a777870ab49f417e703229d53931ed40fd7a",
-                "reference": "6ba9a777870ab49f417e703229d53931ed40fd7a",
+                "url": "https://api.github.com/repos/igorw/evenement/zipball/531bfb9d15f8aa57454f5f0285b18bec903b8fb7",
+                "reference": "531bfb9d15f8aa57454f5f0285b18bec903b8fb7",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.4.0"
+                "php": ">=7.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^6.0||^5.7||^4.8.35"
+                "phpunit/phpunit": "^6.0"
             },
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.0-dev"
-                }
-            },
             "autoload": {
                 "psr-0": {
                     "Evenement": "src"
@@ -1013,7 +1244,7 @@
                 "event-dispatcher",
                 "event-emitter"
             ],
-            "time": "2017-07-17T17:39:19+00:00"
+            "time": "2017-07-23T21:35:13+00:00"
         },
         {
             "name": "fideloper/proxy",
@@ -2360,22 +2591,21 @@
         },
         {
             "name": "mpociot/phpws",
-            "version": "1.1",
+            "version": "2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpociot/phpws.git",
-                "reference": "8854ea3daca17099de0fe943fb16f932138daa1d"
+                "reference": "3b52e8c68e680019109845a48bdef7d27b2cc87b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpociot/phpws/zipball/8854ea3daca17099de0fe943fb16f932138daa1d",
-                "reference": "8854ea3daca17099de0fe943fb16f932138daa1d",
+                "url": "https://api.github.com/repos/mpociot/phpws/zipball/3b52e8c68e680019109845a48bdef7d27b2cc87b",
+                "reference": "3b52e8c68e680019109845a48bdef7d27b2cc87b",
                 "shasum": ""
             },
             "require": {
-                "react/socket": "0.4.*",
-                "react/socket-client": "0.4.*",
-                "react/stream": "0.4.*",
+                "react/socket": "^0.8.6",
+                "react/stream": "^0.7.5",
                 "zendframework/zend-http": "2.*",
                 "zendframework/zend-log": "2.*"
             },
@@ -2393,7 +2623,7 @@
                 }
             ],
             "description": "WebSocket Server and Client library for PHP",
-            "time": "2016-12-16T08:50:24+00:00"
+            "time": "2017-12-22T21:57:55+00:00"
         },
         {
             "name": "mpociot/pipeline",
@@ -2441,22 +2671,22 @@
         },
         {
             "name": "mpociot/slack-client",
-            "version": "0.3.4",
+            "version": "1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpociot/slack-client.git",
-                "reference": "7ae69cca5dbb003605fd9328efc127f73bd665be"
+                "reference": "3ad529fedd32708219763f424b82b45db2218223"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpociot/slack-client/zipball/7ae69cca5dbb003605fd9328efc127f73bd665be",
-                "reference": "7ae69cca5dbb003605fd9328efc127f73bd665be",
+                "url": "https://api.github.com/repos/mpociot/slack-client/zipball/3ad529fedd32708219763f424b82b45db2218223",
+                "reference": "3ad529fedd32708219763f424b82b45db2218223",
                 "shasum": ""
             },
             "require": {
-                "evenement/evenement": "~2.0",
+                "evenement/evenement": "~3.0",
                 "guzzlehttp/guzzle": "~6.0",
-                "mpociot/phpws": "~1.1",
+                "mpociot/phpws": "^2.0",
                 "php": ">=5.5",
                 "react/event-loop": "^0.4.1",
                 "react/promise": "^2.2"
@@ -2488,7 +2718,7 @@
                 "realtime",
                 "slack"
             ],
-            "time": "2017-11-02T14:35:18+00:00"
+            "time": "2017-12-22T22:07:13+00:00"
         },
         {
             "name": "mtdowling/jmespath.php",
@@ -2547,16 +2777,16 @@
         },
         {
             "name": "nesbot/carbon",
-            "version": "1.24.2",
+            "version": "1.25.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/briannesbitt/Carbon.git",
-                "reference": "bba6c6e410c6b4317e37a9474aeaa753808c3875"
+                "reference": "cbcf13da0b531767e39eb86e9687f5deba9857b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/bba6c6e410c6b4317e37a9474aeaa753808c3875",
-                "reference": "bba6c6e410c6b4317e37a9474aeaa753808c3875",
+                "url": "https://api.github.com/repos/briannesbitt/Carbon/zipball/cbcf13da0b531767e39eb86e9687f5deba9857b4",
+                "reference": "cbcf13da0b531767e39eb86e9687f5deba9857b4",
                 "shasum": ""
             },
             "require": {
@@ -2596,7 +2826,7 @@
                 "datetime",
                 "time"
             ],
-            "time": "2018-03-10T10:10:14+00:00"
+            "time": "2018-03-19T15:50:49+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -3474,29 +3704,30 @@
         },
         {
             "name": "react/socket",
-            "version": "v0.4.6",
+            "version": "v0.8.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/socket.git",
-                "reference": "cf074e53c974df52388ebd09710a9018894745d2"
+                "reference": "d3957313c92b539537fccc80170c05a27ec25796"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket/zipball/cf074e53c974df52388ebd09710a9018894745d2",
-                "reference": "cf074e53c974df52388ebd09710a9018894745d2",
+                "url": "https://api.github.com/repos/reactphp/socket/zipball/d3957313c92b539537fccc80170c05a27ec25796",
+                "reference": "d3957313c92b539537fccc80170c05a27ec25796",
                 "shasum": ""
             },
             "require": {
-                "evenement/evenement": "~2.0|~1.0",
+                "evenement/evenement": "^3.0 || ^2.0 || ^1.0",
                 "php": ">=5.3.0",
-                "react/event-loop": "0.4.*|0.3.*",
-                "react/promise": "^2.0 || ^1.1",
-                "react/stream": "^0.4.5"
+                "react/dns": "^0.4.13",
+                "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3.5",
+                "react/promise": "^2.1 || ^1.2",
+                "react/promise-timer": "~1.0",
+                "react/stream": "^1.0 || ^0.7.1"
             },
             "require-dev": {
-                "clue/block-react": "^1.1",
-                "phpunit/phpunit": "~4.8",
-                "react/socket-client": "^0.5.1"
+                "clue/block-react": "^1.2",
+                "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35"
             },
             "type": "library",
             "autoload": {
@@ -3508,81 +3739,38 @@
             "license": [
                 "MIT"
             ],
-            "description": "Async, streaming plaintext TCP/IP and secure TLS socket server for React PHP",
+            "description": "Async, streaming plaintext TCP/IP and secure TLS socket server and client connections for ReactPHP",
             "keywords": [
-                "Socket"
+                "Connection",
+                "Socket",
+                "async",
+                "reactphp",
+                "stream"
             ],
-            "time": "2017-01-26T09:23:38+00:00"
-        },
-        {
-            "name": "react/socket-client",
-            "version": "v0.4.6",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/reactphp/socket-client.git",
-                "reference": "49e730523b73d912e56f7a41f53ed3fc083ae167"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/socket-client/zipball/49e730523b73d912e56f7a41f53ed3fc083ae167",
-                "reference": "49e730523b73d912e56f7a41f53ed3fc083ae167",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.4.0",
-                "react/dns": "0.4.*",
-                "react/event-loop": "0.4.*",
-                "react/promise": "~2.0",
-                "react/stream": "0.4.*"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "0.4-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "React\\SocketClient\\": "src"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "description": "Async connector to open TCP/IP and SSL/TLS based connections.",
-            "keywords": [
-                "Socket"
-            ],
-            "abandoned": "react/socket",
-            "time": "2016-12-06T10:54:49+00:00"
+            "time": "2018-02-28T09:32:38+00:00"
         },
         {
             "name": "react/stream",
-            "version": "v0.4.6",
+            "version": "v0.7.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/stream.git",
-                "reference": "44dc7f51ea48624110136b535b9ba44fd7d0c1ee"
+                "reference": "10100896018fd847a257cd81143b8e1b7be08e40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/stream/zipball/44dc7f51ea48624110136b535b9ba44fd7d0c1ee",
-                "reference": "44dc7f51ea48624110136b535b9ba44fd7d0c1ee",
+                "url": "https://api.github.com/repos/reactphp/stream/zipball/10100896018fd847a257cd81143b8e1b7be08e40",
+                "reference": "10100896018fd847a257cd81143b8e1b7be08e40",
                 "shasum": ""
             },
             "require": {
-                "evenement/evenement": "^2.0|^1.0",
-                "php": ">=5.3.8"
+                "evenement/evenement": "^3.0 || ^2.0 || ^1.0",
+                "php": ">=5.3.8",
+                "react/event-loop": "^1.0 || ^0.5 || ^0.4 || ^0.3.5"
             },
             "require-dev": {
                 "clue/stream-filter": "~1.2",
-                "react/event-loop": "^0.4|^0.3",
-                "react/promise": "^2.0|^1.0"
-            },
-            "suggest": {
-                "react/event-loop": "^0.4",
-                "react/promise": "^2.0"
+                "phpunit/phpunit": "^6.4 || ^5.7 || ^4.8.35"
             },
             "type": "library",
             "autoload": {
@@ -3594,12 +3782,18 @@
             "license": [
                 "MIT"
             ],
-            "description": "Basic readable and writable stream interfaces that support piping.",
+            "description": "Event-driven readable and writable streams for non-blocking I/O in ReactPHP",
             "keywords": [
+                "event-driven",
+                "io",
+                "non-blocking",
                 "pipe",
-                "stream"
+                "reactphp",
+                "readable",
+                "stream",
+                "writable"
             ],
-            "time": "2017-01-25T14:44:14+00:00"
+            "time": "2018-01-19T15:04:38+00:00"
         },
         {
             "name": "santigarcor/laratrust",

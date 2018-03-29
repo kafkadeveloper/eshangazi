@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Member;
 use App\Message;
+use App\Conversation;
 use App\MessageDetail;
+use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class MessageDetailController extends Controller
 {
@@ -154,12 +158,22 @@ class MessageDetailController extends Controller
 
         $title = $extras['apiParameters'][env('APP_ACTION') . '-message-details'];
 
-        $item = MessageDetail::where('title', '=', $title)->first();
+        $message = MessageDetail::where('title', '=', $title)->first();
+
+//        $bot->typesAndWaits(1);
+//        $bot->reply($item->title);
 
         $bot->typesAndWaits(1);
-        $bot->reply($item->title);
+        $bot->reply($message->description);
 
-        $bot->typesAndWaits(1);
-        $bot->reply($item->description);
+        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
+
+        if($member)
+        {
+            Conversation::create([
+                'intent'    => $title,
+                'member_id' => $member->id
+            ]);
+        }
     }
 }

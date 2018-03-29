@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Conversation;
 use App\Feedback;
 use Illuminate\Http\Request;
 
 class FeedbackController extends Controller
 {
+    /**
+     * Center Controller constructor.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,7 +22,9 @@ class FeedbackController extends Controller
      */
     public function index()
     {
-        //
+        $feedback = Feedback::paginate(10);
+
+        return view('feedback.index', ['feedbacks' => $feedback]);
     }
 
     /**
@@ -31,39 +40,11 @@ class FeedbackController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param BotMan $bot
      * @return \Illuminate\Http\Response
      */
-    public function store(BotMan $bot)
+    public function store()
     {
-        $user = $bot->getUser();
-        $user_id = $user->getId();
 
-        $extras = $bot->getMessage()->getExtras();
-
-        $apiIntent = $extras['apiIntent'];
-        $apiReply = $extras['apiReply'];
-
-        $bot->typesAndWaits(1);
-
-        $bot->reply($apiReply);
-
-
-
-        Feedback::create([
-            'feeback'    => $apiIntent,
-            'member_id'  => $member->id
-        ]);
-
-        $member = Member::where('user_platform_id', '=', $user_id)->first();
-
-        if($member)
-        {
-            Conversation::create([
-                'intent'    => $apiIntent,
-                'member_id' => $member->id
-            ]);
-        }
     }
 
     /**

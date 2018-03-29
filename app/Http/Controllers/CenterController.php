@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Conversation;
 use App\Ward;
 use App\Center;
 use App\Member;
@@ -9,6 +10,7 @@ use App\Partner;
 use App\District;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
@@ -205,14 +207,24 @@ class CenterController extends Controller
             }
             else
             {
-                $bot->reply('It seems there\'s no Center in your area, I have these suggestions.');
+                //$bot->reply('It seems there\'s no Center in your area, I have these suggestions.');
  
                 $centers = Center::inRandomOrder()->take(5)->get();
 
                 $bot->typesAndWaits(1);
                 $bot->reply($this->centers($centers));
             }            
-        }        
+        }
+
+        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
+
+        if($member)
+        {
+            Conversation::create([
+                'intent'    => 'Service delivery points',
+                'member_id' => $member->id
+            ]);
+        }
     }
 
     /**
@@ -229,15 +241,18 @@ class CenterController extends Controller
              
         foreach($centers as $center)
         {
-            $url = $center->thumbnail
-                ? (env('AWS_URL') . '/' . $center->thumbnail)
-                : (env('APP_URL') . '/img/logo.jpg');
+            $url = null;
+
+            if ($center->thumbnail)
+                $url = env('AWS_URL') . '/' . $center->thumbnail;
+            else
+                $url = env('APP_URL') . '/img/logo.jpg';
 
             $template_list->addElements([
                 Element::create($center->name)
                     ->subtitle($center->description)
                     ->image($url)
-                    ->addButton(ElementButton::create('View Details')
+                    ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($center->name)->type('postback'))
             ]);
         } 
@@ -259,15 +274,18 @@ class CenterController extends Controller
              
         foreach($center->services as $service)
         {
-            $url = $center->thumbnail
-                ? (env('AWS_URL') . '/' . $center->thumbnail)
-                : (env('APP_URL') . '/img/logo.jpg');
+            $url = null;
+
+            if ($service->thumbnail)
+                $url = env('AWS_URL') . '/' . $service->thumbnail;
+            else
+                $url = env('APP_URL') . '/img/logo.jpg';
 
             $template_list->addElements([
                 Element::create($service->name)
                     ->subtitle($service->description)
                     ->image($url)
-                    ->addButton(ElementButton::create('View Details')
+                    ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($service->name)->type('postback'))
             ]);
         } 

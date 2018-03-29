@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Member;
+use App\Platform;
 use App\District;
 use App\ItemCategory;
 use App\Conversation;
@@ -35,6 +36,7 @@ class MemberController extends Controller
     public function store(BotMan $bot)
     {            
         $user = $bot->getUser();
+        $driver = $bot->getDriver()->getName();
         $extras = $bot->getMessage()->getExtras();        
         $apiReply = $extras['apiReply'];
 
@@ -53,8 +55,8 @@ class MemberController extends Controller
                 $bot->reply($apiReply);
 
                 $bot->reply($this->features());
-
-                $this->subscribe($user, $extras);
+                $this->subscribe($user, $extras, $driver);
+                
             }
         }
         else
@@ -103,28 +105,14 @@ class MemberController extends Controller
     public function started(BotMan $bot)
     {
         $user = $bot->getUser();
-        $user_id = $user->getId();
-
-        $extras = $bot->getMessage()->getExtras();
-        $apiIntent = $extras['apiIntent'];
 
         $bot->typesAndWaits(1);
 
         if($this->check($user)) 
         {
-            $bot->reply('Welcome back ' .  $user->getFirstName());
+            $bot->reply('Karibu tena ' .  $user->getFirstName());
 
             $bot->reply($this->features());
-
-            $member = Member::where('user_platform_id', '=', $user_id)->first();
-
-            if($member)
-            {
-                Conversation::create([
-                    'intent'    => $apiIntent,
-                    'member_id' => $member->id
-                ]);
-            }
         } 
         else 
         {
@@ -141,28 +129,38 @@ class MemberController extends Controller
      *
      * @param $user
      * @param $extras
+     * @param $driver
      *
      * @return void
      */
-    public function subscribe($user, $extras)
+    public function subscribe($user, $extras, $driver)
     {
-        $profile_pic = $user->getInfo()["profile_pic"];
-        $gender = $user->getInfo()["gender"];
-        
         $age = $extras['apiParameters']['age']->amount;
         $district = $extras['apiParameters']['district'];
+        $born_year = date('Y') - $age;
+        $platform_id = $this->getPlatformId($driver);
+        $profile_pic = $this->getUserProfilePic($user, $driver);
+        $gender = $this->getUserGender($user, $driver);
 
         $district = District::where('name', '=', $district)->first();
 
-        Member::create([
+        $member = Member::create([
             'user_platform_id'  => $user->getId(),
             'name'              => $user->getFirstName() . ' ' . $user->getLastName(),
             'avatar'            => $profile_pic,
-            'born_year'         => $age,
+            'born_year'         => $born_year,
             'gender'            => $gender,
-            'platform_id'       => null,
+            'platform_id'       => $platform_id,
             'district_id'       => $district->id,
         ]);
+
+        if ($member)
+        {
+            Conversation::create([
+                'intent'    => 'Subscribe',
+                'member_id' => $member->id
+            ]);
+        }
     }
 
     /**
@@ -189,6 +187,11 @@ class MemberController extends Controller
             $member->update([
                 'status' => 0
             ]);
+
+            Conversation::create([
+                'intent'    => 'Unsubscribe',
+                'member_id' => $member->id
+            ]);
         }
     }
 
@@ -205,19 +208,89 @@ class MemberController extends Controller
              
         foreach($categories as $category)
         {
-            $url = $category->thumbnail
-                ? (env('AWS_URL') . '/' . $category->thumbnail)
-                : (env('APP_URL') . '/img/logo.jpg');
+            $url = null;
+
+            if ($category->thumbnail)
+                $url = env('AWS_URL') . '/' . $category->thumbnail;
+            else
+                $url = env('APP_URL') . '/img/logo.jpg';
 
             $template_list->addElements([
                 Element::create($category->name)
                     ->subtitle($category->description)
                     ->image($url)
-                    ->addButton(ElementButton::create('View Details')
+                    ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($category->name)->type('postback'))
             ]);
         } 
 
         return $template_list;
+    }
+
+    /**
+     * Get platform id of user based on driver
+     *
+     * @param $driver
+     *
+     * @return int or null
+     */
+    public function getPlatformId($driver)
+    {
+        $platform = Platform::where('name', '=', $driver)->first();
+        if(!$platform){
+            $platform_id = null;
+        }else{
+            $platform_id = $platform->id;
+        }
+        
+        return $platform_id;
+    }
+
+    /**
+     * return user profile pic based on driver
+     * 
+     * @param $user
+     * @param $driver
+     * 
+     * @return profile_pc
+     * 
+     */
+    public function getUserProfilePic($user, $driver)
+    {
+        if($driver === 'Facebook')
+        {
+            return $profile_pic = $user->getInfo()["profile_pic"];
+        }
+
+        elseif($driver === 'Slack')
+        {
+            return $profile_pic = $user->getInfo()["profile"]["image_original"];
+        }
+        
+        return null;
+    }
+
+    /**
+     * return user gender based on driver
+     * 
+     * @param $user
+     * @param $driver
+     * 
+     * @return gender
+     * 
+     */
+    public function getUserGender($user, $driver)
+    {
+        if($driver === 'Facebook')
+        {
+            return $gender = $user->getInfo()["gender"];
+        }
+
+        elseif($driver === 'Slack')
+        {
+           return $gender = null;
+        }
+
+        return null;
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Item;
+use App\Member;
+use App\Conversation;
 use App\ItemCategory;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
@@ -165,10 +167,27 @@ class ItemController extends Controller
 
         $item = Item::where('title', '=', $title)->first();
 
-        $bot->typesAndWaits(1);
-        $bot->reply($item->title);
+        //$bot->typesAndWaits(1);
+        //$bot->reply($item->title);
 
         $bot->typesAndWaits(1);
-        $bot->reply($item->description);
+        if($item)
+        {
+            $bot->reply($item->description);
+        }
+        else{
+            $bot->reply('Sorry say that again...Item issue');
+        }
+        
+
+        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
+
+        if($member)
+        {
+            Conversation::create([
+                'intent'    => $title,
+                'member_id' => $member->id
+            ]);
+        }
     }
 }

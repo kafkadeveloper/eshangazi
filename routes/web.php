@@ -14,13 +14,16 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
+Route::get('/test', 'ItemCategoryController@test');
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
 
 Auth::routes();
-
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/feedback', 'FeedbackController@index')->name('index-feedback');
+
+Route::get('/conversations', 'ConversationController@index')->name('index-conversation');
 
 Route::get('/item-categories', 'ItemCategoryController@index')->name('index-item-category');
 Route::get('/item-categories/create', 'ItemCategoryController@create')->name('create-item-category');

@@ -1,18 +1,22 @@
 <?php
 
+use BotMan\BotMan\BotMan;
 use App\Http\Controllers\ItemController;
-use App\Http\Controllers\MessageController;
 use BotMan\BotMan\Middleware\Dialogflow;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\CenterController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PartnerController;
-use App\Http\Controllers\FeedbackController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\MessageDetailController;
 
 $botman = resolve('botman');
+
+$botman->hears('This is a default test', function (BotMan $bot) {
+    $bot->reply('Hello yourself.');
+});
 
 $dialogflow = Dialogflow::create(env('DIALOGFLOW_KEY'))->listenForAction();
 

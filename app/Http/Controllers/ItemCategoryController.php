@@ -158,28 +158,32 @@ class ItemCategoryController extends Controller
         $category = ItemCategory::with('items')->where('name', '=', $name)->first();
 
         $bot->typesAndWaits(1);
-        $bot->reply($category->description);
+        if($category)
+        {
+            $bot->reply($category->description);
+            
+            $bot->typesAndWaits(1);
+            $bot->reply($this->items($category));
+        }
+        else{
+            $bot->reply('Sorry say that again...Item category issue ('.var_export($category,true).') value from dialogflow is ('.$name.')');
+        }
 
-        $bot->typesAndWaits(2);
-        $bot->reply($this->items($category));
-
-        $extras = $bot->getMessage()->getExtras();
-        $apiIntent = $extras['apiIntent'];
+        
 
         $user = $bot->getUser();
         $user_id = $user->getId();
 
         $member = Member::where('user_platform_id', '=', $user_id)->first();
 
-        $bot->reply($member->id);
-
         if($member)
         {
             Conversation::create([
-                'intent'    => $apiIntent,
+                'intent'    => $name,
                 'member_id' => $member->id
             ]);
         }
+
     }
 
     /**
@@ -195,40 +199,26 @@ class ItemCategoryController extends Controller
              
         foreach($category->items as $item)
         {
-            $url = $item->thumbnail
-                ? (env('AWS_URL') . '/' . $item->thumbnail)
-                : (env('APP_URL') . '/img/logo.jpg');
+            $url = null;
+
+            if ($item->thumbnail)
+                $url = env('AWS_URL') . '/' . $item->thumbnail;
+            else
+                $url = env('APP_URL') . '/img/logo.jpg';
 
             $template_list->addElements([
                 Element::create($item->title)
                     ->subtitle($item->description)
                     ->image($url)
-                    ->addButton(ElementButton::create('View Details')
+                    ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($item->title)->type('postback'))
             ]);
         } 
 
         return $template_list;
     }
-
-    /**
-     * Record member and bot conversation.
-     *
-     * @param $bot
-     */
-//    public function conversation($bot)
-//    {
-//        $user = $bot->getUser();
-//        $extras = $bot->getMessage()->getExtras();
-//
-//        $member = Member::where('user_platform_id', '=', $user->getId());
-//
-//        if($member)
-//        {
-//            Conversation::create([
-//                'intent'    => $extras['apiIntent'],
-//                'member_id' => $member->id
-//            ]);
-//        }
-//    }
+    public function test()
+    {
+        return $category = ItemCategory::with('items')->where('name', '=', 'Ukeketaji au Tohara kwa Mwanamke')->first();
+    }
 }

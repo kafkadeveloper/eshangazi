@@ -60,9 +60,9 @@ class QuizConversation extends Conversation
                     {
                         $this->score += 1;
 
-                        $this->say("Qn.".$this->iterations."/".$this->data->count().". ✔️ Correct 👍, you win 1 point.");
+                        $this->say("Swal.".$this->iterations."/".$this->data->count().". ✔️ Sahihi 👍, umeshinda alama 1.");
                     } else {
-                        $this->say("Qn.".$this->iterations."/".$this->data->count().". ❌ Incorrect, it was ".$this->correct.", 0 point.");
+                        $this->say("Swal.".$this->iterations."/".$this->data->count().". ❌ Si-sahihi, sahihi ni ".$this->correct.", alama 0.");
                     }
 
                     if($this->iterations < $this->data->count())
@@ -73,35 +73,35 @@ class QuizConversation extends Conversation
                     {
                         if($this->score == $this->data->count())
                         {
-                            $this->say("Bravo 👏👏 " .
+                            $this->say("Hongera 👏👏 " .
                                 $this->bot->getUser()->getFirstName() .
-                                "!, you have scored ".$this->score . "/"
+                                "!, umepata ".$this->score . "/"
                                 . $this->data->count() .
-                                " . Congratulations! 🏆");
+                                " . Hongeraaa! 🏆🏆");
                         }else if($this->score >= ($this->data->count()/2))
                         {
-                            $this->say("You did well 👏 " .
+                            $this->say("Umefanya vizuri 👏 " .
                                 $this->bot->getUser()->getFirstName() .
-                                "!, your total points are " .
-                                $this->score . " out of " .
+                                "!, umepata " .
+                                $this->score . "/" .
                                 $this->data->count() .
-                                ". Good keep playing.");
+                                ". Endelea kucheza.");
                         }else{
                             $this->say($this->bot->getUser()->getFirstName() .
-                                "!, I believe you can do better than " .
+                                "!, Naamini unaweza kufanya vizuri zaidi ya " .
                                 $this->score . "/" . $this->data->count() .
-                                ". Best of lucky next time! 👊");
+                                ". Kila la heri! 👊");
                         }
                         
                         $this->bot->typesAndWaits(2);
 
                         $question_conf = BotManQuestion::create($this->bot->getUser()->getFirstName() .
-                            ", Do you want to play another round?")
+                            ", Je, ungependa kucheza awamu nyingine?")
                             ->fallback("Unable to ask for repeat confirmantion")
                             ->callbackId("ask_for_repeat")
                             ->addButtons([
-                                Button::create("Yes")->value("yes"),
-                                Button::create("No")->value("no"),
+                                Button::create("Ndio")->value("yes"),
+                                Button::create("Hapana")->value("no"),
                             ]);
 
                         $this->ask($question_conf, function(Answer $answer)
@@ -114,21 +114,21 @@ class QuizConversation extends Conversation
                             }
                             else if ($answer->getValue() === 'no')
                             {
-                                $this->say("Thanks ".$this->bot->getUser()->getFirstName() .
-                                    "!, you are welcome to try again any time.. 👋");
+                                $this->say("Asante ".$this->bot->getUser()->getFirstName() .
+                                    "!, karibu ujaribu kucheza tena muda wowote.. 👋");
                             }
                         });
                     }
                     
                 } else {
-                    $question_wrong = BotManQuestion::create("Oops❗😬😬, " .
+                    $question_wrong = BotManQuestion::create("Oooh❗😬😬, " .
                         $this->bot->getUser()->getFirstName() .
-                        "! It looks something went wrong, Please start again?")
+                        "! Inaonekana kuna kitu hakijaenda sawa, Tafadhali azinsha upya!")
                         ->fallback("Something went wrong")
                         ->callbackId("something_is_wrong")
                         ->addButtons([
-                            Button::create("Start")->value("yes"),
-                            Button::create("No")->value("no"),
+                            Button::create("Azisha")->value("yes"),
+                            Button::create("Hapana")->value("no"),
                         ]);
 
                     $this->ask($question_wrong, function(Answer $answer)
@@ -141,16 +141,16 @@ class QuizConversation extends Conversation
                         }
                         else if ($answer->getValue() === 'no')
                         {
-                            $this->say("Ooh sorry 🙇‍ " .
+                            $this->say("Ooh pole 🙇‍ " .
                                 $this->bot->getUser()->getFirstName() .
-                                "!, you are welcome to try again any time.. 👋");
+                                "!, karibu ujaribu kucheza tena muda wowote.. 👋");
                         }
                     });
                 }
             });
 
         }else{
-            $this->say('No questions at the moment, coming soon...');
+            $this->say('Hakua maswali kwa sasa, rudi baadae..');
         }
     }
 
@@ -161,7 +161,7 @@ class QuizConversation extends Conversation
      */
     public function run()
     {
-        $this->say("Click on the correct answer.");
+        $this->say("Bofya kwenye jibu sahihi.");
 
         $this->askQuestion();
     }

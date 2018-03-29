@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Conversations\FeedbackConversation;
+use App\Member;
+use App\Conversation;
 use BotMan\BotMan\BotMan;
 use App\Http\Conversations\QuizConversation;
+use App\Http\Conversations\FeedbackConversation;
 
 class BotManController extends Controller
 {
@@ -34,6 +36,15 @@ class BotManController extends Controller
     public function quizConversation(BotMan $bot)
     {
         $bot->startConversation(new QuizConversation());
+
+        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
+
+        if($member) {
+            Conversation::create([
+                'intent'    => 'Question and Answers',
+                'member_id' => $member->id
+            ]);
+        }
     }
 
     /**
@@ -44,6 +55,16 @@ class BotManController extends Controller
     public function feedback(BotMan $bot)
     {
         $bot->startConversation(new FeedbackConversation());
+
+        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
+
+        if($member)
+        {
+            Conversation::create([
+                'intent'    => 'Feedback',
+                'member_id' => $member->id
+            ]);
+        }
     }
 
     public function listener(BotMan $bot)
@@ -54,6 +75,6 @@ class BotManController extends Controller
 
         $bot->typesAndWaits(1);   
         
-        $bot->reply($apiReply);
+        $bot->reply(nl2br($apiReply));
     }
 }

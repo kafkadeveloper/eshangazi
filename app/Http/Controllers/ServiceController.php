@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Center;
+use App\Member;
 use App\Service;
+use App\Conversation;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 
@@ -163,5 +165,14 @@ class ServiceController extends Controller
 
         $bot->typesAndWaits(1);
         $bot->reply($service->description);
+
+        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
+
+        if($member) {
+            Conversation::create([
+                'intent'    => $name,
+                'member_id' => $member->id
+            ]);
+        }
     }
 }

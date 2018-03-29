@@ -8,6 +8,7 @@ class Platform extends Model
 {
     protected $fillable = [
         'name',
+        'driver_class',
         'description',
         'created_by',
         'updated_by'
