@@ -164,3 +164,11 @@ Route::get('/users/{user}/edit', 'UserController@edit')->name('edit-user');
 Route::patch('/users/{user}', 'UserController@update')->name('update-user');
 Route::post('/users', 'UserController@store')->name('store-user');
 Route::delete('/users/{user}', 'UserController@destroy')->name('delete-user');
+
+Route::get('/roles', 'RoleController@index')->name('index-role');
+Route::get('/roles/create', 'RoleController@create')->name('create-role');
+Route::get('/roles/{role}', 'RoleController@show')->name('show-role');
+Route::get('/roles/{role}/edit', 'RoleController@edit')->name('edit-role');
+Route::patch('/roles/{role}', 'RoleController@update')->name('update-role');
+Route::post('/roles', 'RoleController@store')->name('store-role');
+Route::delete('/roles/{role}', 'RoleController@destroy')->name('delete-role');

@@ -40,11 +40,7 @@
                     Roles
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link active" id="permission-tab" data-toggle="tab" href="#permission" role="tab" aria-controls="permission" aria-selected="true">
-                    Permissions
-                </a>
-            </li>
+
         </ul>
 
         <div class="tab-content" id="roleTabRelation">
@@ -61,26 +57,6 @@
                                        <li>{{ $role->name }}</li>
                                    </ul>
                                 @endforeach
-
-                    @endif
-                </div>
-            </div>
-        </div>
-
-        <div class="tab-content" id="permissionTabRelation">
-            <div class="tab-pane fade show active" id="region" permission="tabpanel" aria-labelledby="region-tab">
-                <div class="table-responsive mt-2">
-                    @if($user->permissions->isEmpty())
-                        <p class="lead text-muted">
-                            User is not assigned to any permission at the moment.
-                        </p>
-                    @else
-
-                        @foreach($user->permissions as $permission)
-                            <ul>
-                                <li>{{ $permission->name }}</li>
-                            </ul>
-                        @endforeach
 
                     @endif
                 </div>

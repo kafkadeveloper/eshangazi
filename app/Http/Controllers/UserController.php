@@ -92,15 +92,15 @@ class UserController extends Controller
             }
         }
 
-        $permission_ids = $request->get('permissions_ids');
-        if($permission_ids){
-            foreach($user->permissions as $permission){
-                $user->detachPermission($permission);
-            }
-            foreach($permission_ids as $permission){
-                $user->attachPermission($permission);
-            }
-        }
+//        $permission_ids = $request->get('permissions_ids');
+//        if($permission_ids){
+//            foreach($user->permissions as $permission){
+//                $user->detachPermission($permission);
+//            }
+//            foreach($permission_ids as $permission){
+//                $user->attachPermission($permission);
+//            }
+//        }
 
         return redirect()->route('index-user');
     }

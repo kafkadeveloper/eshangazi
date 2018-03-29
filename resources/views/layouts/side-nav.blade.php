@@ -274,7 +274,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('index-role') }}">
                     <span data-feather="file"></span>
                     Roles
                 </a>
