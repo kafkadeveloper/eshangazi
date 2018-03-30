@@ -18,24 +18,7 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 $botman = resolve('botman');
 
 $botman->hears('This is a default test', function (BotMan $bot) {
-    $extras = $bot->getMessage()->getExtras();
-    $apiReply = $extras['apiReply'];
-
-    $categories = ItemCategory::inRandomOrder()->take(5)->get();
-
-    $features = Question::create($apiReply)
-        ->fallback('Unable to create a new database')
-        ->callbackId('create_database');
-
-
-    foreach($categories as $category)
-    {
-        $features->addButtons([
-            Button::create($category->name)->value($category->name)
-        ]);
-    }
-
-    $bot->reply($features);
+    $bot->reply('Hello yourself.');
 });
 
 $dialogflow = Dialogflow::create(env('DIALOGFLOW_KEY'))->listenForAction();

@@ -13,6 +13,10 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 use BotMan\BotMan\Messages\Outgoing\Question as BotManQuestion;
+use BotMan\Drivers\Facebook\FacebookDriver;
+use BotMan\Drivers\Slack\SlackDriver;
+use BotMan\Drivers\Telegram\TelegramDriver;
+use BotMan\Drivers\Web\WebDriver;
 
 class MemberController extends Controller
 {
@@ -118,6 +122,9 @@ class MemberController extends Controller
             $message = $user->getFirstName() . ' ' . $apiReply;
             $categories = ItemCategory::inRandomOrder()->take(5)->get();
 
+            $plain_message = '';
+            $count = 1;
+
             $features = BotManQuestion::create($message)
                 ->fallback('Unable to create a new database')
                 ->callbackId('create_database');
@@ -128,11 +135,21 @@ class MemberController extends Controller
                 $features->addButtons([
                     Button::create($category->name)->value($category->name)
                 ]);
+
+                if($count == 1)
+                    $plain_message .= $count . ' ' . $category->name;
+                else
+                    $plain_message .= '\n' . $count . ' ' . $category->name;
+
+                $count++;
             }
 
-            $bot->reply($features);
+            $bot->reply($features, FacebookDriver::class);
+            $bot->reply($features, TelegramDriver::class);
+            $bot->reply($features, SlackDriver::class);
+            $bot->reply($plain_message, WebDriver::class);
         }
-        else 
+        else
         {
             $bot->reply($apiReply);
         }
