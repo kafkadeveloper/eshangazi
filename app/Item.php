@@ -18,6 +18,7 @@ class Item extends Model
         'gender',
         'minimum_age',
         'item_category_id',
+        'item_id',
         'created_by',
         'updated_by'
     ];
