@@ -59,20 +59,24 @@
                             </td>
 
                             <td class="align-middle text-capitalize">
-                                {{ $member->platform->name }}
+                                @if(is_null($member->platform->name))
+                                    Unknown
+                                @else
+                                    {{ $member->platform->name }}
                             </td>
                             
                             <td class="text-center align-middle">
-                                <form action="#" method="POST">
-                                    {{ csrf_field() }}
-                                    {{ method_field('PATCH')}}
+                                <div class="btn-group">
+                                    <a href="#" class="btn btn-sm btn-outline-secondary">
+                                        Show
+                                    </a>
 
-                                    <div class="btn-group">
-                                        <button type="submit" class="btn btn-sm btn-outline-secondary">
-                                            Unsubscribe
-                                        </button>
-                                    </div>
-                                </form>
+                                    <a href="#" class="btn btn-sm btn-outline-secondary">
+                                        Send Message
+                                    </a>
+
+                                    <button type="submit" class="btn btn-sm btn-outline-secondary">Unsubcribe</button>
+                                </div>
                             </td>
                         </tr>
                     @endforeach
