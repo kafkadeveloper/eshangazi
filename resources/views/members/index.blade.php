@@ -1,27 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="card-body">
-    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
-        <h1 class="h2">
-            Members
-        </h1>
+    <div class="card-body">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3">
+            <h1 class="h2">
+                Members
+            </h1>
 
-        <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group">
+            <div class="btn-toolbar mb-2 mb-md-0">
+                <div class="btn-group">
 
+                </div>
             </div>
         </div>
-    </div>    
 
-    <div class="table-responsive">
-        @if($members->isEmpty())
-            <p class="lead text-muted">
-                No data to display at the moment.
-            </p>
-        @else
-            <table class="table table-striped table-sm">
-                <thead>
+        <div class="table-responsive">
+            @if($members->isEmpty())
+                <p class="lead text-muted">
+                    No data to display at the moment.
+                </p>
+            @else
+                <table class="table table-striped table-sm">
+                    <thead>
                     <tr>
                         <th>Thumbnail</th>
 
@@ -30,20 +30,18 @@
                         <th>Gender</th>
 
                         <th>Platform</th>
-                        
+
                         <th class="text-center">Actions</th>
                     </tr>
-                </thead>
+                    </thead>
 
-                <tbody>
+                    <tbody>
                     @foreach($members as $member)
                         <tr>
                             <td class="align-middle">
-                                <img
-                                    src="{{ $member->avatar ? $member->avatar : '/img/logo.png' }}"
-                                    height="50"
-                                    alt="{{ $member->name }}"
-                                >
+                                <img src="{{ $member->avatar ? $member->avatar : '/img/logo.png' }}"
+                                     height="50"
+                                     alt="{{ $member->name }}">
                             </td>
 
                             <td class="align-middle">
@@ -63,8 +61,9 @@
                                     Unknown
                                 @else
                                     {{ $member->platform->name }}
+                                @endif
                             </td>
-                            
+
                             <td class="text-center align-middle">
                                 <div class="btn-group">
                                     <a href="#" class="btn btn-sm btn-outline-secondary">
@@ -80,11 +79,11 @@
                             </td>
                         </tr>
                     @endforeach
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
 
-            {{ $members->links() }}
-        @endif
+                {{ $members->links() }}
+            @endif
+        </div>
     </div>
-</div>
 @endsection
