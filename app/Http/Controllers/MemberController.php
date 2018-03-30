@@ -8,9 +8,12 @@ use App\District;
 use App\ItemCategory;
 use App\Conversation;
 use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\Drivers\Facebook\Extensions\Element;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
+use BotMan\BotMan\Messages\Outgoing\Question as BotManQuestion;
 
 class MemberController extends Controller
 {
@@ -105,21 +108,33 @@ class MemberController extends Controller
     public function started(BotMan $bot)
     {
         $user = $bot->getUser();
+        $extras = $bot->getMessage()->getExtras();
+
+        $apiReply = $extras['apiReply'];
 
         $bot->typesAndWaits(1);
 
         if($this->check($user)) 
         {
-            $bot->reply('Karibu tena ' .  $user->getFirstName());
+            $message = $user->getFirstName() . ' ' . $apiReply;
 
-            $bot->reply($this->features());
-        } 
+            $features = Question::create($message)
+                ->fallback('Unable to create a new database')
+                ->callbackId('create_database');
+
+            $categories = ItemCategory::inRandomOrder()->take(5)->get();
+
+            foreach($categories as $category)
+            {
+                $features->addButtons([
+                    Button::create($category)->value($category)
+                ]);
+            }
+
+            $bot->reply($features);
+        }
         else 
         {
-            $extras = $bot->getMessage()->getExtras();
-
-            $apiReply = $extras['apiReply'];
-
             $bot->reply($apiReply);
         }
     }
@@ -203,9 +218,9 @@ class MemberController extends Controller
     public function features()
     {
         $categories = ItemCategory::inRandomOrder()->take(5)->get();
-                            
+
         $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
-             
+
         foreach($categories as $category)
         {
             $url = null;
@@ -222,7 +237,7 @@ class MemberController extends Controller
                     ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($category->name)->type('postback'))
             ]);
-        } 
+        }
 
         return $template_list;
     }

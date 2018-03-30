@@ -2,6 +2,7 @@
 
 use BotMan\BotMan\BotMan;
 use App\Http\Controllers\ItemController;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Middleware\Dialogflow;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MemberController;
@@ -11,11 +12,20 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PartnerController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\MessageDetailController;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
 $botman = resolve('botman');
 
 $botman->hears('This is a default test', function (BotMan $bot) {
-    $bot->reply('Hello yourself.');
+    $question = Question::create('Do you need a database?')
+        ->fallback('Unable to create a new database')
+        ->callbackId('create_database')
+        ->addButtons([
+            Button::create('Of course')->value('yes'),
+            Button::create('Hell no!')->value('no'),
+        ]);
+
+    $bot->reply($question);
 });
 
 $dialogflow = Dialogflow::create(env('DIALOGFLOW_KEY'))->listenForAction();
