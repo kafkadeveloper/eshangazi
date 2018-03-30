@@ -40,9 +40,13 @@ class ItemController extends Controller
      */
     public function create()
     {
+        $items = Item::all('id', 'title');
         $item_categories = ItemCategory::all('id', 'name');
 
-        return view('items.create', ['item_categories' => $item_categories]);
+        return view('items.create', [
+            'items'             => $items,
+            'item_categories'   => $item_categories
+        ]);
     }
 
     /**
@@ -69,6 +73,7 @@ class ItemController extends Controller
             'gender'            => $request->gender,
             'minimum_age'       => $request->minimum_age,
             'item_category_id'  => $request->item_category_id,
+            'item_id'           => $request->item_id,
             'created_by'        => auth()->id()
         ]);
 
@@ -96,10 +101,13 @@ class ItemController extends Controller
      */
     public function edit(Item $item)
     {
+
+        $items = Item::all('id', 'title');
         $item_categories = ItemCategory::all('id', 'name');
 
         return view('items.edit', [
-            'item'              => $item, 
+            'item'              => $item,
+            'items'             => $items,
             'item_categories'   => $item_categories
         ]);
     }
@@ -120,6 +128,8 @@ class ItemController extends Controller
         {
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/item-thumbnails', $request->file('thumbnail'), 'public');
+
+            $this->destroy($item);
         }
 
         $item->update([
@@ -129,6 +139,7 @@ class ItemController extends Controller
             'gender'            => $request->gender,
             'minimum_age'       => $request->minimum_age,
             'item_category_id'  => $request->item_category_id,
+            'item_id'           => $request->item_id,
             'updated_by'        => auth()->id()
         ]);
 

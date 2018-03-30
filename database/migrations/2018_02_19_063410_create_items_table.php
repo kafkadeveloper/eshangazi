@@ -23,6 +23,7 @@ class CreateItemsTable extends Migration
             $table->integer('minimum_age')->default(13);
 
             $table->integer('item_category_id')->unsigned();
+            $table->integer('item_id')->unsigned()->nullable();
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned()->nullable();
 
