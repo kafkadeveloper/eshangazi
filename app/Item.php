@@ -43,7 +43,15 @@ class Item extends Model
         return $this->belongsTo(Item::class, 'item_id');
     }
 
-
+    /**
+     * An Item may have a number of child items.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'item_id');
+    }
 
     /**
      * An Item created by a user.
