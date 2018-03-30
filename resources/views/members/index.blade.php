@@ -57,7 +57,7 @@
                             </td>
 
                             <td class="align-middle text-capitalize">
-                                @if(is_null($member->platform->name))
+                                @if(is_null($member->platform_id))
                                     Unknown
                                 @else
                                     {{ $member->platform->name }}
