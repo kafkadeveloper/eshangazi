@@ -190,11 +190,17 @@ class CenterController extends Controller
             $center = Center::with('services')->where('name', '=', $name)->first();
 
             $bot->typesAndWaits(1);
-            $bot->reply($this->services($center));
+            $bot->reply($center->name);
         } 
         else
         {
-            $user = $bot->getUser();
+
+            $centers = Center::inRandomOrder()->take(5)->get();
+
+            $bot->typesAndWaits(1);
+            $bot->reply($this->centers($centers));
+
+            /*$user = $bot->getUser();
 
             $member = Member::where('user_platform_id', '=', $user->getId())->first();
 
@@ -212,7 +218,7 @@ class CenterController extends Controller
 
                 $bot->typesAndWaits(1);
                 $bot->reply($this->centers($centers));
-            }            
+            } */
         }
 
         $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
