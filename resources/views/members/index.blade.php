@@ -68,7 +68,9 @@
                                     {{ method_field('PATCH')}}
 
                                     <div class="btn-group">
-                                        <button type="submit" class="btn btn-sm btn-outline-secondary">Unsubscribe</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-secondary">
+                                            Unsubscribe
+                                        </button>
                                     </div>
                                 </form>
                             </td>

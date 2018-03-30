@@ -52,7 +52,7 @@
             </ul>
 
             <div class="tab-content" id="itemsTabRelation">
-                <div id="items" class="tab-pane fade show active" role="tabpanel" aria-labelledby="partners-tab">
+                <div id="items" class="tab-pane fade show active" role="tabpanel" aria-labelledby="items-tab">
                     @if($item->items->isEmpty())
                         <p class="lead text-muted mt-2">
                             No child item available.
@@ -116,4 +116,13 @@
             </div>
         </section>
     </div>
+@endsection
+
+@section('scripts')
+    <script>
+        $('#itemTab a').on('click', function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+    </script>
 @endsection

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Conversation;
 use App\Ward;
 use App\Center;
 use App\Member;
 use App\Partner;
 use App\District;
+use App\Conversation;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -178,6 +178,7 @@ class CenterController extends Controller
     public function showBotMan(BotMan $bot)
     {
         $extras = $bot->getMessage()->getExtras();
+        $apiReply = $extras['apiReply'];
 
         $name = $extras['apiParameters'][env('APP_ACTION') . '-centers'];
 
@@ -186,7 +187,7 @@ class CenterController extends Controller
             $center = Center::with('services')->where('name', '=', $name)->first();
 
             $bot->typesAndWaits(1);
-            $bot->reply('Services offered at ' . $center->name);
+            $bot->reply($apiReply);
 
             $bot->typesAndWaits(1);
             $bot->reply($this->services($center));
@@ -207,8 +208,6 @@ class CenterController extends Controller
             }
             else
             {
-                //$bot->reply('It seems there\'s no Center in your area, I have these suggestions.');
- 
                 $centers = Center::inRandomOrder()->take(5)->get();
 
                 $bot->typesAndWaits(1);

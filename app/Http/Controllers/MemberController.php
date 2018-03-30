@@ -237,12 +237,12 @@ class MemberController extends Controller
     public function getPlatformId($driver)
     {
         $platform = Platform::where('name', '=', $driver)->first();
-        if(!$platform){
+
+        if(! $platform)
             $platform_id = null;
-        }else{
+        else
             $platform_id = $platform->id;
-        }
-        
+
         return $platform_id;
     }
 
@@ -266,6 +266,11 @@ class MemberController extends Controller
         {
             return $profile_pic = $user->getInfo()["profile"]["image_original"];
         }
+
+//        elseif($driver === 'Telegram')
+//        {
+//            return $profile_pic = $user->getInfo()["profile"]["image_original"];
+//        }
         
         return null;
     }

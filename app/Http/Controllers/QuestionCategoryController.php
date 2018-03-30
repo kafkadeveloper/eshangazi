@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class QuestionCategoryController extends Controller
 {
     /**
-     * Messsage Controller constructor.
+     * Question Category Controller constructor.
      */
     public function __construct()
     {

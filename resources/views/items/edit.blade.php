@@ -159,8 +159,8 @@
 
                     <select name="item_id"
                             class="form-control{{ $errors->has('item_id') ? ' is-invalid' : '' }}"
-                            title="Select Item"
-                            required autofocus>
+                            title="Select Item">
+                        
                         <option value="">
                             Select Item
                         </option>
