@@ -9,15 +9,14 @@
 
             <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group">
-                    <a href="{{ route('index-platform') }}"
-                       class="btn btn-sm btn-outline-secondary">
+                    <a href="{{ route('index-platform') }}" class="btn btn-sm btn-outline-secondary">
                         Platforms List
                     </a>
                 </div>
             </div>
         </div>
 
-        <form method="POST" action="{{ route('store-platform) }}">
+        <form method="POST" action="{{ route('store-platform') }}">
             @csrf
 
             <div class="form-row">
@@ -52,7 +51,7 @@
                            class="form-control{{ $errors->has('driver_class') ? ' is-invalid' : '' }}"
                            value="{{ old('driver_class') }}"
                            placeholder="Driver Name"
-                           required autofocus>
+                           required>
 
                     @if ($errors->has('driver_class'))
                         <span class="invalid-feedback">
@@ -69,13 +68,13 @@
                           name="description"
                           class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
                           row="3" required>
-                    {{ old('description') }}
-                </textarea>
+
+                    {{ old('description') }}</textarea>
 
                 @if ($errors->has('description'))
                     <span class="invalid-feedback">
-                        <strong>{{ $errors->first('description') }}</strong>
-                    </span>
+                    <strong>{{ $errors->first('description') }}</strong>
+                </span>
                 @endif
             </div>
 
@@ -85,9 +84,7 @@
                 </h1>
 
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <button type="submit" class="btn btn-primary mt-3">
-                        Submit
-                    </button>
+                    <button type="submit" class="btn btn-primary mt-3">Submit</button>
                 </div>
             </div>
         </form>

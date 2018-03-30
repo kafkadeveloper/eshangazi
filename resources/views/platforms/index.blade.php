@@ -17,7 +17,7 @@
         </div>
 
         <div class="table-responsive">
-            @if($platform->isEmpty())
+            @if($platforms->isEmpty())
                 <p class="lead text-muted">
                     No data to display at the moment.
                 </p>
@@ -49,6 +49,10 @@
                         <tr>
                             <td class="align-middle">
                                 {{ $platform->name }}
+                            </td>
+
+                            <td class="align-middle">
+                                {{ $platform->driver_class }}
                             </td>
 
                             <td class="text-center align-middle">

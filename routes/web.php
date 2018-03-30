@@ -175,3 +175,11 @@ Route::get('/roles/{role}/edit', 'RoleController@edit')->name('edit-role');
 Route::patch('/roles/{role}', 'RoleController@update')->name('update-role');
 Route::post('/roles', 'RoleController@store')->name('store-role');
 Route::delete('/roles/{role}', 'RoleController@destroy')->name('delete-role');
+
+Route::get('/platforms', 'PlatformController@index')->name('index-platform');
+Route::get('/platforms/create', 'PlatformController@create')->name('create-platform');
+Route::get('/platforms/{platform}', 'PlatformController@show')->name('show-platform');
+Route::get('/platforms/{platform}/edit', 'PlatformController@edit')->name('edit-platform');
+Route::patch('/platforms/{platform}', 'PlatformController@update')->name('update-platform');
+Route::post('/platforms', 'PlatformController@store')->name('store-platform');
+Route::delete('/platforms/{platform}', 'PlatformController@destroy')->name('delete-platform');
