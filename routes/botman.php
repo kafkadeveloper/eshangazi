@@ -18,15 +18,12 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 $botman = resolve('botman');
 
 $botman->hears('This is a default test', function (BotMan $bot) {
-    $user = $bot->getUser();
     $extras = $bot->getMessage()->getExtras();
     $apiReply = $extras['apiReply'];
 
-    $message = $user->getFirstName() . ' ' . $apiReply;
-    
     $categories = ItemCategory::inRandomOrder()->take(5)->get();
 
-    $features = Question::create($message)
+    $features = Question::create($apiReply)
         ->fallback('Unable to create a new database')
         ->callbackId('create_database');
 
