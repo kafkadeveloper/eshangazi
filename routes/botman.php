@@ -31,7 +31,7 @@ $botman->hears('This is a default test', function (BotMan $bot) {
     foreach($categories as $category)
     {
         $features->addButtons([
-            Button::create($category)->value($category)
+            Button::create($category->name)->value($category->name)
         ]);
     }
 
