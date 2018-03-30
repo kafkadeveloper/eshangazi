@@ -157,9 +157,9 @@
                         Choose Item
                     </label>
 
-                    <select name="item_category_id"
-                            class="form-control{{ $errors->has('item_category_id') ? ' is-invalid' : '' }}"
-                            title="Select Category"
+                    <select name="item_id"
+                            class="form-control{{ $errors->has('item_id') ? ' is-invalid' : '' }}"
+                            title="Select Item"
                             required autofocus>
                         <option value="">
                             Select Item

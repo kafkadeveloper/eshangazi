@@ -30,6 +30,8 @@ class CreateItemsTable extends Migration
             $table->timestamps();
             $table->softDeletes();
 
+            $table->foreign('item_id')->references('id')->on('items')
+                ->onUpdate('restrict')->onDelete('restrict');
             $table->foreign('item_category_id')->references('id')->on('item_categories')
                 ->onUpdate('restrict')->onDelete('restrict');
             $table->foreign('created_by')->references('id')->on('users')
