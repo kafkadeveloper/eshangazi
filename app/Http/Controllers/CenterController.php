@@ -182,18 +182,18 @@ class CenterController extends Controller
 
         $name = $extras['apiParameters'][env('APP_ACTION') . '-centers'];
 
+        $bot->typesAndWaits(1);
+        $bot->reply($apiReply);
+
         if($name)
         {
             $center = Center::with('services')->where('name', '=', $name)->first();
 
             $bot->typesAndWaits(1);
-            $bot->reply($apiReply);
-
-            $bot->typesAndWaits(1);
             $bot->reply($this->services($center));
         } 
         else
-        {            
+        {
             $user = $bot->getUser();
 
             $member = Member::where('user_platform_id', '=', $user->getId())->first();

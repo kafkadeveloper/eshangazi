@@ -8,7 +8,6 @@ use App\District;
 use App\ItemCategory;
 use App\Conversation;
 use BotMan\BotMan\BotMan;
-use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
@@ -117,12 +116,12 @@ class MemberController extends Controller
         if($this->check($user)) 
         {
             $message = $user->getFirstName() . ' ' . $apiReply;
+            $categories = ItemCategory::inRandomOrder()->take(5)->get();
 
-            $features = Question::create($message)
+            $features = BotManQuestion::create($message)
                 ->fallback('Unable to create a new database')
                 ->callbackId('create_database');
 
-            $categories = ItemCategory::inRandomOrder()->take(5)->get();
 
             foreach($categories as $category)
             {

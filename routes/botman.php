@@ -1,5 +1,6 @@
 <?php
 
+use App\ItemCategory;
 use BotMan\BotMan\BotMan;
 use App\Http\Controllers\ItemController;
 use BotMan\BotMan\Messages\Outgoing\Question;
@@ -17,15 +18,27 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 $botman = resolve('botman');
 
 $botman->hears('This is a default test', function (BotMan $bot) {
-    $question = Question::create('Do you need a database?')
-        ->fallback('Unable to create a new database')
-        ->callbackId('create_database')
-        ->addButtons([
-            Button::create('Of course')->value('yes'),
-            Button::create('Hell no!')->value('no'),
-        ]);
+    $user = $bot->getUser();
+    $extras = $bot->getMessage()->getExtras();
+    $apiReply = $extras['apiReply'];
 
-    $bot->reply($question);
+    $message = $user->getFirstName() . ' ' . $apiReply;
+    
+    $categories = ItemCategory::inRandomOrder()->take(5)->get();
+
+    $features = Question::create($message)
+        ->fallback('Unable to create a new database')
+        ->callbackId('create_database');
+
+
+    foreach($categories as $category)
+    {
+        $features->addButtons([
+            Button::create($category)->value($category)
+        ]);
+    }
+
+    $bot->reply($features);
 });
 
 $dialogflow = Dialogflow::create(env('DIALOGFLOW_KEY'))->listenForAction();
