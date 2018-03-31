@@ -72,7 +72,7 @@ class MemberController extends Controller
 
                 $features = BotManQuestion::create($message)
                     ->fallback('Unable to create a new database')
-                    ->callbackId('create_database');
+                    ->callbackId('subscribe');
 
 
                 foreach($categories as $category)
@@ -97,7 +97,36 @@ class MemberController extends Controller
         }
         else
         {
-            $bot->reply($this->features());
+            //$bot->reply($this->features());
+
+            $categories = ItemCategory::inRandomOrder()->take(5)->get();
+
+            $plain_message = '';
+            $count = 1;
+
+            $features = BotManQuestion::create($apiReply)
+                ->fallback('Unable to create a new database')
+                ->callbackId('subscribe');
+
+
+            foreach($categories as $category)
+            {
+                $features->addButtons([
+                    Button::create($category->name)->value($category->name)
+                ]);
+
+                if($count == 1)
+                    $plain_message .= $count . ' ' . $category->name;
+                else
+                    $plain_message .= '\n' . $count . ' ' . $category->name;
+
+                $count++;
+            }
+
+            $bot->reply($features, FacebookDriver::class);
+            $bot->reply($features, TelegramDriver::class);
+            $bot->reply($features, SlackDriver::class);
+            $bot->reply($plain_message, WebDriver::class);
         }
     }
 
