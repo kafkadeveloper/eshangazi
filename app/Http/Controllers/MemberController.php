@@ -64,69 +64,70 @@ class MemberController extends Controller
                 $this->subscribe($user, $extras, $driver);
 
 
-                $message = $user->getFirstName() . ' ' . $apiReply;
-                $categories = ItemCategory::inRandomOrder()->take(5)->get();
-
-                $plain_message = '';
-                $count = 1;
-
-                $features = BotManQuestion::create($message)
-                    ->fallback('Unable to create a new database')
-                    ->callbackId('subscribe');
-
-
-                foreach($categories as $category)
-                {
-                    $features->addButtons([
-                        Button::create($category->name)->value($category->name)
-                    ]);
-
-                    if($count == 1)
-                        $plain_message .= $count . ' ' . $category->name;
-                    else
-                        $plain_message .= '\n' . $count . ' ' . $category->name;
-
-                    $count++;
-                }
-
-                $bot->reply($features, FacebookDriver::class);
-                $bot->reply($features, TelegramDriver::class);
-                $bot->reply($features, SlackDriver::class);
-                $bot->reply($plain_message, WebDriver::class);
+//                $message = $user->getFirstName() . ' ' . $apiReply;
+//                $categories = ItemCategory::inRandomOrder()->take(5)->get();
+//
+//                $plain_message = '';
+//                $count = 1;
+//
+//                $features = BotManQuestion::create($message)
+//                    ->fallback('Unable to create a new database')
+//                    ->callbackId('subscribe');
+//
+//
+//                foreach($categories as $category)
+//                {
+//                    $features->addButtons([
+//                        Button::create($category->name)->value($category->name)
+//                    ]);
+//
+//                    if($count == 1)
+//                        $plain_message .= $count . ' ' . $category->name;
+//                    else
+//                        $plain_message .= '\n' . $count . ' ' . $category->name;
+//
+//                    $count++;
+//                }
+//
+//                $bot->reply($features, FacebookDriver::class);
+//                $bot->reply($features, TelegramDriver::class);
+//                $bot->reply($features, SlackDriver::class);
+//                $bot->reply($plain_message, WebDriver::class);
             }
         }
         else
         {
+            $bot->reply($apiReply);
             //$bot->reply($this->features());
 
-            $categories = ItemCategory::inRandomOrder()->take(5)->get();
-
-            $plain_message = '';
-            $count = 1;
-
-            $features = BotManQuestion::create($apiReply)
-                ->fallback('Unable to create a new database')
-                ->callbackId('subscribe');
-
-
-            foreach($categories as $category)
-            {
-                $features->addButtons([
-                    Button::create($category->name)->value($category->name)
-                ]);
-
-                if($count == 1)
-                    $plain_message .= $count . ' ' . $category->name;
-                else
-                    $plain_message .= '\n' . $count . ' ' . $category->name;
-
-                $count++;
-            }
-
-            $bot->reply($features, FacebookDriver::class);
-            $bot->reply($features, TelegramDriver::class);
-            $bot->reply($features, SlackDriver::class);
-            $bot->reply($plain_message, WebDriver::class);
+//            $categories = ItemCategory::inRandomOrder()->take(5)->get();
+//
+//            $plain_message = '';
+//            $count = 1;
+//
+//            $features = BotManQuestion::create($apiReply)
+//                ->fallback('Unable to create a new database')
+//                ->callbackId('subscribe');
+//
+//
+//            foreach($categories as $category)
+//            {
+//                $features->addButtons([
+//                    Button::create($category->name)->value($category->name)
+//                ]);
+//
+//                if($count == 1)
+//                    $plain_message .= $count . ' ' . $category->name;
+//                else
+//                    $plain_message .= '\n' . $count . ' ' . $category->name;
+//
+//                $count++;
+//            }
+//
+//            $bot->reply($features, FacebookDriver::class);
+//            $bot->reply($features, TelegramDriver::class);
+//            $bot->reply($features, SlackDriver::class);
+//            $bot->reply($plain_message, WebDriver::class);
         }
     }
 
@@ -178,35 +179,37 @@ class MemberController extends Controller
 
         if($this->check($user)) 
         {
-            $message = $user->getFirstName() . ' ' . $apiReply;
-            $categories = ItemCategory::inRandomOrder()->take(5)->get();
 
-            $plain_message = '';
-            $count = 1;
-
-            $features = BotManQuestion::create($message)
-                ->fallback('Unable to create a new database')
-                ->callbackId('create_database');
-
-
-            foreach($categories as $category)
-            {
-                $features->addButtons([
-                    Button::create($category->name)->value($category->name)
-                ]);
-
-                if($count == 1)
-                    $plain_message .= $count . ' ' . $category->name;
-                else
-                    $plain_message .= '\n' . $count . ' ' . $category->name;
-
-                $count++;
-            }
-
-            $bot->reply($features, FacebookDriver::class);
-            $bot->reply($features, TelegramDriver::class);
-            $bot->reply($features, SlackDriver::class);
-            $bot->reply($plain_message, WebDriver::class);
+            $bot->reply($apiReply);
+//            $message = $user->getFirstName() . ' ' . $apiReply;
+//            $categories = ItemCategory::inRandomOrder()->take(5)->get();
+//
+//            $plain_message = '';
+//            $count = 1;
+//
+//            $features = BotManQuestion::create($message)
+//                ->fallback('Unable to create a new database')
+//                ->callbackId('create_database');
+//
+//
+//            foreach($categories as $category)
+//            {
+//                $features->addButtons([
+//                    Button::create($category->name)->value($category->name)
+//                ]);
+//
+//                if($count == 1)
+//                    $plain_message .= $count . ' ' . $category->name;
+//                else
+//                    $plain_message .= '\n' . $count . ' ' . $category->name;
+//
+//                $count++;
+//            }
+//
+//            $bot->reply($features, FacebookDriver::class);
+//            $bot->reply($features, TelegramDriver::class);
+//            $bot->reply($features, SlackDriver::class);
+//            $bot->reply($plain_message, WebDriver::class);
         }
         else
         {
