@@ -188,7 +188,7 @@ class ItemCategoryController extends Controller
      */
     public function items($category)
     {
-        $items = Item::where('category_id', $category->id)->where('item_id', NULL)->inRandomOrder()->take(5)->get();
+        $items = Item::where('item_category_id', $category->id)->where('item_id', NULL)->inRandomOrder()->take(5)->get();
 
         $features = Question::create($category->description)
             ->fallback('Kumradhi, sijaweza pata taarifa zaidi kuhusu' . $category->name)
