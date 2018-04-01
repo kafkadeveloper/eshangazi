@@ -30,6 +30,8 @@ $botman->hears('Majaridio ya content', function (BotMan $bot) {
         Button::create('This is a default test')->value('This is a default test'),
         Button::create('Uzazi wa mpango')->value('Uzazi wa mpango')
     ]);
+
+    $bot->reply($majaribio);
 });
 
 $dialogflow = Dialogflow::create(env('DIALOGFLOW_KEY'))->listenForAction();
