@@ -60,8 +60,10 @@ class MemberController extends Controller
             {
                 $bot->reply($apiReply);
 
-                //$bot->reply($this->features());
                 $this->subscribe($user, $extras, $driver);
+
+                //Send a conversation approach
+                $bot->reply($this->features());
 
 
 //                $message = $user->getFirstName() . ' ' . $apiReply;

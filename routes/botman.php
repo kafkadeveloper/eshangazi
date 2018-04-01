@@ -3,7 +3,6 @@
 use App\ItemCategory;
 use BotMan\BotMan\BotMan;
 use App\Http\Controllers\ItemController;
-use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Middleware\Dialogflow;
 use App\Http\Controllers\BotManController;
 use App\Http\Controllers\MemberController;
@@ -11,6 +10,7 @@ use App\Http\Controllers\CenterController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PartnerController;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\MessageDetailController;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
@@ -19,6 +19,17 @@ $botman = resolve('botman');
 
 $botman->hears('This is a default test', function (BotMan $bot) {
     $bot->reply('Hello yourself.');
+});
+
+$botman->hears('Majaridio ya content', function (BotMan $bot) {
+    $majaribio = Question::create('Ujumbe wa majaribio')
+                    ->fallback('Unable to create a new test')
+                    ->callbackId('majaribio');
+
+    $majaribio->addButtons([
+        Button::create('This is a default test')->value('This is a default test'),
+        Button::create('Uzazi wa mpango')->value('Uzazi wa mpango')
+    ]);
 });
 
 $dialogflow = Dialogflow::create(env('DIALOGFLOW_KEY'))->listenForAction();
