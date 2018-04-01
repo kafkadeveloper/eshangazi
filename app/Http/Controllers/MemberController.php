@@ -58,11 +58,20 @@ class MemberController extends Controller
 
                 $this->subscribe($user, $extras, $driver);
 
-                $this->features($bot);
+                $features = $this->features($user, $apiReply);
+
+                $bot->reply($features, FacebookDriver::class);
+                $bot->reply($features, TelegramDriver::class);
+                $bot->reply($features, SlackDriver::class);
             }
         } else {
             $bot->reply($apiReply);
-            $this->features($bot);
+
+            $features = $this->features($user, $apiReply);
+
+            $bot->reply($features, FacebookDriver::class);
+            $bot->reply($features, TelegramDriver::class);
+            $bot->reply($features, SlackDriver::class);
             //$bot->reply($this->features());
 
 //            $categories = ItemCategory::inRandomOrder()->take(5)->get();
@@ -145,7 +154,13 @@ class MemberController extends Controller
         if ($this->check($user)) {
 
             $bot->reply($apiReply);
-            $this->features($bot);
+            $features = $this->features($user, $apiReply);
+
+            $bot->reply($features, FacebookDriver::class);
+            $bot->reply($features, TelegramDriver::class);
+            $bot->reply($features, SlackDriver::class);
+            //$bot->reply($plain_message, WebDriver::class);
+
 //            $message = $user->getFirstName() . ' ' . $apiReply;
 //            $categories = ItemCategory::inRandomOrder()->take(5)->get();
 //
@@ -252,19 +267,19 @@ class MemberController extends Controller
     /**
      * Display a list of bot features in a Generic Template.
      *
-     * @param BotMan $bot
-     * @return GenericTemplate
+     * @param $user
+     * @param $reply
+     *
+     * @return BotManQuestion
+     *
      */
-    public function features(BotMan $bot)
+    public function features($user, $reply)
     {
-        $user = $bot->getUser();
-        $extras = $bot->getMessage()->getExtras();
-        $apiReply = $extras['apiReply'];
 
         if($user)
-            $message = $user->getFirstName() . ' ' . $apiReply;
+            $message = $user . ' ' . $reply;
         else
-            $message = $apiReply;
+            $message = $reply;
 
         $categories = ItemCategory::inRandomOrder()->take(5)->get();
 
@@ -289,10 +304,7 @@ class MemberController extends Controller
 //            $count++;
         }
 
-        $bot->reply($features, FacebookDriver::class);
-        $bot->reply($features, TelegramDriver::class);
-        $bot->reply($features, SlackDriver::class);
-        //$bot->reply($plain_message, WebDriver::class);
+        return $features;
 
 //        $categories = ItemCategory::inRandomOrder()->take(5)->get();
 //
