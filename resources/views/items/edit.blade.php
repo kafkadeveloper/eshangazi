@@ -31,7 +31,8 @@
                            class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}"
                            value="{{ $item->title }}"
                            placeholder="Title"
-                           required autofocus>
+                           required
+                           autofocus>
 
                     @if ($errors->has('title'))
                         <span class="invalid-feedback">
@@ -48,15 +49,14 @@
                     <select name="item_category_id"
                             class="form-control{{ $errors->has('item_category_id') ? ' is-invalid' : '' }}"
                             title="Select Category"
-                            required autofocus>
+                            required>
 
                         <option value="">
                             Select Category
                         </option>
 
                         @foreach($item_categories as $category)
-                            <option
-                                value="{{$category->id}}" {{ $item->item_category_id == $category->id ? "selected":"" }}>
+                            <option value="{{$category->id}}" {{ $item->item_category_id == $category->id ? "selected":"" }}>
                                 {{ $category->name }}
                             </option>
                         @endforeach
@@ -81,7 +81,8 @@
                         id="description"
                         name="description"
                         class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
-                        row="3" required>
+                        row="3"
+                        required>
                     {{ $item->description }}
                 </textarea>
 
@@ -153,6 +154,28 @@
 
             <div class="form-row">
                 <div class="form-group col-md-6">
+                    <label for="display_title">
+                        Display Title
+                    </label>
+
+                    <input id="display_title"
+                           name="display_title"
+                           type="text"
+                           class="form-control{{ $errors->has('display_title') ? ' is-invalid' : '' }}"
+                           value="{{ $item->display_title }}"
+                           placeholder="Display Title"
+                           required>
+
+                    @if ($errors->has('display_title'))
+                        <span class="invalid-feedback">
+                            <strong>
+                                {{ $errors->first('display_title') }}
+                            </strong>
+                        </span>
+                    @endif
+                </div>
+
+                <div class="form-group col-md-6">
                     <label>
                         Choose Item
                     </label>
@@ -165,8 +188,7 @@
                         </option>
 
                         @foreach($items as $item)
-                            <option
-                                value="{{$item->id}}" {{ old("item_id") == $item->id ? "selected":"" }}>
+                            <option value="{{$item->id}}" {{ old("item_id") == $item->id ? "selected":"" }}>
                                 {{ $item->title }}
                             </option>
                         @endforeach
@@ -179,19 +201,25 @@
                     @endif
                 </div>
 
-                <div class="form-group col-md-6">
+                <div class="form-group">
                     <label for="thumbnail">Thumbnail</label>
 
-                    <input id="thumbnail" name="thumbnail" type="file" class="form-control-file">
+                    <input id="thumbnail"
+                           name="thumbnail"
+                           type="file"
+                           class="form-control-file">
                 </div>
             </div>
+
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mt-3 border-top">
                 <h1 class="h2">
                     &nbsp;
                 </h1>
 
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                    <button type="submit" class="btn btn-primary mt-3">
+                        Submit
+                    </button>
                 </div>
             </div>
         </form>

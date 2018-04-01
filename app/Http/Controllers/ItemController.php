@@ -72,6 +72,7 @@ class ItemController extends Controller
             'thumbnail'         => $thumbnail_path,
             'gender'            => $request->gender,
             'minimum_age'       => $request->minimum_age,
+            'display_title'     => $request->display_title,
             'item_category_id'  => $request->item_category_id,
             'item_id'           => $request->item_id,
             'created_by'        => auth()->id()
@@ -138,6 +139,7 @@ class ItemController extends Controller
             'thumbnail'         => $thumbnail_path ? $thumbnail_path : $item->thumbnail,
             'gender'            => $request->gender,
             'minimum_age'       => $request->minimum_age,
+            'display_title'     => $request->display_title,
             'item_category_id'  => $request->item_category_id,
             'item_id'           => $request->item_id,
             'updated_by'        => auth()->id()

@@ -73,6 +73,7 @@ class ItemCategoryController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'thumbnail' => $thumbnail_path,
+            'display_title' => $request->display_title,
             'created_by' => auth()->id()
         ]);
 
@@ -124,6 +125,7 @@ class ItemCategoryController extends Controller
             'name' => $request->name,
             'description' => $request->description,
             'thumbnail' => $thumbnail_path ? $thumbnail_path : $item_category->thumbnail,
+            'display_title' => $request->display_title,
             'updated_by' => auth()->id()
         ]);
 
@@ -206,7 +208,7 @@ class ItemCategoryController extends Controller
 
         foreach ($items as $item) {
             $features->addButtons([
-                Button::create($item->title)->value($item->title)
+                Button::create($item->display_title)->value($item->title)
             ]);
         }
 
@@ -228,7 +230,7 @@ class ItemCategoryController extends Controller
 
         foreach ($items as $item) {
             $template_list->addButton(
-                ElementButton::create($item->title)->type('postback')->payload($item->title)
+                ElementButton::create($item->display_title)->type('postback')->payload($item->title)
             );
         }
 

@@ -17,6 +17,7 @@ class Item extends Model
         'thumbnail',
         'gender',
         'minimum_age',
+        'display_title',
         'item_category_id',
         'item_id',
         'created_by',

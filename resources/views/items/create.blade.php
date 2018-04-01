@@ -25,32 +25,38 @@
                         Title
                     </label>
 
-                    <input id="title" name="title" type="text"
+                    <input id="title"
+                           name="title"
+                           type="text"
                            class="form-control{{ $errors->has('title') ? ' is-invalid' : '' }}"
-                           value="{{ old('title') }}" placeholder="Title" required autofocus>
+                           value="{{ old('title') }}"
+                           placeholder="Title"
+                           required
+                           autofocus>
 
                     @if ($errors->has('title'))
                         <span class="invalid-feedback">
-            <strong>{{ $errors->first('title') }}</strong>
-          </span>
+                            <strong>{{ $errors->first('title') }}</strong>
+                        </span>
                     @endif
                 </div>
 
                 <div class="form-group col-md-6">
                     <label>
-                        Choese Category
+                        Choose Category
                     </label>
 
                     <select name="item_category_id"
                             class="form-control{{ $errors->has('item_category_id') ? ' is-invalid' : '' }}"
-                            title="Select Category" required autofocus>
+                            title="Select Category"
+                            required>
+
                         <option value="">
                             Select Category
                         </option>
 
                         @foreach($item_categories as $category)
-                            <option
-                                    value="{{$category->id}}" {{ old("item_category_id") == $category->id ? "selected":"" }}>
+                            <option value="{{$category->id}}" {{ old("item_category_id") == $category->id ? "selected":"" }}>
                                 {{ $category->name }}
                             </option>
                         @endforeach
@@ -69,19 +75,18 @@
                     Description
                 </label>
 
-                <textarea
-                        id="description"
-                        name="description"
-                        class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
-                        row="3"
-                        required>
-        {{ old('description') }}
-      </textarea>
+                <textarea id="description"
+                          name="description"
+                          class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
+                          row="3"
+                          required>
+                    {{ old('description') }}
+                </textarea>
 
                 @if ($errors->has('description'))
                     <span class="invalid-feedback">
-          <strong>{{ $errors->first('description') }}</strong>
-        </span>
+                        <strong>{{ $errors->first('description') }}</strong>
+                    </span>
                 @endif
             </div>
 
@@ -91,8 +96,7 @@
                         Gender
                     </label>
 
-                    <select
-                            id="gender"
+                    <select id="gender"
                             name="gender"
                             class="form-control{{ $errors->has('gender') ? ' is-invalid' : '' }}"
                             required>
@@ -116,32 +120,55 @@
 
                     @if ($errors->has('gender'))
                         <span class="invalid-feedback">
-            <strong>{{ $errors->first('gender') }}</strong>
-          </span>
+                            <strong>{{ $errors->first('gender') }}</strong>
+                        </span>
                     @endif
                 </div>
+
                 <div class="form-group col-md-6">
                     <label for="minimum_age">
                         Age
                     </label>
 
-                    <input
-                            id="minimum_age"
+                    <input id="minimum_age"
                             name="minimum_age"
                             type="number"
                             class="form-control{{ $errors->has('minimum_age') ? ' is-invalid' : '' }}"
                             value="{{ old('minimum_age') }}"
-                            placeholder="Minimum Age" required>
+                            placeholder="Minimum Age"
+                           required>
 
                     @if ($errors->has('minimum_age'))
                         <span class="invalid-feedback">
-            <strong>{{ $errors->first('minimum_age') }}</strong>
-          </span>
+                            <strong>{{ $errors->first('minimum_age') }}</strong>
+                        </span>
                     @endif
                 </div>
             </div>
 
             <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="display_title">
+                        Display Title
+                    </label>
+
+                    <input id="display_title"
+                           name="display_title"
+                           type="text"
+                           class="form-control{{ $errors->has('display_title') ? ' is-invalid' : '' }}"
+                           value="{{ old(display_title) }}"
+                           placeholder="Display Title"
+                           required>
+
+                    @if ($errors->has('display_title'))
+                        <span class="invalid-feedback">
+                            <strong>
+                                {{ $errors->first('display_title') }}
+                            </strong>
+                        </span>
+                    @endif
+                </div>
+
                 <div class="form-group col-md-6">
                     <label>
                         Choose Item
@@ -150,6 +177,7 @@
                     <select name="item_id"
                             class="form-control{{ $errors->has('item_id') ? ' is-invalid' : '' }}"
                             title="Select Item">
+
                         <option value="">
                             Select Item
                         </option>
@@ -168,20 +196,24 @@
                         </div>
                     @endif
                 </div>
-
-                <div class="form-group col-md-6">
-                    <label for="thumbnail">Thumbnail</label>
-
-                    <input id="thumbnail" name="thumbnail" type="file" class="form-control-file">
-                </div>
             </div>
+
+            <div class="form-group">
+                <label for="thumbnail">Thumbnail</label>
+
+                <input id="thumbnail"
+                       name="thumbnail"
+                       type="file"
+                       class="form-control-file">
+            </div>
+
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mt-3 border-top">
-                <h1 class="h2">
-                    &nbsp;
-                </h1>
+                <h1 class="h2"></h1>
 
                 <div class="btn-toolbar mb-2 mb-md-0">
-                    <button type="submit" class="btn btn-primary mt-3">Submit</button>
+                    <button type="submit" class="btn btn-primary mt-3">
+                        Submit
+                    </button>
                 </div>
             </div>
         </form>

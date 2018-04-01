@@ -21,6 +21,7 @@ class CreateItemsTable extends Migration
             $table->string('thumbnail')->nullable();
             $table->enum('gender', ['both', 'male', 'female'])->default('both');
             $table->integer('minimum_age')->default(13);
+            $table->string('display_title')->nullable();
 
             $table->integer('item_category_id')->unsigned();
             $table->integer('item_id')->unsigned()->nullable();

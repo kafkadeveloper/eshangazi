@@ -195,7 +195,7 @@ class MemberController extends Controller
 
         foreach ($categories as $category) {
             $features->addButtons([
-                Button::create($category->name)->value($category->name)
+                Button::create($category->display_title)->value($category->name)
             ]);
         }
 
