@@ -162,10 +162,18 @@ class MemberController extends Controller
             Button::create('Uzazi wa mpango')->value('Uzazi wa mpango')
         ]);
 
-        $bot->reply($features, FacebookDriver::class);
-        $bot->reply($features, TelegramDriver::class);
-        $bot->reply($features, SlackDriver::class);
-        $bot->reply($features, WebDriver::class);
+        $bot->reply($features);
+
+        $majaribio = BotManQuestion::create('Ujumbe wa majaribio')
+            ->fallback('Unable to create a new test')
+            ->callbackId('majaribio');
+
+        $majaribio->addButtons([
+            Button::create('This is a default test')->value('This is a default test'),
+            Button::create('Uzazi wa mpango')->value('Uzazi wa mpango')
+        ]);
+
+        $bot->reply($majaribio);
 
         if ($this->check($user)) {
 
