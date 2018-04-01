@@ -176,7 +176,6 @@ class ItemCategoryController extends Controller
                 'member_id' => $member->id
             ]);
         }
-
     }
 
     /**
