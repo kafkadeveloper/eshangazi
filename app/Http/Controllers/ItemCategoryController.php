@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Item;
 use App\Member;
 use App\Conversation;
 use App\ItemCategory;
 use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use BotMan\Drivers\Facebook\Extensions\Element;
@@ -16,13 +19,13 @@ class ItemCategoryController extends Controller
 {
     /**
      * Item category constructor
-     * 
+     *
      */
     public function __construct()
     {
         $this->middleware('auth')->except('showBotMan');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -33,8 +36,8 @@ class ItemCategoryController extends Controller
         $item_categories = ItemCategory::paginate(10);
 
         return view('item-categories.index', [
-                'item_categories' => $item_categories
-            ]);
+            'item_categories' => $item_categories
+        ]);
     }
 
     /**
@@ -50,7 +53,7 @@ class ItemCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -58,18 +61,17 @@ class ItemCategoryController extends Controller
     {
         $thumbnail_path = null;
 
-        if ($request->hasFile('thumbnail'))
-        {
+        if ($request->hasFile('thumbnail')) {
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/item-category-thumbnails', $request->file('thumbnail'), 'public');
 
         }
 
         ItemCategory::create([
-            'name'          => $request->name,
-            'description'   => $request->description,
-            'thumbnail'     => $thumbnail_path,
-            'created_by'    => auth()->id()
+            'name' => $request->name,
+            'description' => $request->description,
+            'thumbnail' => $thumbnail_path,
+            'created_by' => auth()->id()
         ]);
 
         return back();
@@ -79,7 +81,7 @@ class ItemCategoryController extends Controller
      * Display the specified resource.
      *
      * @param  ItemCategory $item_category
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(ItemCategory $item_category)
@@ -91,7 +93,7 @@ class ItemCategoryController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  ItemCategory $item_category
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(ItemCategory $item_category)
@@ -102,26 +104,25 @@ class ItemCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @param  ItemCategory $item_category
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, ItemCategory $item_category)
     {
-        $thumbnail_path = null; 
+        $thumbnail_path = null;
 
-        if ($request->hasFile('thumbnail'))
-        {
+        if ($request->hasFile('thumbnail')) {
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/item-category-thumbnails', $request->file('thumbnail'), 'public');
         }
 
         $item_category->update([
-            'name'          => $request->name,
-            'description'   => $request->description,
-            'thumbnail'     => $thumbnail_path ? $thumbnail_path : $item_category->thumbnail,
-            'updated_by'    => auth()->id()
+            'name' => $request->name,
+            'description' => $request->description,
+            'thumbnail' => $thumbnail_path ? $thumbnail_path : $item_category->thumbnail,
+            'updated_by' => auth()->id()
         ]);
 
         return redirect()->route('show-item-category', $item_category);
@@ -136,7 +137,7 @@ class ItemCategoryController extends Controller
      */
     public function destroy(ItemCategory $item_category)
     {
-        if(Storage::disk('s3')->exists($item_category->thumbnail))
+        if (Storage::disk('s3')->exists($item_category->thumbnail))
             Storage::disk('s3')->delete($item_category->thumbnail);
 
         $item_category->delete();
@@ -155,31 +156,23 @@ class ItemCategoryController extends Controller
 
         $name = $extras['apiParameters'][env('APP_ACTION') . '-item-categories'];
 
-        $category = ItemCategory::with('items')->where('name', '=', $name)->first();
+        $category = ItemCategory::where('name', '=', $name)->first();
 
         $bot->typesAndWaits(1);
-        if($category)
-        {
-            $bot->reply($category->description);
-            
-            $bot->typesAndWaits(1);
+        if ($category) {
             $bot->reply($this->items($category));
+        } else {
+            $bot->reply('Kuna tatizo la kiufundi, linafanyiwa kazi');
         }
-        else{
-            $bot->reply('Sorry say that again...Item category issue ('.var_export($category,true).') value from dialogflow is ('.$name.')');
-        }
-
-        
 
         $user = $bot->getUser();
         $user_id = $user->getId();
 
         $member = Member::where('user_platform_id', '=', $user_id)->first();
 
-        if($member)
-        {
+        if ($member) {
             Conversation::create([
-                'intent'    => $name,
+                'intent' => $name,
                 'member_id' => $member->id
             ]);
         }
@@ -191,14 +184,29 @@ class ItemCategoryController extends Controller
      *
      * @param $category
      *
-     * @return \BotMan\Drivers\Facebook\Extensions\GenericTemplate
+     * @return Question
      */
     public function items($category)
-    {                           
-        $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
-             
-        foreach($category->items as $item)
-        {
+    {
+        $items = Item::where('category_id', $category->id)->where('item_id', NULL)->inRandomOrder()->take(5)->get();
+
+        $features = Question::create($category->description)
+            ->fallback('Kumradhi, sijaweza pata taarifa zaidi kuhusu' . $category->name)
+            ->callbackId('item_category');
+
+        foreach ($items as $item) {
+            $features->addButtons([
+                Button::create($item->title)->value($item->title)
+            ]);
+        }
+
+        return $features;
+
+        /*
+         * ++++++++++++++++++++++++++++
+         * $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
+
+        foreach ($category->items as $item) {
             $url = null;
 
             if ($item->thumbnail)
@@ -213,10 +221,11 @@ class ItemCategoryController extends Controller
                     ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($item->title)->type('postback'))
             ]);
-        } 
+        }
 
-        return $template_list;
+        return $template_list;*/
     }
+
     public function test()
     {
         return $category = ItemCategory::with('items')->where('name', '=', 'Ukeketaji au Tohara kwa Mwanamke')->first();

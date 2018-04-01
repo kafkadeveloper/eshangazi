@@ -8,8 +8,8 @@ use App\District;
 use App\ItemCategory;
 use App\Conversation;
 use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use BotMan\BotMan\Messages\Outgoing\Question as BotManQuestion;
 
 class MemberController extends Controller
 {
@@ -47,20 +47,12 @@ class MemberController extends Controller
             if ($incomplete) {
                 $bot->reply($apiReply);
             } else {
-                $bot->reply($apiReply);
-
                 $this->subscribe($user, $extras, $driver);
 
-                $features = $this->features($apiReply);
-
-                $bot->reply($features);
+                $bot->reply($this->features($apiReply));
             }
         } else {
-            $bot->reply($apiReply);
-
-            $features = $this->features($apiReply);
-
-            $bot->reply($features);
+            $bot->reply($this->features($apiReply));
         }
     }
 
@@ -110,16 +102,10 @@ class MemberController extends Controller
 
         $bot->typesAndWaits(1);
 
-        if ($this->check($user)) {
-
+        if ($this->check($user))
+            $bot->reply($this->features($apiReply));
+        else
             $bot->reply($apiReply);
-
-            $features = $this->features($apiReply);
-
-            $bot->reply($features);
-        } else {
-            $bot->reply($apiReply);
-        }
     }
 
     /**
@@ -194,17 +180,16 @@ class MemberController extends Controller
     /**
      * Display a list of bot features in a Generic Template.
      *
-     * @param $user
      * @param $reply
      *
-     * @return BotManQuestion
+     * @return Question
      *
      */
     public function features($reply)
     {
         $categories = ItemCategory::inRandomOrder()->take(5)->get();
 
-        $features = BotManQuestion::create($reply)
+        $features = Question::create($reply)
             ->fallback('Unable to create a new database')
             ->callbackId('subscribe');
 
