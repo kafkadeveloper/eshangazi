@@ -289,12 +289,17 @@ class MemberController extends Controller
             ->fallback('Unable to create a new database')
             ->callbackId('subscribe');
 
+        $features->addButtons([
+            Button::create('Haki za afya')->value('Haki za afya'),
+            Button::create('Uzazi wa mpango')->value('Uzazi wa mpango')
+        ]);
 
-        foreach ($categories as $category) {
-            $features->addButtons([
-                Button::create($category->name)->value($category->name)
-            ]);
-        }
+
+//        foreach ($categories as $category) {
+//            $features->addButtons([
+//                Button::create($category->name)->value($category->name)
+//            ]);
+//        }
 
         return $features;
 
