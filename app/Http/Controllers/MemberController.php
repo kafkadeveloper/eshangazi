@@ -8,15 +8,8 @@ use App\District;
 use App\ItemCategory;
 use App\Conversation;
 use BotMan\BotMan\BotMan;
-use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
-use BotMan\Drivers\Facebook\Extensions\ElementButton;
-use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 use BotMan\BotMan\Messages\Outgoing\Question as BotManQuestion;
-use BotMan\Drivers\Facebook\FacebookDriver;
-use BotMan\Drivers\Slack\SlackDriver;
-use BotMan\Drivers\Telegram\TelegramDriver;
-use BotMan\Drivers\Web\WebDriver;
 
 class MemberController extends Controller
 {
@@ -48,7 +41,7 @@ class MemberController extends Controller
 
         $bot->typesAndWaits(1);
 
-        if (! $this->check($user)) {
+        if (!$this->check($user)) {
             $incomplete = $extras['apiActionIncomplete'];
 
             if ($incomplete) {
@@ -68,35 +61,6 @@ class MemberController extends Controller
             $features = $this->features($apiReply);
 
             $bot->reply($features);
-
-//            $categories = ItemCategory::inRandomOrder()->take(5)->get();
-//
-//            $plain_message = '';
-//            $count = 1;
-//
-//            $features = BotManQuestion::create($apiReply)
-//                ->fallback('Unable to create a new database')
-//                ->callbackId('subscribe');
-//
-//
-//            foreach($categories as $category)
-//            {
-//                $features->addButtons([
-//                    Button::create($category->name)->value($category->name)
-//                ]);
-//
-//                if($count == 1)
-//                    $plain_message .= $count . ' ' . $category->name;
-//                else
-//                    $plain_message .= '\n' . $count . ' ' . $category->name;
-//
-//                $count++;
-//            }
-//
-//            $bot->reply($features, FacebookDriver::class);
-//            $bot->reply($features, TelegramDriver::class);
-//            $bot->reply($features, SlackDriver::class);
-//            $bot->reply($plain_message, WebDriver::class);
         }
     }
 
@@ -153,37 +117,6 @@ class MemberController extends Controller
             $features = $this->features($apiReply);
 
             $bot->reply($features);
-            //$bot->reply($plain_message, WebDriver::class);
-
-//            $message = $user->getFirstName() . ' ' . $apiReply;
-//            $categories = ItemCategory::inRandomOrder()->take(5)->get();
-//
-//            $plain_message = '';
-//            $count = 1;
-//
-//            $features = BotManQuestion::create($message)
-//                ->fallback('Unable to create a new database')
-//                ->callbackId('create_database');
-//
-//
-//            foreach($categories as $category)
-//            {
-//                $features->addButtons([
-//                    Button::create($category->name)->value($category->name)
-//                ]);
-//
-//                if($count == 1)
-//                    $plain_message .= $count . ' ' . $category->name;
-//                else
-//                    $plain_message .= '\n' . $count . ' ' . $category->name;
-//
-//                $count++;
-//            }
-//
-//            $bot->reply($features, FacebookDriver::class);
-//            $bot->reply($features, TelegramDriver::class);
-//            $bot->reply($features, SlackDriver::class);
-//            $bot->reply($plain_message, WebDriver::class);
         } else {
             $bot->reply($apiReply);
         }
@@ -275,43 +208,13 @@ class MemberController extends Controller
             ->fallback('Unable to create a new database')
             ->callbackId('subscribe');
 
-        $features->addButtons([
-            Button::create('Haki za afya')->value('Haki za afya'),
-            Button::create('Uzazi wa mpango')->value('Uzazi wa mpango')
-        ]);
-
-
-//        foreach ($categories as $category) {
-//            $features->addButtons([
-//                Button::create($category->name)->value($category->name)
-//            ]);
-//        }
+        foreach ($categories as $category) {
+            $features->addButtons([
+                Button::create($category->name)->value($category->name)
+            ]);
+        }
 
         return $features;
-
-//        $categories = ItemCategory::inRandomOrder()->take(5)->get();
-//
-//        $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
-//
-//        foreach($categories as $category)
-//        {
-//            $url = null;
-//
-//            if ($category->thumbnail)
-//                $url = env('AWS_URL') . '/' . $category->thumbnail;
-//            else
-//                $url = env('APP_URL') . '/img/logo.jpg';
-//
-//            $template_list->addElements([
-//                Element::create($category->name)
-//                    ->subtitle($category->description)
-//                    ->image($url)
-//                    ->addButton(ElementButton::create('Fahamu zaidi')
-//                        ->payload($category->name)->type('postback'))
-//            ]);
-//        }
-//
-//        return $template_list;
     }
 
     /**
