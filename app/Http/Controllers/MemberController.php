@@ -58,11 +58,11 @@ class MemberController extends Controller
 
                 $this->subscribe($user, $extras, $driver);
 
-                $this->features();
+                $this->features($bot);
             }
         } else {
             $bot->reply($apiReply);
-            $this->features();
+            $this->features($bot);
             //$bot->reply($this->features());
 
 //            $categories = ItemCategory::inRandomOrder()->take(5)->get();
@@ -145,7 +145,7 @@ class MemberController extends Controller
         if ($this->check($user)) {
 
             $bot->reply($apiReply);
-            $this->features();
+            $this->features($bot);
 //            $message = $user->getFirstName() . ' ' . $apiReply;
 //            $categories = ItemCategory::inRandomOrder()->take(5)->get();
 //
@@ -252,11 +252,11 @@ class MemberController extends Controller
     /**
      * Display a list of bot features in a Generic Template.
      *
-     * @return \BotMan\Drivers\Facebook\Extensions\GenericTemplate
+     * @param BotMan $bot
+     * @return GenericTemplate
      */
-    public function features()
+    public function features(BotMan $bot)
     {
-        $bot = app('botman');
         $user = $bot->getUser();
         $extras = $bot->getMessage()->getExtras();
         $apiReply = $extras['apiReply'];
