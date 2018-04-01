@@ -40,66 +40,29 @@ class MemberController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(BotMan $bot)
-    {            
+    {
         $user = $bot->getUser();
         $driver = $bot->getDriver()->getName();
-        $extras = $bot->getMessage()->getExtras();        
+        $extras = $bot->getMessage()->getExtras();
         $apiReply = $extras['apiReply'];
 
         $bot->typesAndWaits(1);
 
-        if(! $this->check($user))
-        {
-            $incomplete = $extras['apiActionIncomplete'];  
-            
-            if($incomplete)
-            {
-                $bot->reply($apiReply); 
-            }
-            else
-            {
+        if (! $this->check($user)) {
+            $incomplete = $extras['apiActionIncomplete'];
+
+            if ($incomplete) {
+                $bot->reply($apiReply);
+            } else {
                 $bot->reply($apiReply);
 
                 $this->subscribe($user, $extras, $driver);
 
-                //Send a conversation approach
-                $bot->reply($this->features());
-
-
-//                $message = $user->getFirstName() . ' ' . $apiReply;
-//                $categories = ItemCategory::inRandomOrder()->take(5)->get();
-//
-//                $plain_message = '';
-//                $count = 1;
-//
-//                $features = BotManQuestion::create($message)
-//                    ->fallback('Unable to create a new database')
-//                    ->callbackId('subscribe');
-//
-//
-//                foreach($categories as $category)
-//                {
-//                    $features->addButtons([
-//                        Button::create($category->name)->value($category->name)
-//                    ]);
-//
-//                    if($count == 1)
-//                        $plain_message .= $count . ' ' . $category->name;
-//                    else
-//                        $plain_message .= '\n' . $count . ' ' . $category->name;
-//
-//                    $count++;
-//                }
-//
-//                $bot->reply($features, FacebookDriver::class);
-                $bot->reply($features, TelegramDriver::class);
-                $bot->reply($features, SlackDriver::class);
-//                $bot->reply($plain_message, WebDriver::class);
+                $this->features();
             }
-        }
-        else
-        {
+        } else {
             $bot->reply($apiReply);
+            $this->features();
             //$bot->reply($this->features());
 
 //            $categories = ItemCategory::inRandomOrder()->take(5)->get();
@@ -143,11 +106,11 @@ class MemberController extends Controller
     public function reject(BotMan $bot)
     {
         $extras = $bot->getMessage()->getExtras();
-        
+
         $apiReply = $extras['apiReply'];
 
-        $bot->typesAndWaits(1);     
-        
+        $bot->typesAndWaits(1);
+
         $bot->reply($apiReply);
     }
 
@@ -160,7 +123,7 @@ class MemberController extends Controller
     {
         $member = Member::where('user_platform_id', '=', $user->getId())->first();
 
-        return $member ? true : false;        
+        return $member ? true : false;
     }
 
     /**
@@ -179,10 +142,10 @@ class MemberController extends Controller
 
         $bot->typesAndWaits(1);
 
-        if($this->check($user)) 
-        {
+        if ($this->check($user)) {
 
             $bot->reply($apiReply);
+            $this->features();
 //            $message = $user->getFirstName() . ' ' . $apiReply;
 //            $categories = ItemCategory::inRandomOrder()->take(5)->get();
 //
@@ -212,9 +175,7 @@ class MemberController extends Controller
 //            $bot->reply($features, TelegramDriver::class);
 //            $bot->reply($features, SlackDriver::class);
 //            $bot->reply($plain_message, WebDriver::class);
-        }
-        else
-        {
+        } else {
             $bot->reply($apiReply);
         }
     }
@@ -240,19 +201,18 @@ class MemberController extends Controller
         $district = District::where('name', '=', $district)->first();
 
         $member = Member::create([
-            'user_platform_id'  => $user->getId(),
-            'name'              => $user->getFirstName() . ' ' . $user->getLastName(),
-            'avatar'            => $profile_pic,
-            'born_year'         => $born_year,
-            'gender'            => $gender,
-            'platform_id'       => $platform_id,
-            'district_id'       => $district->id,
+            'user_platform_id' => $user->getId(),
+            'name' => $user->getFirstName() . ' ' . $user->getLastName(),
+            'avatar' => $profile_pic,
+            'born_year' => $born_year,
+            'gender' => $gender,
+            'platform_id' => $platform_id,
+            'district_id' => $district->id,
         ]);
 
-        if ($member)
-        {
+        if ($member) {
             Conversation::create([
-                'intent'    => 'Subscribe',
+                'intent' => 'Subscribe',
                 'member_id' => $member->id
             ]);
         }
@@ -271,20 +231,19 @@ class MemberController extends Controller
 
         $member = Member::where('user_platform_id', '=', $user->getId());
 
-        if($member)
-        {
+        if ($member) {
             $extras = $bot->getMessage()->getExtras();
 
             $apiReply = $extras['apiReply'];
             $bot->typesAndWaits(1);
             $bot->reply($apiReply);
-            
+
             $member->update([
                 'status' => 0
             ]);
 
             Conversation::create([
-                'intent'    => 'Unsubscribe',
+                'intent' => 'Unsubscribe',
                 'member_id' => $member->id
             ]);
         }
@@ -297,29 +256,67 @@ class MemberController extends Controller
      */
     public function features()
     {
+        $bot = app('botman');
+        $user = $bot->getUser();
+        $extras = $bot->getMessage()->getExtras();
+        $apiReply = $extras['apiReply'];
+
+        if($user)
+            $message = $user->getFirstName() . ' ' . $apiReply;
+        else
+            $message = $apiReply;
+
         $categories = ItemCategory::inRandomOrder()->take(5)->get();
 
-        $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
+        $plain_message = '';
+        $count = 1;
 
-        foreach($categories as $category)
-        {
-            $url = null;
+        $features = BotManQuestion::create($message)
+            ->fallback('Unable to create a new database')
+            ->callbackId('subscribe');
 
-            if ($category->thumbnail)
-                $url = env('AWS_URL') . '/' . $category->thumbnail;
-            else
-                $url = env('APP_URL') . '/img/logo.jpg';
 
-            $template_list->addElements([
-                Element::create($category->name)
-                    ->subtitle($category->description)
-                    ->image($url)
-                    ->addButton(ElementButton::create('Fahamu zaidi')
-                        ->payload($category->name)->type('postback'))
+        foreach ($categories as $category) {
+            $features->addButtons([
+                Button::create($category->name)->value($category->name)
             ]);
+
+//            if ($count == 1)
+//                $plain_message .= $count . ' ' . $category->name;
+//            else
+//                $plain_message .= '\n' . $count . ' ' . $category->name;
+//
+//            $count++;
         }
 
-        return $template_list;
+        $bot->reply($features, FacebookDriver::class);
+        $bot->reply($features, TelegramDriver::class);
+        $bot->reply($features, SlackDriver::class);
+        //$bot->reply($plain_message, WebDriver::class);
+
+//        $categories = ItemCategory::inRandomOrder()->take(5)->get();
+//
+//        $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
+//
+//        foreach($categories as $category)
+//        {
+//            $url = null;
+//
+//            if ($category->thumbnail)
+//                $url = env('AWS_URL') . '/' . $category->thumbnail;
+//            else
+//                $url = env('APP_URL') . '/img/logo.jpg';
+//
+//            $template_list->addElements([
+//                Element::create($category->name)
+//                    ->subtitle($category->description)
+//                    ->image($url)
+//                    ->addButton(ElementButton::create('Fahamu zaidi')
+//                        ->payload($category->name)->type('postback'))
+//            ]);
+//        }
+//
+//        return $template_list;
     }
 
     /**
@@ -333,7 +330,7 @@ class MemberController extends Controller
     {
         $platform = Platform::where('name', '=', $driver)->first();
 
-        if(! $platform)
+        if (!$platform)
             $platform_id = null;
         else
             $platform_id = $platform->id;
@@ -343,22 +340,18 @@ class MemberController extends Controller
 
     /**
      * return user profile pic based on driver
-     * 
+     *
      * @param $user
      * @param $driver
-     * 
+     *
      * @return profile_pc
-     * 
+     *
      */
     public function getUserProfilePic($user, $driver)
     {
-        if($driver === 'Facebook')
-        {
+        if ($driver === 'Facebook') {
             return $profile_pic = $user->getInfo()["profile_pic"];
-        }
-
-        elseif($driver === 'Slack')
-        {
+        } elseif ($driver === 'Slack') {
             return $profile_pic = $user->getInfo()["profile"]["image_original"];
         }
 
@@ -366,29 +359,25 @@ class MemberController extends Controller
 //        {
 //            return $profile_pic = $user->getInfo()["profile"]["image_original"];
 //        }
-        
+
         return null;
     }
 
     /**
      * return user gender based on driver
-     * 
+     *
      * @param $user
      * @param $driver
-     * 
+     *
      * @return gender
-     * 
+     *
      */
     public function getUserGender($user, $driver)
     {
-        if($driver === 'Facebook')
-        {
+        if ($driver === 'Facebook') {
             return $gender = $user->getInfo()["gender"];
-        }
-
-        elseif($driver === 'Slack')
-        {
-           return $gender = null;
+        } elseif ($driver === 'Slack') {
+            return $gender = null;
         }
 
         return null;

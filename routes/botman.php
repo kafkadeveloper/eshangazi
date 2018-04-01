@@ -21,6 +21,7 @@ $botman->hears('This is a default test', function (BotMan $bot) {
     $bot->reply('Hello yourself.');
 });
 
+
 $botman->hears('Majaridio ya content', function (BotMan $bot) {
     $majaribio = Question::create('Ujumbe wa majaribio')
                     ->fallback('Unable to create a new test')
@@ -31,9 +32,7 @@ $botman->hears('Majaridio ya content', function (BotMan $bot) {
         Button::create('Uzazi wa mpango')->value('Uzazi wa mpango')
     ]);
 
-    $bot->reply($majaribio->getActions());
-    $bot->reply($majaribio->getText());
-    $bot->reply($majaribio->getButtons());
+    $bot->reply($majaribio);
 });
 
 $dialogflow = Dialogflow::create(env('DIALOGFLOW_KEY'))->listenForAction();
