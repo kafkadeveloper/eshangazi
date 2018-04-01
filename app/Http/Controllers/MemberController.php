@@ -60,19 +60,14 @@ class MemberController extends Controller
 
                 $features = $this->features($apiReply);
 
-                $bot->reply($features, FacebookDriver::class);
-                $bot->reply($features, TelegramDriver::class);
-                $bot->reply($features, SlackDriver::class);
+                $bot->reply($features);
             }
         } else {
             $bot->reply($apiReply);
 
             $features = $this->features($apiReply);
 
-            $bot->reply($features, FacebookDriver::class);
-            $bot->reply($features, TelegramDriver::class);
-            $bot->reply($features, SlackDriver::class);
-            //$bot->reply($this->features());
+            $bot->reply($features);
 
 //            $categories = ItemCategory::inRandomOrder()->take(5)->get();
 //
@@ -151,39 +146,13 @@ class MemberController extends Controller
 
         $bot->typesAndWaits(1);
 
-        $categories = ItemCategory::inRandomOrder()->take(5)->get();
-
-        $features = BotManQuestion::create($apiReply)
-            ->fallback('Unable to create a new database')
-            ->callbackId('subscribe');
-
-        $features->addButtons([
-            Button::create('Haki za afya')->value('Haki za afya'),
-            Button::create('Uzazi wa mpango')->value('Uzazi wa mpango')
-        ]);
-
-        $bot->reply($features);
-
-        $majaribio = BotManQuestion::create('Ujumbe wa majaribio')
-            ->fallback('Unable to create a new test')
-            ->callbackId('majaribio');
-
-        $majaribio->addButtons([
-            Button::create('This is a default test')->value('This is a default test'),
-            Button::create('Uzazi wa mpango')->value('Uzazi wa mpango')
-        ]);
-
-        $bot->reply($majaribio);
-
         if ($this->check($user)) {
 
             $bot->reply($apiReply);
 
             $features = $this->features($apiReply);
 
-            $bot->reply($features, FacebookDriver::class);
-            $bot->reply($features, TelegramDriver::class);
-            $bot->reply($features, SlackDriver::class);
+            $bot->reply($features);
             //$bot->reply($plain_message, WebDriver::class);
 
 //            $message = $user->getFirstName() . ' ' . $apiReply;
