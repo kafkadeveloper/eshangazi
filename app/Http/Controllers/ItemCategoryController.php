@@ -9,6 +9,8 @@ use App\ItemCategory;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
+use BotMan\Drivers\Facebook\FacebookDriver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use BotMan\Drivers\Facebook\Extensions\Element;
@@ -153,6 +155,7 @@ class ItemCategoryController extends Controller
     public function showBotMan(BotMan $bot)
     {
         $extras = $bot->getMessage()->getExtras();
+        $driver = $bot->getDriver()->getName();
 
         $name = $extras['apiParameters'][env('APP_ACTION') . '-item-categories'];
 
@@ -160,7 +163,15 @@ class ItemCategoryController extends Controller
 
         $bot->typesAndWaits(1);
         if ($category) {
-            $bot->reply($this->items($category));
+            if ($driver == 'Facebook')
+                $bot->reply($this->toFacebook($category));
+            elseif ($driver == 'Slack' || $driver == 'Telegram')
+                $bot->reply($this->toSlackTelegram($category));
+            else {
+                $bot->reply($category->description);
+                $bot->reply('Unaweza jibu mojawapo kuendelea'
+                    . $this->toWeb($category));
+            }
         } else {
             $bot->reply('Kuna tatizo la kiufundi, linafanyiwa kazi');
         }
@@ -179,13 +190,13 @@ class ItemCategoryController extends Controller
     }
 
     /**
-     * Show a list of Items found for a particular category in a Generic Template.
+     * Show a list of Items found for a particular category request from Slack or Telegram Driver.
      *
      * @param $category
      *
      * @return Question
      */
-    public function items($category)
+    public function toSlackTelegram($category)
     {
         $items = Item::where('item_category_id', $category->id)->where('item_id', NULL)->inRandomOrder()->take(5)->get();
 
@@ -200,33 +211,51 @@ class ItemCategoryController extends Controller
         }
 
         return $features;
-
-        /*
-         * ++++++++++++++++++++++++++++
-         * $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
-
-        foreach ($category->items as $item) {
-            $url = null;
-
-            if ($item->thumbnail)
-                $url = env('AWS_URL') . '/' . $item->thumbnail;
-            else
-                $url = env('APP_URL') . '/img/logo.jpg';
-
-            $template_list->addElements([
-                Element::create($item->title)
-                    ->subtitle($item->description)
-                    ->image($url)
-                    ->addButton(ElementButton::create('Fahamu zaidi')
-                        ->payload($item->title)->type('postback'))
-            ]);
-        }
-
-        return $template_list;*/
     }
 
-    public function test()
+    /**
+     * Show a list of Items found for a particular category request from Facebook Driver.
+     *
+     * @param $category
+     *
+     * @return ButtonTemplate
+     */
+    public function toFacebook($category)
     {
-        return $category = ItemCategory::with('items')->where('name', '=', 'Ukeketaji au Tohara kwa Mwanamke')->first();
+        $items = Item::where('item_category_id', $category->id)->where('item_id', NULL)->inRandomOrder()->take(5)->get();
+
+        $template_list = ButtonTemplate::create($category->description);
+
+        foreach ($items as $item) {
+            $template_list->addButton(
+                ElementButton::create($item->title)->type('postback')->payload($item->title)
+            );
+        }
+
+        return $template_list;
+    }
+
+    /**
+     * Show a list of Items found for a particular category request from Web Driver.
+     *
+     * @param $category
+     *
+     * @return string
+     */
+    public function toWeb($category)
+    {
+        $items = Item::where('item_category_id', $category->id)->where('item_id', NULL)->inRandomOrder()->take(5)->get();
+
+        $message = '';
+        $count = 1;
+
+        foreach ($items as $item) {
+            if($count == 1)
+                $message .= $item->title;
+            else
+                $message .= ', ' . $item->title;
+        }
+
+        return $message;
     }
 }
