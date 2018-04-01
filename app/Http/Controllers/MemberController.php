@@ -92,8 +92,8 @@ class MemberController extends Controller
 //                }
 //
 //                $bot->reply($features, FacebookDriver::class);
-//                $bot->reply($features, TelegramDriver::class);
-//                $bot->reply($features, SlackDriver::class);
+                $bot->reply($features, TelegramDriver::class);
+                $bot->reply($features, SlackDriver::class);
 //                $bot->reply($plain_message, WebDriver::class);
             }
         }

@@ -31,7 +31,9 @@ $botman->hears('Majaridio ya content', function (BotMan $bot) {
         Button::create('Uzazi wa mpango')->value('Uzazi wa mpango')
     ]);
 
-    $bot->reply($majaribio);
+    $bot->reply($majaribio->getActions());
+    $bot->reply($majaribio->getText());
+    $bot->reply($majaribio->getButtons());
 });
 
 $dialogflow = Dialogflow::create(env('DIALOGFLOW_KEY'))->listenForAction();
