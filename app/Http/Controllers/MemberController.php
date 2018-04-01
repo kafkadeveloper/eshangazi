@@ -58,7 +58,7 @@ class MemberController extends Controller
 
                 $this->subscribe($user, $extras, $driver);
 
-                $features = $this->features($user, $apiReply);
+                $features = $this->features($apiReply);
 
                 $bot->reply($features, FacebookDriver::class);
                 $bot->reply($features, TelegramDriver::class);
@@ -67,7 +67,7 @@ class MemberController extends Controller
         } else {
             $bot->reply($apiReply);
 
-            $features = $this->features($user, $apiReply);
+            $features = $this->features($apiReply);
 
             $bot->reply($features, FacebookDriver::class);
             $bot->reply($features, TelegramDriver::class);
@@ -151,10 +151,18 @@ class MemberController extends Controller
 
         $bot->typesAndWaits(1);
 
+        $features = $this->features($apiReply);
+
+        $bot->reply($features, FacebookDriver::class);
+        $bot->reply($features, TelegramDriver::class);
+        $bot->reply($features, SlackDriver::class);
+        $bot->reply($features, WebDriver::class);
+
         if ($this->check($user)) {
 
             $bot->reply($apiReply);
-            $features = $this->features($user, $apiReply);
+
+            $features = $this->features($apiReply);
 
             $bot->reply($features, FacebookDriver::class);
             $bot->reply($features, TelegramDriver::class);
@@ -273,20 +281,11 @@ class MemberController extends Controller
      * @return BotManQuestion
      *
      */
-    public function features($user, $reply)
+    public function features($reply)
     {
-
-        if($user)
-            $message = $user . ' ' . $reply;
-        else
-            $message = $reply;
-
         $categories = ItemCategory::inRandomOrder()->take(5)->get();
 
-        $plain_message = '';
-        $count = 1;
-
-        $features = BotManQuestion::create($message)
+        $features = BotManQuestion::create($reply)
             ->fallback('Unable to create a new database')
             ->callbackId('subscribe');
 
@@ -295,13 +294,6 @@ class MemberController extends Controller
             $features->addButtons([
                 Button::create($category->name)->value($category->name)
             ]);
-
-//            if ($count == 1)
-//                $plain_message .= $count . ' ' . $category->name;
-//            else
-//                $plain_message .= '\n' . $count . ' ' . $category->name;
-//
-//            $count++;
         }
 
         return $features;
