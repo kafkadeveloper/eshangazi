@@ -47,9 +47,6 @@ class MemberController extends Controller
             if ($incomplete) {
                 $bot->reply($apiReply);
             } else {
-                if($driver === 'Telegram'){
-                    $bot->reply(print_r($user->getInfo(),true));
-                }
                 $this->subscribe($user, $extras, $driver);
 
                 $bot->reply($this->features($apiReply));
