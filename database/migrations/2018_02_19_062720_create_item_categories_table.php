@@ -19,6 +19,7 @@ class CreateItemCategoriesTable extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('thumbnail')->nullable();
+            $table->string('display_title')->nullable();
 
             $table->enum('status', ['draft', 'publish', 'cancel'])->default('draft');
             

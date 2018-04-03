@@ -18,6 +18,7 @@
     
     <form method="POST" action="{{ route('store-partner') }}" enctype="multipart/form-data">
         @csrf
+
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="name">

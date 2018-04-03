@@ -4,19 +4,19 @@
     <div class="card-body">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
             <h1 class="h2">
-                New Category
+                New Platform
             </h1>
 
             <div class="btn-toolbar mb-2 mb-md-0">
                 <div class="btn-group">
-                    <a href="{{ route('index-item-category') }}" class="btn btn-sm btn-outline-secondary">
-                        Categories List
+                    <a href="{{ route('index-platform') }}" class="btn btn-sm btn-outline-secondary">
+                        Platforms List
                     </a>
                 </div>
             </div>
         </div>
 
-        <form method="POST" action="{{ route('store-item-category') }}" enctype="multipart/form-data">
+        <form method="POST" action="{{ route('store-platform') }}">
             @csrf
 
             <div class="form-row">
@@ -31,69 +31,51 @@
                            class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
                            value="{{ old('name') }}"
                            placeholder="Name"
-                           required
-                           autofocus>
+                           required autofocus>
 
                     @if ($errors->has('name'))
                         <span class="invalid-feedback">
-                            <strong>
-                                {{ $errors->first('name') }}
-                            </strong>
+                            <strong>{{ $errors->first('name') }}</strong>
                         </span>
                     @endif
                 </div>
 
                 <div class="form-group col-md-6">
-                    <label for="display_title">
-                        Display Title
+                    <label for="name">
+                        Driver
                     </label>
 
-                    <input id="display_title"
-                           name="display_title"
+                    <input id="driver_class"
+                           name="driver_class"
                            type="text"
-                           class="form-control{{ $errors->has('display_title') ? ' is-invalid' : '' }}"
-                           value="{{ old('name') }}"
-                           placeholder="Display Title"
+                           class="form-control{{ $errors->has('driver_class') ? ' is-invalid' : '' }}"
+                           value="{{ old('driver_class') }}"
+                           placeholder="Driver Name"
                            required>
 
-                    @if ($errors->has('display_title'))
+                    @if ($errors->has('driver_class'))
                         <span class="invalid-feedback">
-                            <strong>
-                                {{ $errors->first('display_title') }}
-                            </strong>
+                            <strong>{{ $errors->first('driver_class') }}</strong>
                         </span>
                     @endif
                 </div>
             </div>
 
             <div class="form-group">
-                <label for="description">
-                    Description
-                </label>
+                <label for="description">Description</label>
 
                 <textarea id="description"
                           name="description"
                           class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
-                          row="3"
-                          required>
-                    {{ old('description') }}
-                </textarea>
+                          row="3" required>
+
+                    {{ old('description') }}</textarea>
 
                 @if ($errors->has('description'))
                     <span class="invalid-feedback">
-                        <strong>
-                            {{ $errors->first('description') }}
-                        </strong>
-                    </span>
+                    <strong>{{ $errors->first('description') }}</strong>
+                </span>
                 @endif
-            </div>
-
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="thumbnail">Thumbnail</label>
-
-                    <input id="thumbnail" name="thumbnail" type="file" class="form-control-file">
-                </div>
             </div>
 
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mt-3 border-top">

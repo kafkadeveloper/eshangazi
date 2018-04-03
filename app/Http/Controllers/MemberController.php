@@ -8,9 +8,8 @@ use App\District;
 use App\ItemCategory;
 use App\Conversation;
 use BotMan\BotMan\BotMan;
-use BotMan\Drivers\Facebook\Extensions\Element;
-use BotMan\Drivers\Facebook\Extensions\ElementButton;
-use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
 class MemberController extends Controller
 {
@@ -34,37 +33,29 @@ class MemberController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(BotMan $bot)
-    {            
+    {
         $user = $bot->getUser();
         $driver = $bot->getDriver()->getName();
-        $extras = $bot->getMessage()->getExtras();        
+        $extras = $bot->getMessage()->getExtras();
         $apiReply = $extras['apiReply'];
 
         $bot->typesAndWaits(1);
 
-        if(! $this->check($user))
-        {
-            $incomplete = $extras['apiActionIncomplete'];  
-            
-            if($incomplete)
-            {
-                $bot->reply($apiReply); 
-            }
-            else
-            {
-                $bot->reply($apiReply);
-                if($driver === 'Telegram'){
-                    $bot->reply(print_r($user, true));
-                }
+        if (!$this->check($user)) {
+            $incomplete = $extras['apiActionIncomplete'];
 
-                $bot->reply($this->features());
+            if ($incomplete) {
+                $bot->reply($apiReply);
+            } else {
+                if($driver === 'Telegram'){
+                    $bot->reply(print_r($user,true));
+                }
                 $this->subscribe($user, $extras, $driver);
-                
+
+                $bot->reply($this->features($apiReply));
             }
-        }
-        else
-        {
-            $bot->reply($this->features());
+        } else {
+            $bot->reply($this->features($apiReply));
         }
     }
 
@@ -78,11 +69,11 @@ class MemberController extends Controller
     public function reject(BotMan $bot)
     {
         $extras = $bot->getMessage()->getExtras();
-        
+
         $apiReply = $extras['apiReply'];
 
-        $bot->typesAndWaits(1);     
-        
+        $bot->typesAndWaits(1);
+
         $bot->reply($apiReply);
     }
 
@@ -95,7 +86,7 @@ class MemberController extends Controller
     {
         $member = Member::where('user_platform_id', '=', $user->getId())->first();
 
-        return $member ? true : false;        
+        return $member ? true : false;
     }
 
     /**
@@ -108,23 +99,16 @@ class MemberController extends Controller
     public function started(BotMan $bot)
     {
         $user = $bot->getUser();
+        $extras = $bot->getMessage()->getExtras();
+
+        $apiReply = $extras['apiReply'];
 
         $bot->typesAndWaits(1);
 
-        if($this->check($user)) 
-        {
-            $bot->reply('Karibu tena ' .  $user->getFirstName());
-
-            $bot->reply($this->features());
-        } 
-        else 
-        {
-            $extras = $bot->getMessage()->getExtras();
-
-            $apiReply = $extras['apiReply'];
-
+        if ($this->check($user))
+            $bot->reply($this->features($apiReply));
+        else
             $bot->reply($apiReply);
-        }
     }
 
     /**
@@ -148,19 +132,18 @@ class MemberController extends Controller
         $district = District::where('name', '=', $district)->first();
 
         $member = Member::create([
-            'user_platform_id'  => $user->getId(),
-            'name'              => $user->getFirstName() . ' ' . $user->getLastName(),
-            'avatar'            => $profile_pic,
-            'born_year'         => $born_year,
-            'gender'            => $gender,
-            'platform_id'       => $platform_id,
-            'district_id'       => $district->id,
+            'user_platform_id' => $user->getId(),
+            'name' => $user->getFirstName() . ' ' . $user->getLastName(),
+            'avatar' => $profile_pic,
+            'born_year' => $born_year,
+            'gender' => $gender,
+            'platform_id' => $platform_id,
+            'district_id' => $district->id,
         ]);
 
-        if ($member)
-        {
+        if ($member) {
             Conversation::create([
-                'intent'    => 'Subscribe',
+                'intent' => 'Subscribe',
                 'member_id' => $member->id
             ]);
         }
@@ -179,20 +162,19 @@ class MemberController extends Controller
 
         $member = Member::where('user_platform_id', '=', $user->getId());
 
-        if($member)
-        {
+        if ($member) {
             $extras = $bot->getMessage()->getExtras();
 
             $apiReply = $extras['apiReply'];
             $bot->typesAndWaits(1);
             $bot->reply($apiReply);
-            
+
             $member->update([
                 'status' => 0
             ]);
 
             Conversation::create([
-                'intent'    => 'Unsubscribe',
+                'intent' => 'Unsubscribe',
                 'member_id' => $member->id
             ]);
         }
@@ -201,33 +183,26 @@ class MemberController extends Controller
     /**
      * Display a list of bot features in a Generic Template.
      *
-     * @return \BotMan\Drivers\Facebook\Extensions\GenericTemplate
+     * @param $reply
+     *
+     * @return Question
+     *
      */
-    public function features()
+    public function features($reply)
     {
         $categories = ItemCategory::inRandomOrder()->take(5)->get();
-                            
-        $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
-             
-        foreach($categories as $category)
-        {
-            $url = null;
 
-            if ($category->thumbnail)
-                $url = env('AWS_URL') . '/' . $category->thumbnail;
-            else
-                $url = env('APP_URL') . '/img/logo.jpg';
+        $features = Question::create($reply)
+            ->fallback('Unable to create a new database')
+            ->callbackId('subscribe');
 
-            $template_list->addElements([
-                Element::create($category->name)
-                    ->subtitle($category->description)
-                    ->image($url)
-                    ->addButton(ElementButton::create('Fahamu zaidi')
-                        ->payload($category->name)->type('postback'))
+        foreach ($categories as $category) {
+            $features->addButtons([
+                Button::create($category->display_title)->value($category->name)
             ]);
-        } 
+        }
 
-        return $template_list;
+        return $features;
     }
 
     /**
@@ -240,52 +215,52 @@ class MemberController extends Controller
     public function getPlatformId($driver)
     {
         $platform = Platform::where('name', '=', $driver)->first();
-        if(!$platform){
+
+        if (!$platform)
             $platform_id = null;
-        }else{
+        else
             $platform_id = $platform->id;
-        }
-        
+
         return $platform_id;
     }
 
     /**
      * return user profile pic based on driver
-     * 
+     *
      * @param $user
      * @param $driver
-     * 
+     *
      * @return profile_pc
-     * 
+     *
      */
     public function getUserProfilePic($user, $driver)
     {
-        if($driver === 'Facebook')
-        {
+        if ($driver === 'Facebook') {
             return $profile_pic = $user->getInfo()["profile_pic"];
-        }
-
-        elseif($driver === 'Slack')
-        {
+        } elseif ($driver === 'Slack') {
             return $profile_pic = $user->getInfo()["profile"]["image_original"];
         }
-        
+
+//        elseif($driver === 'Telegram')
+//        {
+//            return $profile_pic = $user->getInfo()["profile"]["image_original"];
+//        }
+
         return null;
     }
 
     /**
      * return user gender based on driver
-     * 
+     *
      * @param $user
      * @param $driver
-     * 
+     *
      * @return gender
-     * 
+     *
      */
     public function getUserGender($user, $driver)
     {
-        if($driver === 'Facebook')
-        {
+        if ($driver === 'Facebook') {
             return $gender = $user->getInfo()["gender"];
         }
 

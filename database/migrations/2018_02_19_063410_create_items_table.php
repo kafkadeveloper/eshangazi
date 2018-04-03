@@ -21,14 +21,18 @@ class CreateItemsTable extends Migration
             $table->string('thumbnail')->nullable();
             $table->enum('gender', ['both', 'male', 'female'])->default('both');
             $table->integer('minimum_age')->default(13);
+            $table->string('display_title')->nullable();
 
             $table->integer('item_category_id')->unsigned();
+            $table->integer('item_id')->unsigned()->nullable();
             $table->integer('created_by')->unsigned();
             $table->integer('updated_by')->unsigned()->nullable();
 
             $table->timestamps();
             $table->softDeletes();
 
+            $table->foreign('item_id')->references('id')->on('items')
+                ->onUpdate('restrict')->onDelete('restrict');
             $table->foreign('item_category_id')->references('id')->on('item_categories')
                 ->onUpdate('restrict')->onDelete('restrict');
             $table->foreign('created_by')->references('id')->on('users')

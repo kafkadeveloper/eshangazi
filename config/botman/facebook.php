@@ -76,31 +76,30 @@ return [
     'persistent_menu' => [
         [
             'locale' => 'default',
-            'composer_input_disabled' => 'true',
             'call_to_actions' => [
                 [
-                    'title' => 'Features',
+                    'title' => 'Msaada Zaidi',
                     'type'  => 'nested',
                     'call_to_actions' => [
                         [
-                            'title'     => 'Sexual Rights',
+                            'title'     => 'Msaada',
                             'type'      => 'postback',
-                            'payload'   => 'SEXUAL_RIGHTS',
+                            'payload'   => 'REFERRALS',
                         ],
                         [
-                            'title'     => 'Teenage Pregnancies',
+                            'title'     => 'Vituo vya Huduma',
                             'type'      => 'postback',
                             'payload'   => 'TEENAGE_PREGNANCY',
                         ],
                     ],
                 ],
                 [
-                    'title'     => 'Qestions & Answers',
+                    'title'     => 'Maswali na Majibu',
                     'type'      => 'postback',
                     'payload'   => 'QUESTIONS_ANSWERS',
                 ],
                 [
-                    'title'     => 'Feedback',
+                    'title'     => 'Maoni',
                     'type'      => 'postback',
                     'payload'   => 'FEEDBACK',
                 ],

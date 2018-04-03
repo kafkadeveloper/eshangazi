@@ -25,8 +25,8 @@
                 Name
             </label>
 
-            <input id="name" name="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" 
-                value="{{ $user->name }}" placeholder="Name" required autofocus>
+            <input id="name" name="name" type="text" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}"
+                   value="{{ $user->name }}" placeholder="Name" required autofocus>
 
             @if ($errors->has('name'))
                 <span class="invalid-feedback">
@@ -35,77 +35,52 @@
             @endif
         </div>
 
-        <div class="form-group">
-            <label for="name">
-               Email
-            </label>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="email">
+                    Display Name
+                </label>
 
-            <input id="email" name="email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
-                   value="{{ $user->email }}" placeholder="Name" required autofocus>
+                <input id="email" name="email" type="text" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}"
+                       value="{{ $user->email }}" placeholder="Display Name" required>
 
-            @if ($errors->has('email'))
-                <span class="invalid-feedback">
-                    <strong>{{ $errors->first('email') }}</strong>
-                </span>
-            @endif
-        </div>
+                @if ($errors->has('email'))
+                    <span class="invalid-feedback">
+                        <strong>{{ $errors->first('email') }}</strong>
+                    </span>
+                @endif
+            </div>
 
-        <div class="form-group">
-            <label for="roles_ids">
-               Attach/Change(Role).
-            </label>
+            <div class="form-group col-md-6">
+                <label for="description">
+                    Roles
+                </label>
 
-            <select  id="roles_ids" name="roles_ids[]" type="text" class="form-control" multiple="multiple">
-                <option value="">--Choose Role--</option>
-
-                @foreach($roles as $role)
+                <select id="role" name="roles_ids[]" type="text" class="form-control{{ $errors->has('role') ? ' is-invalid' : '' }}"
+                          multiple="multiple" autofocus>
+                    <option value="">--Select Role--</option>
+                    @foreach($roles as $role)
                         @if($user->roles)
-                                @if(in_array($role->id, $roles_ids))
-                                    @foreach($user->roles as $rolesingle)
-                                        @if($role->id == $rolesingle->id)
-                                            <option value="{{ $role->id }}" selected="selected">{{ $role->name }}</option>
-                                            @endif
-                                        @endforeach
-                                    @else
-                                     <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                 @endif
-                        @else
-                            <option value="{{ $role->id }}">{{ $role->name }}</option>
-                        @endif
-                @endforeach
-
-            </select>
-
-            @if ($errors->has('roles_ids'))
-                <span class="invalid-feedback">
-                    <strong>{{ $errors->first('roles_ids') }}</strong>
-                </span>
-            @endif
-        </div>
-
-        <div class="form-group">
-            <label for="role">
-                Attach/Change(Permission).
-            </label>
-            <br/>
-            <div class="row">
-            @foreach($permissions as $permission)
-                <div class="col-3">
-                    @if($user->permissions)
-                        @if(in_array($permission->id, $permissions_ids))
-                            @foreach($user->permissions as $singlep)
-                                @if($permission->id == $singlep->id)
-                                <input id="role" name="permissions_ids[]" type="checkbox" value="{{ $permission->id }}" checked="checked"> &nbsp;{{ $permission->name }}
-                                @endif
-                            @endforeach
-                            @else
-                            <input id="role" name="permissions_ids[]" type="checkbox" value="{{ $permission->id }}"> &nbsp;{{ $permission->name }}
+                            @if(in_array($role->id,$roles_ids))
+                                @foreach($user->roles as $attachedRoles)
+                                    @if($role->id == $attachedRoles->id)
+                                        <option value="{{ $role->id }}" selected="selected">{{ $role->name }}</option>
+                                        @endif
+                                    @endforeach
+                                @else
+                                <option value="{{ $role->id }}">{{ $role->name }}</option>
                             @endif
-                        @else
-                            <input id="role" name="permissions_ids[]" type="checkbox" value="{{ $permission->id }}"> &nbsp;{{ $permission->name }}
+                            @else
+                        <option value="{{ $role->id }}">{{ $role->name }}</option>
                         @endif
-                </div>
-             @endforeach
+                        @endforeach
+                </select>
+
+                @if ($errors->has('role'))
+                    <span class="invalid-feedback">
+                        <strong>{{ $errors->first('role') }}</strong>
+                    </span>
+                @endif
             </div>
         </div>
 

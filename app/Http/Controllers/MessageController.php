@@ -153,7 +153,7 @@ class MessageController extends Controller
     {      
         $bot = app('botman');
 
-        $members = Member::all();
+        $members = Member::where('status', 1)->get();
 
         foreach($members as $member)
         {

@@ -15,6 +15,7 @@ class ItemCategory extends Model
         'name', 
         'description',
         'thumbnail',
+        'display_title',
         'status',
         'created_by',
         'updated_by'

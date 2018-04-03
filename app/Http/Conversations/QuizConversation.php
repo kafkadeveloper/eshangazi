@@ -60,9 +60,14 @@ class QuizConversation extends Conversation
                     {
                         $this->score += 1;
 
-                        $this->say("Swal.".$this->iterations."/".$this->data->count().". ✔️ Sahihi 👍, umeshinda alama 1.");
+                        $this->say("Swal." .
+                            $this->iterations . "/" .
+                            $this->data->count(). ". ✔️ Sahihi 👍, umeshinda alama 1.");
                     } else {
-                        $this->say("Swal.".$this->iterations."/".$this->data->count().". ❌ Si-sahihi, sahihi ni ".$this->correct.", alama 0.");
+                        $this->say("Swal." .
+                            $this->iterations . "/" .
+                            $this->data->count() . ". ❌ Si-sahihi, sahihi ni " .
+                            $this->correct . ", alama 0.");
                     }
 
                     if($this->iterations < $this->data->count())
@@ -150,7 +155,7 @@ class QuizConversation extends Conversation
             });
 
         }else{
-            $this->say('Hakua maswali kwa sasa, rudi baadae..');
+            $this->say('Hakua maswali kwa sasa, rudi baadae...');
         }
     }
 

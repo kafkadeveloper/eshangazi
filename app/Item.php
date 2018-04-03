@@ -17,7 +17,9 @@ class Item extends Model
         'thumbnail',
         'gender',
         'minimum_age',
+        'display_title',
         'item_category_id',
+        'item_id',
         'created_by',
         'updated_by'
     ];
@@ -30,7 +32,27 @@ class Item extends Model
     public function category()
     {
         return $this->belongsTo(ItemCategory::class, 'item_category_id');
-    }      
+    }
+
+    /**
+     * An Item may belong to another parent Item.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function item()
+    {
+        return $this->belongsTo(Item::class, 'item_id');
+    }
+
+    /**
+     * An Item may have a number of child items.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function items()
+    {
+        return $this->hasMany(Item::class, 'item_id');
+    }
 
     /**
      * An Item created by a user.

@@ -2,10 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Item;
 use App\Member;
 use App\Conversation;
 use App\ItemCategory;
 use BotMan\BotMan\BotMan;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
+use BotMan\Drivers\Facebook\FacebookDriver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use BotMan\Drivers\Facebook\Extensions\Element;
@@ -16,13 +21,13 @@ class ItemCategoryController extends Controller
 {
     /**
      * Item category constructor
-     * 
+     *
      */
     public function __construct()
     {
         $this->middleware('auth')->except('showBotMan');
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -33,8 +38,8 @@ class ItemCategoryController extends Controller
         $item_categories = ItemCategory::paginate(10);
 
         return view('item-categories.index', [
-                'item_categories' => $item_categories
-            ]);
+            'item_categories' => $item_categories
+        ]);
     }
 
     /**
@@ -50,7 +55,7 @@ class ItemCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      *
      * @return \Illuminate\Http\Response
      */
@@ -58,18 +63,18 @@ class ItemCategoryController extends Controller
     {
         $thumbnail_path = null;
 
-        if ($request->hasFile('thumbnail'))
-        {
+        if ($request->hasFile('thumbnail')) {
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/item-category-thumbnails', $request->file('thumbnail'), 'public');
 
         }
 
         ItemCategory::create([
-            'name'          => $request->name,
-            'description'   => $request->description,
-            'thumbnail'     => $thumbnail_path,
-            'created_by'    => auth()->id()
+            'name' => $request->name,
+            'description' => $request->description,
+            'thumbnail' => $thumbnail_path,
+            'display_title' => $request->display_title,
+            'created_by' => auth()->id()
         ]);
 
         return back();
@@ -79,7 +84,7 @@ class ItemCategoryController extends Controller
      * Display the specified resource.
      *
      * @param  ItemCategory $item_category
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(ItemCategory $item_category)
@@ -91,7 +96,7 @@ class ItemCategoryController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  ItemCategory $item_category
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(ItemCategory $item_category)
@@ -102,26 +107,26 @@ class ItemCategoryController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @param  ItemCategory $item_category
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, ItemCategory $item_category)
     {
-        $thumbnail_path = null; 
+        $thumbnail_path = null;
 
-        if ($request->hasFile('thumbnail'))
-        {
+        if ($request->hasFile('thumbnail')) {
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/item-category-thumbnails', $request->file('thumbnail'), 'public');
         }
 
         $item_category->update([
-            'name'          => $request->name,
-            'description'   => $request->description,
-            'thumbnail'     => $thumbnail_path ? $thumbnail_path : $item_category->thumbnail,
-            'updated_by'    => auth()->id()
+            'name' => $request->name,
+            'description' => $request->description,
+            'thumbnail' => $thumbnail_path ? $thumbnail_path : $item_category->thumbnail,
+            'display_title' => $request->display_title,
+            'updated_by' => auth()->id()
         ]);
 
         return redirect()->route('show-item-category', $item_category);
@@ -136,7 +141,7 @@ class ItemCategoryController extends Controller
      */
     public function destroy(ItemCategory $item_category)
     {
-        if(Storage::disk('s3')->exists($item_category->thumbnail))
+        if (Storage::disk('s3')->exists($item_category->thumbnail))
             Storage::disk('s3')->delete($item_category->thumbnail);
 
         $item_category->delete();
@@ -152,73 +157,107 @@ class ItemCategoryController extends Controller
     public function showBotMan(BotMan $bot)
     {
         $extras = $bot->getMessage()->getExtras();
+        $driver = $bot->getDriver()->getName();
 
         $name = $extras['apiParameters'][env('APP_ACTION') . '-item-categories'];
 
-        $category = ItemCategory::with('items')->where('name', '=', $name)->first();
+        $category = ItemCategory::where('name', '=', $name)->first();
 
         $bot->typesAndWaits(1);
-        if($category)
-        {
-            $bot->reply($category->description);
-            
-            $bot->typesAndWaits(1);
-            $bot->reply($this->items($category));
+        if ($category) {
+            if ($driver == 'Facebook')
+                $bot->reply($this->toFacebook($category));
+            elseif ($driver == 'Slack' || $driver == 'Telegram')
+                $bot->reply($this->toSlackTelegram($category));
+            else {
+                $bot->reply($category->description);
+                $bot->reply('Unaweza jibu mojawapo kuendelea'
+                    . $this->toWeb($category));
+            }
+        } else {
+            $bot->reply('Kuna tatizo la kiufundi, linafanyiwa kazi');
         }
-        else{
-            $bot->reply('Sorry say that again...Item category issue ('.var_export($category,true).') value from dialogflow is ('.$name.')');
-        }
-
-        
 
         $user = $bot->getUser();
         $user_id = $user->getId();
 
         $member = Member::where('user_platform_id', '=', $user_id)->first();
 
-        if($member)
-        {
+        if ($member) {
             Conversation::create([
-                'intent'    => $name,
+                'intent' => $name,
                 'member_id' => $member->id
             ]);
         }
-
     }
 
     /**
-     * Show a list of Items found for a particular category in a Generic Template.
+     * Show a list of Items found for a particular category request from Slack or Telegram Driver.
      *
      * @param $category
      *
-     * @return \BotMan\Drivers\Facebook\Extensions\GenericTemplate
+     * @return Question
      */
-    public function items($category)
-    {                           
-        $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
-             
-        foreach($category->items as $item)
-        {
-            $url = null;
+    public function toSlackTelegram($category)
+    {
+        $items = Item::where('item_category_id', $category->id)->where('item_id', NULL)->inRandomOrder()->take(5)->get();
 
-            if ($item->thumbnail)
-                $url = env('AWS_URL') . '/' . $item->thumbnail;
-            else
-                $url = env('APP_URL') . '/img/logo.jpg';
+        $features = Question::create($category->description)
+            ->fallback('Kumradhi, sijaweza pata taarifa zaidi kuhusu' . $category->name)
+            ->callbackId('item_category');
 
-            $template_list->addElements([
-                Element::create($item->title)
-                    ->subtitle($item->description)
-                    ->image($url)
-                    ->addButton(ElementButton::create('Fahamu zaidi')
-                        ->payload($item->title)->type('postback'))
+        foreach ($items as $item) {
+            $features->addButtons([
+                Button::create($item->display_title)->value($item->title)
             ]);
-        } 
+        }
+
+        return $features;
+    }
+
+    /**
+     * Show a list of Items found for a particular category request from Facebook Driver.
+     *
+     * @param $category
+     *
+     * @return ButtonTemplate
+     */
+    public function toFacebook($category)
+    {
+        $items = Item::where('item_category_id', $category->id)->where('item_id', NULL)->inRandomOrder()->take(5)->get();
+
+        $template_list = ButtonTemplate::create($category->description);
+
+        foreach ($items as $item) {
+            $template_list->addButton(
+                ElementButton::create($item->display_title)->type('postback')->payload($item->title)
+            );
+        }
 
         return $template_list;
     }
-    public function test()
+
+    /**
+     * Show a list of Items found for a particular category request from Web Driver.
+     *
+     * @param $category
+     *
+     * @return string
+     */
+    public function toWeb($category)
     {
-        return $category = ItemCategory::with('items')->where('name', '=', 'Ukeketaji au Tohara kwa Mwanamke')->first();
+        $items = Item::where('item_category_id', $category->id)->where('item_id', NULL)->inRandomOrder()->take(5)->get();
+
+        $message = '';
+        $count = 1;
+
+        foreach ($items as $item) {
+            if($count == 1)
+                $message .= $item->title;
+            else
+                $message .= ', ' . $item->title;
+        }
+
+        return $message;
     }
 }
