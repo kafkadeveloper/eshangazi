@@ -53,6 +53,9 @@ class MemberController extends Controller
             else
             {
                 $bot->reply($apiReply);
+                if($driver === 'Telegram'){
+                    $bot->reply(print_r($user, true));
+                }
 
                 $bot->reply($this->features());
                 $this->subscribe($user, $extras, $driver);
@@ -284,11 +287,6 @@ class MemberController extends Controller
         if($driver === 'Facebook')
         {
             return $gender = $user->getInfo()["gender"];
-        }
-
-        elseif($driver === 'Slack')
-        {
-           return $gender = null;
         }
 
         return null;
