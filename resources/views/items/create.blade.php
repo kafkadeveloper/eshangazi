@@ -156,7 +156,7 @@
                            name="display_title"
                            type="text"
                            class="form-control{{ $errors->has('display_title') ? ' is-invalid' : '' }}"
-                           value="{{ old(display_title) }}"
+                           value="{{ old('display_title') }}"
                            placeholder="Display Title"
                            required>
 
