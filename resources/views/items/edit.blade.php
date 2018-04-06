@@ -82,9 +82,7 @@
                         name="description"
                         class="form-control{{ $errors->has('description') ? ' is-invalid' : '' }}"
                         row="3"
-                        required>
-                    {{ $item->description }}
-                </textarea>
+                        required>{{ $item->description }}</textarea>
 
                 @if ($errors->has('description'))
                     <span class="invalid-feedback">
