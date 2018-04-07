@@ -186,7 +186,7 @@
                         </option>
 
                         @foreach($items as $itemm)
-                            <option value="{{$itemm->id}}" {{ $itemm->id == $item->id ? "selected":"" }}>
+                            <option value="{{$itemm->id}}" {{ $itemm->id == $item->item_id ? "selected":"" }}>
                                 {{ $itemm->title }}
                             </option>
                         @endforeach
