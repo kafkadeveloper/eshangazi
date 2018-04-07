@@ -178,7 +178,7 @@ class ItemController extends Controller
 
         $title = $extras['apiParameters'][env('APP_ACTION') . '-items'];
 
-        $item = Item::where('title', '=', $title)->first();
+        $item = Item::where('title', 'ilike', $title)->first();
 
         //$bot->typesAndWaits(1);
         //$bot->reply($item->title);
