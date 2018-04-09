@@ -28,7 +28,7 @@ class QuizConversation extends Conversation
                     Button::create('Baadae')->value('no')
                 ]);
         return $this->ask($Question, function (Answer $answer) {
-            if($answer === 'yes'){
+            if($answer->getValue() === 'yes'){
                 $this->say("Bofya kwenye jibu sahihi.");
                 $this->askQuestion();
             }else{
