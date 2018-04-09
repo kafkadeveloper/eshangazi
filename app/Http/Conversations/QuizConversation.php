@@ -20,7 +20,7 @@ class QuizConversation extends Conversation
      */
     public function startConv()
     {
-        $Question = Question::create('Karibu '.$this->bot->getUser()->getFirstName(). ' kwenye maswali na majibu')
+        $Question = BotManQuestion::create('Karibu '.$this->bot->getUser()->getFirstName(). ' kwenye maswali na majibu')
                 ->fallback('Unable to start game')
                 ->callbackId('start_game')
                 ->addButtons([
@@ -29,7 +29,6 @@ class QuizConversation extends Conversation
                 ]);
         return $this->ask($Question, function (Answer $answer) {
             if($answer === 'yes'){
-
                 $this->say("Bofya kwenye jibu sahihi.");
                 $this->askQuestion();
             }else{
