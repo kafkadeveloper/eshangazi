@@ -202,7 +202,7 @@ class MemberController extends Controller
                         ->subtitle($category->description)
                         ->image($category->thumbnail)
                         ->addButton(ElementButton::create('Fahamu Zaidi')
-                            ->payload('$category->name')->type('postback'))
+                            ->payload($category->name)->type('postback'))
                 );
             }
 
