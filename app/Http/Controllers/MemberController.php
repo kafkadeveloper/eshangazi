@@ -111,11 +111,11 @@ class MemberController extends Controller
             $bot->reply('Karibu tena '.$user->getFirstName());
             $bot->reply($this->features($apiReply, $driver));
         } else{
-            $Question = Question::create('Ili niweze kukuhudumia kwa ufasaha, ningependa kukuuliza maswali mawili..')
+            $Question = Question::create('Ili niweze kukuhudumia kwa ufasaha, ningependa kukuuliza maswali mawili !')
                 ->fallback('Unable to ask question')
-                ->callbackId('confirm-subscribe')
+                ->callbackId('confirm_subscribe')
                 ->addButtons([
-                    Button::create('Ndio')->value('sawa'),
+                    Button::create('Sawa niulize')->value('sawa'),
                     Button::create('Baadae')->value('hapana')
                 ]);
             $bot->reply($apiReply);
@@ -222,8 +222,8 @@ class MemberController extends Controller
 
         }else{
             $features = Question::create($reply)
-                ->fallback('Unable to create a new database')
-                ->callbackId('subscribe');
+                ->fallback('Unable to show  features')
+                ->callbackId('features_list');
 
             foreach ($categories as $category) {
                 $features->addButtons([
