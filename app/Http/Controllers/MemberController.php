@@ -200,7 +200,7 @@ class MemberController extends Controller
                 $features->addElements(
                     Element::create($category->name)
                         ->subtitle($category->description)
-                        ->image($category->thumbnail)
+                        ->image(env('AWS_URL') . '/' . $category->thumbnail)
                         ->addButton(ElementButton::create('Fahamu Zaidi')
                             ->payload($category->name)->type('postback'))
                 );
