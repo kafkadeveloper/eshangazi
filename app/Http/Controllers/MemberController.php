@@ -9,7 +9,10 @@ use App\ItemCategory;
 use App\Conversation;
 use BotMan\BotMan\BotMan;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\Drivers\Facebook\Extensions\ElementButton;
+use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 
 class MemberController extends Controller
 {
@@ -96,6 +99,7 @@ class MemberController extends Controller
     public function started(BotMan $bot)
     {
         $user = $bot->getUser();
+        $driver = $bot->getDriver()->getName();
         $extras = $bot->getMessage()->getExtras();
 
         $apiReply = $extras['apiReply'];
@@ -103,7 +107,7 @@ class MemberController extends Controller
         $bot->typesAndWaits(1);
 
         if ($this->check($user))
-            $bot->reply($this->features($apiReply));
+            $bot->reply($this->features($apiReply, $driver));
         else
             $bot->reply($apiReply);
     }
@@ -185,18 +189,33 @@ class MemberController extends Controller
      * @return Question
      *
      */
-    public function features($reply)
+    public function features($reply, $driver)
     {
         $categories = ItemCategory::inRandomOrder()->take(5)->get();
 
-        $features = Question::create($reply)
-            ->fallback('Unable to create a new database')
-            ->callbackId('subscribe');
+        if($driver === 'Facebook')
+        {
+            $features = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
+            foreach ($categories as $category){
+                $features->addElements(
+                    Element::create($category->name)
+                        ->subtitle($category->description)
+                        ->image($category->thumbnail)
+                        ->addButton(ElementButton::create('Fahamu Zaidi')
+                            ->payload($category->name)->type('postback'))
+                );
+            }
 
-        foreach ($categories as $category) {
-            $features->addButtons([
-                Button::create($category->display_title)->value($category->name)
-            ]);
+        }else{
+            $features = Question::create($reply)
+                ->fallback('Unable to create a new database')
+                ->callbackId('subscribe');
+
+            foreach ($categories as $category) {
+                $features->addButtons([
+                    Button::create($category->display_title)->value($category->name)
+                ]);
+            }
         }
 
         return $features;

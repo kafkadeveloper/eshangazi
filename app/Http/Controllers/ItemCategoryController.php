@@ -224,7 +224,7 @@ class ItemCategoryController extends Controller
      */
     public function toFacebook($category)
     {
-        $items = Item::where('item_category_id', $category->id)->where('item_id', NULL)->inRandomOrder()->take(5)->get();
+        $items = Item::where('item_category_id', $category->id)->where('item_id', NULL)->inRandomOrder()->take(3)->get();
 
         $template_list = ButtonTemplate::create($category->description);
 
