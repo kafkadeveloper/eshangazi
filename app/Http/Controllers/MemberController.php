@@ -202,9 +202,11 @@ class MemberController extends Controller
                         ->subtitle($category->description)
                         ->image($category->thumbnail)
                         ->addButton(ElementButton::create('Fahamu Zaidi')
-                            ->payload('fahamuzaidi')->type('postback'))
+                            ->payload('$category->name')->type('postback'))
                 );
             }
+
+            return $features;
 
         }else{
             $features = Question::create($reply)
@@ -216,9 +218,9 @@ class MemberController extends Controller
                     Button::create($category->display_title)->value($category->name)
                 ]);
             }
-        }
 
-        return $features;
+            return $features;
+        }
     }
 
     /**
