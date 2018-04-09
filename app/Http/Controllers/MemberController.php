@@ -200,10 +200,10 @@ class MemberController extends Controller
             foreach ($categories as $category){
                 $features->addElements(
                     Element::create($category->name)
-                        ->subtitle($category->description)
+                        ->subtitle('This is subtittle')
                         ->image('https://da-asha-bot.herokuapp.com/img/logo.png')
                         ->addButton(ElementButton::create('Fahamu Zaidi')
-                            ->payload($category->name)->type('postback'))
+                            ->payload('fahamuzaidi')->type('postback'))
                 );
             }
 
