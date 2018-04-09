@@ -52,9 +52,11 @@ class MemberController extends Controller
             } else {
                 $this->subscribe($user, $extras, $driver);
 
+                if($driver === 'Facebook') $bot->reply($apiReply);
                 $bot->reply($this->features($apiReply, $driver));
             }
         } else {
+            $bot->reply('Karibu tena '.$user->getFirstName());
             $bot->reply($this->features($apiReply, $driver));
         }
     }
@@ -196,7 +198,7 @@ class MemberController extends Controller
         if($driver === 'Facebook')
         {
             $features = GenericTemplate::create()
-	                    ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE);
+	                    ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
             foreach ($categories as $category){
                 $features->addElements([
                     Element::create($category->name)
