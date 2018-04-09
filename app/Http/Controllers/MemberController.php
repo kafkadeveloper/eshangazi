@@ -206,8 +206,8 @@ class MemberController extends Controller
             //     );
             // }
     $features = GenericTemplate::create()
-	->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
-	->addElements([
+	->addImageAspectRatio(GenericTemplate::RATIO_SQUARE);
+	$features->addElements([
 		Element::create('BotMan Documentation')
 			->subtitle('All about BotMan')
 			->image('http://botman.io/img/botman-body.png')
