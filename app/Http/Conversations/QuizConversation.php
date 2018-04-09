@@ -16,7 +16,31 @@ class QuizConversation extends Conversation
     protected $data;
 
     /**
-     * First question
+     * Start conversation
+     */
+    public function startConv()
+    {
+        $Question = Question::create('Karibu '.$this->bot->getUser()->getFirstName(). ' kwenye maswali na majibu')
+                ->fallback('Unable to start game')
+                ->callbackId('start_game')
+                ->addButtons([
+                    Button::create('Cheza')->value('yes'),
+                    Button::create('Baadae')->value('no')
+                ]);
+        return $this->ask($Question, function (Answer $answer) {
+            if($answer === 'yes'){
+
+                $this->say("Bofya kwenye jibu sahihi.");
+                $this->askQuestion();
+            }else{
+                $this->say("Asante ".$this->bot->getUser()->getFirstName() .
+                                    "!, karibu ujaribu kucheza muda wowote.. 👋");
+            }
+        });
+    }
+
+    /**
+     * Asking questions
      */
     public function askQuestion()
     {
@@ -166,8 +190,6 @@ class QuizConversation extends Conversation
      */
     public function run()
     {
-        $this->say("Bofya kwenye jibu sahihi.");
-
-        $this->askQuestion();
+        $this->startConv();
     }
 }
