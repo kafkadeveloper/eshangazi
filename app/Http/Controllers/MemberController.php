@@ -198,13 +198,13 @@ class MemberController extends Controller
             $features = GenericTemplate::create()
 	                    ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE);
             foreach ($categories as $category){
-                $features->addElements(
+                $features->addElements([
                     Element::create('Kuhusu da asha')
                         ->subtitle('This is subtittle')
                         ->image('https://da-asha-bot.herokuapp.com/img/logo.png')
                         ->addButton(ElementButton::create('Fahamu Zaidi')
                             ->payload('fahamuzaidi')->type('postback'))
-                );
+                ]);
             }
 
             return $features;
