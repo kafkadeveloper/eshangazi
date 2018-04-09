@@ -52,10 +52,10 @@ class MemberController extends Controller
             } else {
                 $this->subscribe($user, $extras, $driver);
 
-                $bot->reply(print_r($this->features($apiReply, $driver), true));
+                $bot->reply($this->features($apiReply, $driver));
             }
         } else {
-            $bot->reply(print_r($this->features($apiReply, $driver), true));
+            $bot->reply($this->features($apiReply, $driver));
         }
     }
 
