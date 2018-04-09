@@ -56,7 +56,6 @@ class MemberController extends Controller
                 $bot->reply($this->features($apiReply, $driver));
             }
         } else {
-            $bot->reply('Karibu tena '.$user->getFirstName());
             $bot->reply($this->features($apiReply, $driver));
         }
     }
@@ -108,10 +107,20 @@ class MemberController extends Controller
 
         $bot->typesAndWaits(1);
 
-        if ($this->check($user))
+        if ($this->check($user)){
+            $bot->reply('Karibu tena '.$user->getFirstName());
             $bot->reply($this->features($apiReply, $driver));
-        else
+        } else{
+            $Question = Question::create('Ili niweze kukuhudumia kwa ufasaha, ningependa kukuuliza maswali mawili..')
+                ->fallback('Unable to ask question')
+                ->callbackId('confirm-subscribe')
+                ->addButtons([
+                    Button::create('Ndio')->value('sawa'),
+                    Button::create('Baadae')->value('hapana')
+                ]);
             $bot->reply($apiReply);
+            $bot->reply($Question);
+        }
     }
 
     /**
