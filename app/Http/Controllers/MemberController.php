@@ -199,7 +199,7 @@ class MemberController extends Controller
 	                    ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE);
             foreach ($categories as $category){
                 $features->addElements(
-                    Element::create($category->name)
+                    Element::create('Kuhusu da asha')
                         ->subtitle('This is subtittle')
                         ->image('https://da-asha-bot.herokuapp.com/img/logo.png')
                         ->addButton(ElementButton::create('Fahamu Zaidi')
