@@ -195,16 +195,33 @@ class MemberController extends Controller
 
         if($driver === 'Facebook')
         {
-            $features = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_SQUARE);
-            foreach ($categories as $category){
-                $features->addElements(
-                    Element::create($category->name)
-                        ->subtitle($category->description)
-                        ->image(env('AWS_URL') . '/' . $category->thumbnail)
-                        ->addButton(ElementButton::create('Fahamu Zaidi')
-                            ->payload($category->name)->type('postback'))
-                );
-            }
+            // $features = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_SQUARE);
+            // foreach ($categories as $category){
+            //     $features->addElements(
+            //         Element::create($category->name)
+            //             ->subtitle($category->description)
+            //             ->image(env('AWS_URL') . '/' . $category->thumbnail)
+            //             ->addButton(ElementButton::create('Fahamu Zaidi')
+            //                 ->payload($category->name)->type('postback'))
+            //     );
+            // }
+    $features = GenericTemplate::create()
+	->addImageAspectRatio(GenericTemplate::RATIO_SQUARE)
+	->addElements([
+		Element::create('BotMan Documentation')
+			->subtitle('All about BotMan')
+			->image('http://botman.io/img/botman-body.png')
+			->addButton(ElementButton::create('visit')->url('http://botman.io'))
+			->addButton(ElementButton::create('tell me more')
+				->payload('tellmemore')->type('postback')),
+		Element::create('BotMan Laravel Starter')
+			->subtitle('This is the best way to start with Laravel and BotMan')
+			->image('http://botman.io/img/botman-body.png')
+			->addButton(ElementButton::create('visit')
+				->url('https://github.com/mpociot/botman-laravel-starter')
+			)
+	]);
+
 
             return $features;
 
