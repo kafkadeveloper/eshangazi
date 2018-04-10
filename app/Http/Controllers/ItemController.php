@@ -175,6 +175,7 @@ class ItemController extends Controller
     public function showBotMan(BotMan $bot)
     {
         $extras = $bot->getMessage()->getExtras();
+        $driver = $bot->getDriver()->getName();
 
         $title = $extras['apiParameters'][env('APP_ACTION') . '-items'];
 
@@ -186,10 +187,22 @@ class ItemController extends Controller
         $bot->typesAndWaits(1);
         if($item)
         {
-            $bot->reply($item->description);
+            if(is_null($item->items)){
+                $bot->reply($item->description);
+            }else{
+                if ($driver == 'Facebook')
+                    $bot->reply($this->toFacebook($item));
+                elseif ($driver == 'Slack' || $driver == 'Telegram')
+                    $bot->reply($this->toSlackTelegram($item));
+                else {
+                    $bot->reply($item->description);
+                    $bot->reply('Unaweza jibu mojawapo kuendelea'
+                        . $this->toWeb($item));
+                }
+            }
         }
         else{
-            $bot->reply('Sorry say that again...Item issue');
+            $bot->reply('Naendele kukusanya taarifa zaidi, kuhusu '.$title);
         }
         
 
@@ -202,5 +215,74 @@ class ItemController extends Controller
                 'member_id' => $member->id
             ]);
         }
+    }
+
+    /**
+     * Show a list of Items found for a particular category request from Slack or Telegram Driver.
+     *
+     * @param $category
+     *
+     * @return Question
+     */
+    public function toSlackTelegram($item)
+    {
+        $child_items = $item->items()->inRandomOrder()->take(5)->get();
+        $features = Question::create($item->description)
+            ->fallback('Kumradhi, sijaweza pata taarifa zaidi kuhusu' . $item->title)
+            ->callbackId('item');
+
+        foreach ($child_items->items as $itemm) {
+            $features->addButtons([
+                Button::create($itemm->display_title)->value($itemm->title)
+            ]);
+        }
+
+        return $features;
+    }
+
+    /**
+     * Show a list of Items found for a particular category request from Facebook Driver.
+     *
+     * @param $category
+     *
+     * @return ButtonTemplate
+     */
+    public function toFacebook($item)
+    {
+        $child_items = $item->items()->inRandomOrder()->take(3)->get();
+
+        $template_list = ButtonTemplate::create($category->description);
+
+        foreach ($child_items as $itemm) {
+            $template_list->addButton(
+                ElementButton::create($itemm->display_title)->type('postback')->payload($itemm->title)
+            );
+        }
+
+        return $template_list;
+    }
+
+    /**
+     * Show a list of Items found for a particular category request from Web Driver.
+     *
+     * @param $category
+     *
+     * @return string
+     */
+    public function toWeb($item)
+    {
+        $child_items = $item->items()->inRandomOrder()->take(3)->get();
+
+        $message = '';
+        $count = 1;
+
+        foreach ($child_items as $itemm) {
+            if($count == 1)
+                $message .= $itemm->title;
+            else
+                $message .= ', ' . $itemm->title;
+        }
+
+        return $message;
     }
 }
