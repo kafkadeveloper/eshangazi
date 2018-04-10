@@ -202,7 +202,7 @@ class ItemController extends Controller
                     $bot->reply($this->toSlackTelegram($item));
                 else {
                     $bot->reply($item->description);
-                    $bot->reply('Unaweza jibu mojawapo kuendelea \n'
+                    $bot->reply("Unaweza jibu mojawapo kuendelea \n"
                         . $this->toWeb($item));
                 }
             }
@@ -279,14 +279,14 @@ class ItemController extends Controller
     {
         $child_items = $item->items()->inRandomOrder()->take(3)->get();
 
-        $message = '';
+        $message = "";
         $count = 1;
 
         foreach ($child_items as $itemm) {
             if($count == 1)
                 $message .= $itemm->title;
             else{
-                $message .= '\n';
+                $message .= " \n";
                 $message .= $itemm->title;
             }
         }
