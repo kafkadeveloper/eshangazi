@@ -257,7 +257,7 @@ class ItemController extends Controller
     {
         $child_items = $item->items()->inRandomOrder()->take(3)->get();
 
-        $template_list = ButtonTemplate::create($category->description);
+        $template_list = ButtonTemplate::create($item->description);
 
         foreach ($child_items as $itemm) {
             $template_list->addButton(
