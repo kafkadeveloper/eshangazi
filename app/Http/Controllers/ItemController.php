@@ -193,7 +193,7 @@ class ItemController extends Controller
         $bot->typesAndWaits(1);
         if($item)
         {
-            if(is_null($item->items)){
+            if($item->items->isEmpty()){
                 $bot->reply($item->description);
             }else{
                 if ($driver == 'Facebook')
