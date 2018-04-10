@@ -32,6 +32,8 @@
             <th>Thumbnail</th>
 
             <th>Title</th>
+            
+            <th>Display Title</th>
 
             <th>Category</th>
 
@@ -48,6 +50,10 @@
 
               <td class="align-middle">
                 {{ $item->title}}
+              </td>
+
+              <td class="align-middle">
+                {{ $item->display_title}}
               </td>
               
               <td class="align-middle">
