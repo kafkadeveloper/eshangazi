@@ -9,6 +9,12 @@ use App\ItemCategory;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\Drivers\Facebook\Extensions\Element;
+use BotMan\Drivers\Facebook\Extensions\ElementButton;
+use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 
 class ItemController extends Controller
 {
