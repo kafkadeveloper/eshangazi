@@ -49,15 +49,15 @@
               </td>
 
               <td class="align-middle">
-                {{ $item->title}}
+                {{$item->title}}
               </td>
 
               <td class="align-middle">
-                {{ $item->display_title}}
+                {{$item->display_title}}
               </td>
               
               <td class="align-middle">
-                {{ $item->category->name}}
+                {{$item->category->name}}
               </td>
               
               <td class="text-center align-middle">
