@@ -286,9 +286,9 @@ class ItemController extends Controller
             if($count == 1)
                 $message .= $itemm->title;
             else{
-                $mess = ', \n'.$itemm->title;
-                $message .= $mess;
+                $message .= ", \n".$itemm->title;
             }
+            $count++;
         }
 
         return $message;
