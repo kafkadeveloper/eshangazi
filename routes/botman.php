@@ -17,8 +17,8 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
 $botman = resolve('botman');
 
-$botman->hears('This is a default test', function (BotMan $bot) {
-    $bot->reply('Hello yourself.');
+$botman->hears('Only for testing', function (BotMan $bot) {
+    $bot->reply('Hello I head, Only for testing.');
 });
 
 
@@ -28,7 +28,7 @@ $botman->hears('Majaridio ya content', function (BotMan $bot) {
                     ->callbackId('majaribio');
 
     $majaribio->addButtons([
-        Button::create('This is a default test')->value('This is a default test'),
+        Button::create('This is a default test')->value('Only for testing'),
         Button::create('Uzazi wa mpango')->value('Uzazi wa mpango')
     ]);
 
