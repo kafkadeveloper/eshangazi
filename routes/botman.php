@@ -29,7 +29,7 @@ $botman->hears('Majaridio ya content', function (BotMan $bot) {
 
     $majaribio->addButtons([
         Button::create('This is a default test')->value('Only for testing'),
-        Button::create('Uzazi wa mpango')->value('Uzazi wa mpango')
+        Button::create('Uzazi wa mpango')->value("Uzazi wa mpango")
     ]);
 
     $bot->reply($majaribio);
