@@ -202,8 +202,9 @@ class ItemController extends Controller
                     $bot->reply($this->toSlackTelegram($item));
                 else {
                     $bot->reply($item->description);
-                    $bot->reply("Unaweza jibu mojawapo kuendelea \n"
-                        . $this->toWeb($item));
+                    // $bot->reply("Unaweza jibu mojawapo kuendelea \n"
+                    //     . $this->toWeb($item));
+                    $bot->reply($this->toWebb($item));
                 }
             }
         }
@@ -292,5 +293,28 @@ class ItemController extends Controller
         }
 
         return $message;
+    }
+    
+    /**
+     * Show a list of Items found for a particular item request from Web Driver.
+     *
+     * @param $item
+     *
+     * @return string
+     */
+    public function toWebb($item)
+    {
+        $child_items = $item->items()->inRandomOrder()->take(5)->get();
+        $features = Question::create($item->description)
+            ->fallback('Kumradhi, sijaweza pata taarifa zaidi kuhusu' . $item->title)
+            ->callbackId('item');
+
+        foreach ($child_items->items as $itemm) {
+            $features->addButtons([
+                Button::create($itemm->display_title)->value($itemm->title)
+            ]);
+        }
+
+        return $features;
     }
 }
