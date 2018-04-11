@@ -78,7 +78,7 @@ class MemberController extends Controller
         $bot->typesAndWaits(1);
 
         $bot->reply($apiReply);
-        $bot->reply($this->features($reply, $driver));
+        $bot->reply($this->features($apiReply, $driver));
     }
 
     /**
