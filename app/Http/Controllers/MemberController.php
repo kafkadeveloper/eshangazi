@@ -69,6 +69,8 @@ class MemberController extends Controller
      */
     public function reject(BotMan $bot)
     {
+        $user = $bot->getUser();
+        $driver = $bot->getDriver()->getName();
         $extras = $bot->getMessage()->getExtras();
 
         $apiReply = $extras['apiReply'];
@@ -76,6 +78,7 @@ class MemberController extends Controller
         $bot->typesAndWaits(1);
 
         $bot->reply($apiReply);
+        $bot->reply($this->features($reply, $driver));
     }
 
     /**
