@@ -109,20 +109,24 @@ class MemberController extends Controller
         $apiReply = $extras['apiReply'];
 
         $bot->typesAndWaits(1);
-
-        if ($this->check($user)){
-            $bot->reply('Karibu tena '.$user->getFirstName());
+        if($driver === 'Web'){
             $bot->reply($this->features($apiReply, $driver));
-        } else{
-            $Question = Question::create('Ili niweze kukuhudumia kwa ufasaha, ningependa kukuuliza maswali mawili !')
-                ->fallback('Unable to ask question')
-                ->callbackId('confirm_subscribe')
-                ->addButtons([
-                    Button::create('Sawa niulize')->value('sawa'),
-                    Button::create('Baadae')->value('hapana')
-                ]);
-            $bot->reply($apiReply);
-            $bot->reply($Question);
+        }else{
+
+            if ($this->check($user)){
+                $bot->reply('Karibu tena '.$user->getFirstName());
+                $bot->reply($this->features($apiReply, $driver));
+            } else{
+                $Question = Question::create('Ili niweze kukuhudumia kwa ufasaha, ningependa kukuuliza maswali mawili !')
+                    ->fallback('Unable to ask question')
+                    ->callbackId('confirm_subscribe')
+                    ->addButtons([
+                        Button::create('Sawa niulize')->value('sawa'),
+                        Button::create('Baadae')->value('hapana')
+                    ]);
+                $bot->reply($apiReply);
+                $bot->reply($Question);
+            }
         }
     }
 
