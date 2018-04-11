@@ -201,7 +201,7 @@ class ItemController extends Controller
                 elseif ($driver == 'Slack' || $driver == 'Telegram')
                     $bot->reply($this->toSlackTelegram($item));
                 else {
-                    $bot->reply($item->description);
+                    //$bot->reply($item->description);
                     // $bot->reply("Unaweza jibu mojawapo kuendelea \n"
                     //     . $this->toWeb($item));
                     $bot->reply($this->toWebb($item));
