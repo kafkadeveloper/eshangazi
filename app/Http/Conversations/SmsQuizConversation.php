@@ -104,7 +104,7 @@ class SmsQuizConversation extends Conversation
                                 $this->bot->getUser()->getFirstName() .
                                 "!, umepata ".$this->score . "/"
                                 . $this->data->count() .
-                                " . Hongeraaa! 🏆🏆 /n";
+                                " . Hongeraaa! 🏆🏆 \n";
                         }else if($this->score >= ($this->data->count()/2))
                         {
                             $sms = "Umefanya vizuri 👏 " .
@@ -112,12 +112,12 @@ class SmsQuizConversation extends Conversation
                                 "!, umepata " .
                                 $this->score . "/" .
                                 $this->data->count() .
-                                ". /n";
+                                ". \n";
                         }else{
                             $sms = $this->bot->getUser()->getFirstName() .
                                 "!, Naamini unaweza kufanya vizuri zaidi ya " .
                                 $this->score . "/" . $this->data->count() .
-                                ". Kila la heri! 👊 /n";
+                                " ulizopata, Kila la heri! 👊 \n";
                         }
                         
                         //$this->bot->typesAndWaits(2);
