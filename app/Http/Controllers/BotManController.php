@@ -6,6 +6,7 @@ use App\Member;
 use App\Conversation;
 use BotMan\BotMan\BotMan;
 use App\Http\Conversations\QuizConversation;
+use App\Http\Conversations\SmsQuizConversation;
 use App\Http\Conversations\FeedbackConversation;
 
 class BotManController extends Controller
