@@ -35,7 +35,11 @@ class BotManController extends Controller
      */
     public function quizConversation(BotMan $bot)
     {
-        $bot->startConversation(new QuizConversation());
+        if($bot->getDriver()->getName() === 'Web'){
+            $bot->startConversation(new SmsQuizConversation());
+        }else{
+            $bot->startConversation(new QuizConversation());
+        }
 
         $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
 
