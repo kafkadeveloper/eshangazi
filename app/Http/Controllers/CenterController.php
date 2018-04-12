@@ -199,26 +199,6 @@ class CenterController extends Controller
 
             $bot->typesAndWaits(1);
             $bot->reply($this->centers($centers));
-
-            /*$user = $bot->getUser();
-
-            $member = Member::where('user_platform_id', '=', $user->getId())->first();
-
-            $district = District::with('centers')->find($member->district_id);            
-            
-            $bot->typesAndWaits(1);
-
-            if(! $district->centers->isEmpty())
-            {
-                $bot->reply($this->centers($district->centers));
-            }
-            else
-            {
-                $centers = Center::inRandomOrder()->take(5)->get();
-
-                $bot->typesAndWaits(1);
-                $bot->reply($this->centers($centers));
-            } */
         }
 
         $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();

@@ -14,6 +14,7 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/test', 'ItemCategoryController@test');
 Route::match(['get', 'post'], '/botman', 'BotManController@handle');
 Route::get('/botman/tinker', 'BotManController@tinker');
@@ -183,3 +184,7 @@ Route::get('/platforms/{platform}/edit', 'PlatformController@edit')->name('edit-
 Route::patch('/platforms/{platform}', 'PlatformController@update')->name('update-platform');
 Route::post('/platforms', 'PlatformController@store')->name('store-platform');
 Route::delete('/platforms/{platform}', 'PlatformController@destroy')->name('delete-platform');
+
+Route::get('/privacy-policy', function () {
+    return view('privacy');
+});
