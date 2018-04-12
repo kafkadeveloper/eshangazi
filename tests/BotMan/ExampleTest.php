@@ -15,7 +15,7 @@ class ExampleTest extends TestCase
     public function testBasicTest()
     {
         $this->bot
-            ->receives('This is a default test')
-            ->assertReply('Hello yourself.');
+            ->receives('Only for testing')
+            ->assertReply('Hello I head, Only for testing.');
     }
 }
