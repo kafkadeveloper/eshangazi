@@ -122,7 +122,7 @@ class SmsQuizConversation extends Conversation
                         
                         //$this->bot->typesAndWaits(2);
 
-                        $question_conf = BotManQuestion::create($sms . ", Je, ungependa kucheza awamu nyingine?")
+                        $question_conf = BotManQuestion::create($sms . "Je, ungependa kucheza awamu nyingine?")
                             ->fallback("Unable to ask for repeat confirmantion")
                             ->callbackId("ask_for_repeat")
                             ->addButtons([
