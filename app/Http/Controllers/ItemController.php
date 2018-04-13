@@ -133,10 +133,10 @@ class ItemController extends Controller
 
         if ($request->hasFile('thumbnail'))
         {
+            if(Storage::disk('s3')->exists($item->thumbnail)) Storage::disk('s3')->delete($item->thumbnail);
+            
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/item-thumbnails', $request->file('thumbnail'), 'public');
-
-            $this->destroy($item);
         }
 
         $item->update([
