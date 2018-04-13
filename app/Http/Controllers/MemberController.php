@@ -214,7 +214,7 @@ class MemberController extends Controller
         if($driver === 'Facebook')
         {
             $features = GenericTemplate::create()
-	                    ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
+	                    ->addImageAspectRatio(GenericTemplate::RATIO_SQUARE);
             foreach ($categories as $category){
                 $features->addElements([
                     Element::create($category->name)
