@@ -117,6 +117,9 @@ class ItemCategoryController extends Controller
         $thumbnail_path = null;
 
         if ($request->hasFile('thumbnail')) {
+            
+            if(Storage::disk('s3')->exists($item_category->thumbnail)) Storage::disk('s3')->delete($item_category->thumbnail);
+            
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/item-category-thumbnails', $request->file('thumbnail'), 'public');
         }
