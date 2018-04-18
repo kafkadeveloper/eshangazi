@@ -144,6 +144,8 @@ class QuizConversation extends Conversation
                             {
                                 $this->say("Asante ".$this->bot->getUser()->getFirstName() .
                                     "!, karibu ujaribu kucheza tena muda wowote.. 👋");
+                                $this->bot->typesAndWaits(2);
+                                $this->bot->reply($this->customFeatures($this->bot->getUser()));
                             }
                         });
                     }
@@ -172,6 +174,8 @@ class QuizConversation extends Conversation
                             $this->say("Ooh pole 🙇‍ " .
                                 $this->bot->getUser()->getFirstName() .
                                 "!, karibu ujaribu kucheza tena muda wowote.. 👋");
+                            $this->bot->typesAndWaits(2);
+                            $this->bot->reply($this->customFeatures($this->bot->getUser()));
                         }
                     });
                 }
@@ -179,6 +183,8 @@ class QuizConversation extends Conversation
 
         }else{
             $this->say('Hakua maswali kwa sasa, rudi baadae...');
+            $this->bot->typesAndWaits(2);
+            $this->bot->reply($this->customFeatures($this->bot->getUser()));
         }
     }
 
@@ -190,5 +196,26 @@ class QuizConversation extends Conversation
     public function run()
     {
         $this->startConv();
+    }
+
+            /**
+     * Show a list of other items.
+     *
+     * @param $bot->getUser()
+     *
+     * @return string
+     */
+    public function customFeatures($user)
+    {
+        $features = BotManQuestion::create($user->getFirstName().' pia unaweza angalia vitu hivi!')
+            ->fallback('Kumradhi, sijaweza kuuliza')
+            ->callbackId('item')
+            ->addButtons([
+                Button::create('🏡 Vituo vya huduma')->value('Vituo vya huduma'),
+                Button::create('🎮 Cheza gemu')->value('Maswali na majibu'),
+                Button::create('🔁 Rudi mwanzo')->value('features')
+            ]);
+
+        return $features;
     }
 }
