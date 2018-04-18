@@ -161,7 +161,6 @@ class ItemCategoryController extends Controller
     {
         $extras = $bot->getMessage()->getExtras();
         $driver = $bot->getDriver()->getName();
-
         $name = $extras['apiParameters'][env('APP_ACTION') . '-item-categories'];
 
         $category = ItemCategory::where('name', '=', $name)->first();

@@ -303,4 +303,27 @@ class MemberController extends Controller
 
         return null;
     }
+
+    /**
+     * Show list of all features
+     * 
+     * @param BotMan $bot
+     */
+    public function showFeatures(BotMan $bot)
+    {
+        $user = $bot->getUser();
+        $driver = $bot->getDriver()->getName();
+        $extras = $bot->getMessage()->getExtras();
+
+        $apiReply = $extras['apiReply'];
+        if($driver == 'Web'){
+            $bot->reply($this->features($apiReply, $driver));
+        }else{
+            $bot->typesAndWaits(1);
+            $bot->reply($user->getFirstName().' '.$apiReply);
+            $bot->typesAndWaits(2);
+            $bot->reply($this->features($apiReply, $driver));
+        }
+    }
+
 }

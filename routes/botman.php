@@ -48,6 +48,7 @@ $botman->hears(env('APP_ACTION') . '.greetings.bye', BotManController::class.'@l
 $botman->hears(env('APP_ACTION') . '.started', MemberController::class.'@started')->middleware($dialogflow);
 $botman->hears(env('APP_ACTION') . '.started.yes', MemberController::class.'@store')->middleware($dialogflow);
 $botman->hears(env('APP_ACTION') . '.started.no', MemberController::class.'@reject')->middleware($dialogflow);
+$botman->hears(env('APP_ACTION') . '.features', MemberController::class.'@showFeatures')->middleware($dialogflow);
 
 $botman->hears(env('APP_ACTION') . '.item.categories', ItemCategoryController::class.'@showBotMan')->middleware($dialogflow);
 $botman->hears(env('APP_ACTION') . '.items', ItemController::class.'@showBotMan')->middleware($dialogflow);
