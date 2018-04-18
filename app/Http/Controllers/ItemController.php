@@ -198,6 +198,7 @@ class ItemController extends Controller
             $attachment = new Image(env('AWS_URL') . '/' . $item->thumbnail);
             $message = OutgoingMessage::create($item->description)->withAttachment($attachment);
             if($item->items->isEmpty()){
+                $bot->reply($message);
                 $bot->reply($item->description);
             }else{
                 if ($driver == 'Facebook'){
