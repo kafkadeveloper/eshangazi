@@ -40,6 +40,8 @@ class BotManController extends Controller
             $bot->startConversation(new SmsQuizConversation());
         }else{
             $bot->startConversation(new QuizConversation());
+            $bot->typesAndWaits(2);
+            $bot->reply($this->customFeatures($bot->getUser()));
         }
 
         $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
@@ -81,5 +83,26 @@ class BotManController extends Controller
         $bot->typesAndWaits(1);   
         
         $bot->reply(nl2br($apiReply));
+    }
+
+        /**
+     * Show a list of other items.
+     *
+     * @param $bot->getUser()
+     *
+     * @return string
+     */
+    public function customFeatures($user)
+    {
+        $features = Question::create($user->getFirstName().' pia unaweza angalia vitu hivi!')
+            ->fallback('Kumradhi, sijaweza kuuliza')
+            ->callbackId('item')
+            ->addButtons([
+                Button::create('🏡 Vituo vya huduma')->value('Vituo vya huduma'),
+                Button::create('🎮 Cheza gemu')->value('Maswali na majibu'),
+                Button::create('🔁 Rudi mwanzo')->value('features')
+            ]);
+
+        return $features;
     }
 }
