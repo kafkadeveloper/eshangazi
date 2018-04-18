@@ -6,8 +6,10 @@ use App\Member;
 use App\Conversation;
 use BotMan\BotMan\BotMan;
 use App\Http\Conversations\QuizConversation;
+use BotMan\BotMan\Messages\Outgoing\Question;
 use App\Http\Conversations\SmsQuizConversation;
 use App\Http\Conversations\FeedbackConversation;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
 class BotManController extends Controller
 {
