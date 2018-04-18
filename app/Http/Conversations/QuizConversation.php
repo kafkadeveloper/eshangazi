@@ -214,7 +214,6 @@ class QuizConversation extends Conversation
             ->callbackId('item')
             ->addButtons([
                 Button::create('🏡 Vituo vya huduma')->value('Vituo vya huduma'),
-                Button::create('🎮 Cheza gemu')->value('Maswali na majibu'),
                 Button::create('🔁 Rudi mwanzo')->value('features')
             ]);
 
