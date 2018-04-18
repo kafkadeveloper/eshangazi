@@ -34,6 +34,8 @@ class QuizConversation extends Conversation
             }else{
                 $this->say("Asante ".$this->bot->getUser()->getFirstName() .
                                     "!, karibu ujaribu kucheza muda wowote.. 👋");
+                $this->bot->typesAndWaits(2);
+                $this->bot->reply($this->customFeatures($this->bot->getUser()));
             }
         });
     }
