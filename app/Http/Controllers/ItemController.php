@@ -184,6 +184,7 @@ class ItemController extends Controller
     {
         $extras = $bot->getMessage()->getExtras();
         $driver = $bot->getDriver()->getName();
+        $user = $bot->getUser();
 
         $title = $extras['apiParameters'][env('APP_ACTION') . '-items'];
 
@@ -204,6 +205,8 @@ class ItemController extends Controller
                     $bot->reply($message);
                     $bot->typesAndWaits(2);
                     $bot->reply($item->description);
+                    $bot->typesAndWaits(2);
+                    $bot->reply($this->customFeatures($user));
                 }
             }else{
                 if ($driver == 'Facebook'){
@@ -327,6 +330,26 @@ class ItemController extends Controller
                 Button::create($itemm->display_title)->value($itemm->title)
             ]);
         }
+
+        return $features;
+    }
+
+    /**
+     * Show a list of other items.
+     *
+     * @param $bot->getUser()
+     *
+     * @return string
+     */
+    public function customFeatures($user)
+    {
+        $features = Question::create($user->getFirstName().' pia unaweza angalia vitu hivi!')
+            ->fallback('Kumradhi, sijaweza kuuliza')
+            ->callbackId('item')
+            ->addButtons([
+                Button::create('🏡 Vituo vya huduma')->value('Vituo vya huduma'),
+                Button::create('🎮 Cheza gemu')->value('Maswali na majibu')
+            ]);
 
         return $features;
     }
