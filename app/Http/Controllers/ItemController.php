@@ -10,6 +10,8 @@ use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
+use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\Drivers\Facebook\Extensions\Element;
@@ -193,17 +195,20 @@ class ItemController extends Controller
         $bot->typesAndWaits(1);
         if($item)
         {
+            $attachment = new Image(env('AWS_URL') . '/' . $item->thumbnail);
+            $message = OutgoingMessage::create($item->description)->withAttachment($attachment);
             if($item->items->isEmpty()){
                 $bot->reply($item->description);
             }else{
-                if ($driver == 'Facebook')
+                if ($driver == 'Facebook'){
+                    $bot->reply($message);
+                    $bot->typesAndWaits(2);
                     $bot->reply($this->toFacebook($item));
-                elseif ($driver == 'Slack' || $driver == 'Telegram')
+                }
+                elseif ($driver == 'Slack' || $driver == 'Telegram'){
                     $bot->reply($this->toSlackTelegram($item));
+                }
                 else {
-                    //$bot->reply($item->description);
-                    // $bot->reply("Unaweza jibu mojawapo kuendelea \n"
-                    //     . $this->toWeb($item));
                     $bot->reply($this->toWebb($item));
                 }
             }
