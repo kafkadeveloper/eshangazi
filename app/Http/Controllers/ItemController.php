@@ -348,6 +348,7 @@ class ItemController extends Controller
             ->callbackId('item')
             ->addButtons([
                 Button::create('🏡 Vituo vya huduma')->value('Vituo vya huduma'),
+                Button::create('💁 Wataalamu / msaada')->value('Wataalamu wanaohusika kutoa msaada'),
                 Button::create('🎮 Cheza gemu')->value('Maswali na majibu'),
                 Button::create('🔁 Rudi mwanzo')->value('features')
             ]);
