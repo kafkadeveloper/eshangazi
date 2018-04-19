@@ -34,6 +34,11 @@
                     {{$item->created_at->toFormattedDateString()}}
                 </small>
             </p>
+            <p class="card-text">
+                <a href="{{ route('edit-item', $item) }}" class="btn btn-sm btn-outline-secondary">
+                    Edit Info
+                </a>
+            </p>
         </section>
 
         <section class="relation">
