@@ -172,7 +172,8 @@ class PartnerController extends Controller
         // }
             
 
-        $bot->reply($this->partners($partners));
+        //$bot->reply($this->partners($partners));
+        $bot->reply('Nitakupatia taarifa za wataalamu wetu.');
 
         //$this->getNearExperts($bot, $partners, $user, $member);
     }
