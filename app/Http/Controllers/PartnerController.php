@@ -165,14 +165,14 @@ class PartnerController extends Controller
 
         $partners = Partner::where('partner_category_id', 1)->take(5)->get();
 
-        foreach($partners as $partner)
-        {
-            $bot->typesAndWaits(1);
-            $bot->reply($partner->id);
-        }
+        // foreach($partners as $partner)
+        // {
+        //     $bot->typesAndWaits(1);
+        //     $bot->reply($partner->id);
+        // }
             
 
-        //$bot->reply($this->partners($partners));
+        $bot->reply($this->partners($partners));
 
         //$this->getNearExperts($bot, $partners, $user, $member);
     }
