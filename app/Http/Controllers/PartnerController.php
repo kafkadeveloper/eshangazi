@@ -173,7 +173,6 @@ class PartnerController extends Controller
             
 
         $bot->reply($this->partners($partners));
-        $bot->reply('Nitakupatia taarifa za wataalamu wetu.');
 
         //$this->getNearExperts($bot, $partners, $user, $member);
     }
@@ -245,7 +244,7 @@ class PartnerController extends Controller
                     ->subtitle($partner->bio)
                     ->image($url)
                     ->addButton(ElementButton::create('Piga simu')
-                        ->payload($partner->phone)->type('phone_number'))
+                        ->payload($partner->phone)->type('postback'))
             ]);
         }
 
