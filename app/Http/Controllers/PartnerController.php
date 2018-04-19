@@ -245,7 +245,7 @@ class PartnerController extends Controller
                     ->subtitle($partner->bio)
                     ->image($url)
                     ->addButton(ElementButton::create('Piga simu')
-                        ->payload($partner->phone)->type('postback'))
+                        ->payload($partner->phone)->type('phone_number'))
             ]);
         }
 
