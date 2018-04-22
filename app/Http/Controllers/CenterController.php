@@ -240,7 +240,7 @@ class CenterController extends Controller
                     ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($center->name)->type('postback'),
                         ElementButton::create('Piga Simu')
-                            ->payload($center->name)->type('phone_number'))
+                            ->payload($center->phone)->type('phone_number'))
             ]);
         } 
 
