@@ -23,8 +23,6 @@ class FeedbackConversation extends Conversation
 
             $this->feedback = $answer->getText();
 
-            $this->say($this->feedback);
-
             if($this->member)
             {
                 Feedback::create([
@@ -34,7 +32,7 @@ class FeedbackConversation extends Conversation
 
                 $this->bot->typesAndWaits(1);
 
-                $this->say($this->bot->getUser()->getFirstName() . 'Asante kwa maoni yako, tutayafanyia kazi ');
+                $this->say($this->bot->getUser()->getFirstName() . ', asante kwa maoni yako, tutayafanyia kazi.');
             }
         });
     }
@@ -46,14 +44,6 @@ class FeedbackConversation extends Conversation
      */
     public function run()
     {
-        $extras = $this->bot->getMessage()->getExtras();
-
-        $apiReply = $extras['apiReply'];
-
-        $this->bot->typesAndWaits(1);
-
-        $this->bot->reply($apiReply);
-
         $this->askFeedback();
     }
 }

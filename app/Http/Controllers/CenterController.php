@@ -190,7 +190,7 @@ class CenterController extends Controller
             $center = Center::with('services')->where('name', '=', $name)->first();
 
             $bot->typesAndWaits(1);
-            $bot->reply($center->name);
+            $bot->reply($center->description);
         } 
         else
         {
@@ -238,7 +238,9 @@ class CenterController extends Controller
                     ->subtitle($center->description)
                     ->image($url)
                     ->addButton(ElementButton::create('Fahamu zaidi')
-                        ->payload($center->name)->type('postback'))
+                        ->payload($center->name)->type('postback'),
+                        ElementButton::create('Piga Simu')
+                            ->payload($center->name)->type('phone_number'))
             ]);
         } 
 

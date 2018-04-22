@@ -89,7 +89,7 @@ return [
                         [
                             'title'     => 'Vituo vya Huduma',
                             'type'      => 'postback',
-                            'payload'   => 'TEENAGE_PREGNANCY',
+                            'payload'   => 'CENTERS',
                         ],
                     ],
                 ],
@@ -97,11 +97,36 @@ return [
                     'title'     => 'Maswali na Majibu',
                     'type'      => 'postback',
                     'payload'   => 'QUESTIONS_ANSWERS',
+                    'type'  => 'nested',
+                    'call_to_actions' => [
+                        [
+                            'title'     => 'Msaada',
+                            'type'      => 'postback',
+                            'payload'   => 'REFERRALS',
+                        ],
+                        [
+                            'title'     => 'Vituo vya Huduma',
+                            'type'      => 'postback',
+                            'payload'   => 'CENTERS',
+                        ],
+                    ],
                 ],
                 [
                     'title'     => 'Maoni',
                     'type'      => 'postback',
-                    'payload'   => 'FEEDBACK',
+                    'type'  => 'nested',
+                    'call_to_actions' => [
+                        [
+                            'title'     => 'Vituo',
+                            'type'      => 'postback',
+                            'payload'   => 'CENTERS',
+                        ],
+                        [
+                            'title'     => 'Msaada',
+                            'type'      => 'postback',
+                            'payload'   => 'FEEDBACK',
+                        ],
+                    ],
                 ],
             ],
         ],
