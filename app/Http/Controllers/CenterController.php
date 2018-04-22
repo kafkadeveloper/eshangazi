@@ -238,8 +238,8 @@ class CenterController extends Controller
                     ->subtitle($center->description)
                     ->image($url)
                     ->addButton(ElementButton::create('Fahamu zaidi')
-                        ->payload($center->name)->type('postback'),
-                        ElementButton::create('Piga Simu')
+                        ->payload($center->name)->type('postback'))
+                    ->addButton(ElementButton::create('Piga Simu')
                             ->payload($center->phone)->type('phone_number'))
             ]);
         } 
