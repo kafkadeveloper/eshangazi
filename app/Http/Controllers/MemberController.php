@@ -50,7 +50,6 @@ class MemberController extends Controller
             if ($incomplete) {
                 $bot->reply($apiReply);
             } else {
-                $bot->reply(print_r($extras, true));
                 $this->subscribe($user, $extras, $driver);
 
                 if($driver === 'Facebook') $bot->reply($apiReply);
@@ -142,9 +141,9 @@ class MemberController extends Controller
      */
     public function subscribe($user, $extras, $driver)
     {
-        $age = $extras['apiParameters']['age']->amount;
-        $district = $extras['apiParameters']['district'];
-        $born_year = date('Y') - $age;
+        $age = isset($extras['apiParameters']['age']->amount) ? $extras['apiParameters']['age']->amount : null;
+        $district = isset($extras['apiParameters']['district']) ? $extras['apiParameters']['district'] : null;
+        $born_year = $age != null ? date('Y') - $age : null;
         $platform_id = $this->getPlatformId($driver);
         $profile_pic = $this->getUserProfilePic($user, $driver);
         $gender = $this->getUserGender($user, $driver);
