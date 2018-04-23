@@ -48,6 +48,7 @@ class MemberController extends Controller
             $incomplete = $extras['apiActionIncomplete'];
 
             if ($incomplete) {
+                $bot->reply('Age is: '.$extras['apiParameters']['age']->amount);
                 $bot->reply($apiReply);
             } else {
                 $bot->reply('Age is: '.$extras['apiParameters']['age']->amount);
