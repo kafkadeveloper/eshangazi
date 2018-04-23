@@ -78,53 +78,55 @@ return [
             'locale' => 'default',
             'call_to_actions' => [
                 [
-                    'title' => 'Msaada Zaidi',
+                    'title' => 'Kuhusu',
                     'type'  => 'nested',
                     'call_to_actions' => [
                         [
-                            'title'     => 'Msaada',
+                            'title'     => 'Ndoa za Utotoni',
                             'type'      => 'postback',
-                            'payload'   => 'REFERRALS',
+                            'payload'   => 'FEATURE_ONE_PAYLOAD',
                         ],
                         [
-                            'title'     => 'Vituo vya Huduma',
+                            'title'     => 'Ukatili kwa Mwenza',
                             'type'      => 'postback',
-                            'payload'   => 'CENTERS',
+                            'payload'   => 'FEATURE_TWO_PAYLOAD',
+                        ],
+                        [
+                            'title'     => 'Ukeketaji au Tohara',
+                            'type'      => 'postback',
+                            'payload'   => 'FEATURE_THREE_PAYLOAD',
                         ],
                     ],
                 ],
                 [
-                    'title'     => 'Maswali na Majibu',
-                    'type'      => 'postback',
-                    'payload'   => 'QUESTIONS_ANSWERS',
+                    'title'     => 'Wataalam na Msaada',
                     'type'  => 'nested',
                     'call_to_actions' => [
                         [
-                            'title'     => 'Msaada',
+                            'title'     => 'Wataalam',
                             'type'      => 'postback',
-                            'payload'   => 'REFERRALS',
+                            'payload'   => 'REFERRALS_PAYLOAD',
                         ],
                         [
                             'title'     => 'Vituo vya Huduma',
                             'type'      => 'postback',
-                            'payload'   => 'CENTERS',
+                            'payload'   => 'CENTERS_PAYLOAD',
                         ],
                     ],
                 ],
                 [
-                    'title'     => 'Maoni',
-                    'type'      => 'postback',
+                    'title'     => 'Michezo na Maoni',
                     'type'  => 'nested',
                     'call_to_actions' => [
                         [
-                            'title'     => 'Vituo',
+                            'title'     => 'Mchezo wa Maswali',
                             'type'      => 'postback',
-                            'payload'   => 'CENTERS',
+                            'payload'   => 'QUESTION_ANSWERS_PAYLOAD',
                         ],
                         [
-                            'title'     => 'Msaada',
+                            'title'     => 'Maoni Yako',
                             'type'      => 'postback',
-                            'payload'   => 'FEEDBACK',
+                            'payload'   => 'FEEDBACK_PAYLOAD',
                         ],
                     ],
                 ],
