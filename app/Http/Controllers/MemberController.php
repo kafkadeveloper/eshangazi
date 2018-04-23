@@ -75,7 +75,7 @@ class MemberController extends Controller
 
         $apiReply = $extras['apiReply'];
 
-        $this->subscribe($user, $extras, $driver);
+        //$this->subscribe($user, $extras, $driver);
         $bot->typesAndWaits(1);
         $bot->reply($apiReply);
         $bot->reply($this->features($apiReply, $driver));
