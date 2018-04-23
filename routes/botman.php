@@ -40,7 +40,7 @@ $dialogflow = Dialogflow::create(env('DIALOGFLOW_KEY'))->listenForAction();
 $botman->middleware->received($dialogflow);
 
 $botman->hears(env('APP_ACTION') . '.questions', BotManController::class.'@quizConversation')->middleware($dialogflow);
-//$botman->hears(env('APP_ACTION') . '.fallback', BotManController::class.'@listener')->middleware($dialogflow);
+$botman->hears(env('APP_ACTION') . '.fallback', BotManController::class.'@listener')->middleware($dialogflow);
 $botman->hears(env('APP_ACTION') . '.help', BotManController::class.'@listener')->middleware($dialogflow);
 $botman->hears(env('APP_ACTION') . '.greetings.hello', BotManController::class.'@listener')->middleware($dialogflow);
 $botman->hears(env('APP_ACTION') . '.greetings.how_are_you', BotManController::class.'@listener')->middleware($dialogflow);
