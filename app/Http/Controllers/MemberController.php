@@ -149,6 +149,11 @@ class MemberController extends Controller
         $gender = $this->getUserGender($user, $driver);
 
         $district = District::where('name', '=', $district)->first();
+        if($district) {
+            $district_id = $district->id;
+        }else{
+            $district_id = null;
+        }
 
         $member = Member::create([
             'user_platform_id' => $user->getId(),
@@ -157,7 +162,7 @@ class MemberController extends Controller
             'born_year' => $born_year,
             'gender' => $gender,
             'platform_id' => $platform_id,
-            'district_id' => $district->id,
+            'district_id' => $district_id,
         ]);
 
         if ($member) {
