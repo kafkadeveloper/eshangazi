@@ -107,15 +107,15 @@
                             Choose gender...
                         </option>
 
-                        <option value="male" {{ $item->gender == "male" ? "selected":"" }}>
+                        <option value="male" {{ $item->gender == "male" ? "selected" : "" }}>
                             Male
                         </option>
 
-                        <option value="female" {{ $item->gender == "female" ? "selected":"" }}>
+                        <option value="female" {{ $item->gender == "female" ? "selected" : "" }}>
                             Female
                         </option>
 
-                        <option value="both" {{ $item->gender == "both" ? "selected":"" }}>
+                        <option value="both" {{ $item->gender == "both" ? "selected" : "" }}>
                             Both
                         </option>
                     </select>
