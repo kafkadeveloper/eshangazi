@@ -44,7 +44,7 @@ class MemberController extends Controller
 
         $bot->typesAndWaits(1);
 
-        if (!$this->check($user)) {
+        if (! $this->check($user)) {
             $incomplete = $extras['apiActionIncomplete'];
 
             if ($incomplete) {
@@ -52,8 +52,8 @@ class MemberController extends Controller
             } else {
                 $this->subscribe($user, $extras, $driver);
 
-                if($driver === 'Facebook') $bot->reply($apiReply);
-                $bot->reply($this->features($apiReply, $driver));
+                if ($driver === 'Facebook') $bot->reply($apiReply);
+                    $bot->reply($this->features($apiReply, $driver));
             }
         } else {
             $bot->reply($this->features($apiReply, $driver));
@@ -109,21 +109,23 @@ class MemberController extends Controller
         $apiReply = $extras['apiReply'];
 
         $bot->typesAndWaits(1);
-        if($driver === 'Web'){
-            $bot->reply($this->features($apiReply, $driver));
-        }else{
 
-            if ($this->check($user)){
-                $bot->reply('Karibu tena '.$user->getFirstName());
+        if ($driver === 'Web') {
+            $bot->reply($this->features($apiReply, $driver));
+        } else {
+
+            if ($this->check($user)) {
+                $bot->reply('Karibu tena ' . $user->getFirstName());
                 $bot->reply($this->features($apiReply, $driver));
-            } else{
-                $Question = Question::create('Ili niweze kukuhudumia kwa ufasaha, ningependa kukuuliza maswali mawili !')
+            } else {
+                $Question = Question::create('Ili niweze kukuhudumia kwa ufasaha, ningependa kukuuliza maswali mawili!')
                     ->fallback('Unable to ask question')
                     ->callbackId('confirm_subscribe')
                     ->addButtons([
                         Button::create('Sawa niulize')->value('sawa'),
                         Button::create('Baadae')->value('hapana')
                     ]);
+
                 $bot->reply($apiReply);
                 $bot->reply($Question);
             }
@@ -141,7 +143,7 @@ class MemberController extends Controller
      */
     public function subscribe($user, $extras, $driver)
     {
-        $age = $extras['apiParameters']['age']->amount;
+        $age = $extras['apiParameters']['age'];
         $district = $extras['apiParameters']['district'];
         $born_year = date('Y') - $age;
         $platform_id = $this->getPlatformId($driver);
@@ -211,11 +213,10 @@ class MemberController extends Controller
     {
         $categories = ItemCategory::inRandomOrder()->take(5)->get();
 
-        if($driver === 'Facebook')
-        {
+        if ($driver === 'Facebook') {
             $features = GenericTemplate::create()
-	                    ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
-            foreach ($categories as $category){
+                ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
+            foreach ($categories as $category) {
                 $features->addElements([
                     Element::create($category->name)
                         ->subtitle($category->description)
@@ -227,7 +228,7 @@ class MemberController extends Controller
 
             return $features;
 
-        }else{
+        } else {
             $features = Question::create($reply)
                 ->fallback('Unable to show  features')
                 ->callbackId('features_list');
@@ -306,7 +307,7 @@ class MemberController extends Controller
 
     /**
      * Show list of all features
-     * 
+     *
      * @param BotMan $bot
      */
     public function showFeatures(BotMan $bot)
@@ -316,11 +317,11 @@ class MemberController extends Controller
         $extras = $bot->getMessage()->getExtras();
 
         $apiReply = $extras['apiReply'];
-        if($driver == 'Web'){
+        if ($driver == 'Web') {
             $bot->reply($this->features($apiReply, $driver));
-        }else{
+        } else {
             $bot->typesAndWaits(1);
-            $bot->reply($user->getFirstName().' '.$apiReply);
+            $bot->reply($user->getFirstName() . ' ' . $apiReply);
             $bot->typesAndWaits(2);
             $bot->reply($this->features($apiReply, $driver));
         }
