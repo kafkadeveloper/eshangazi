@@ -17,23 +17,9 @@ use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
 $botman = resolve('botman');
 
-// $botman->hears('Only for testing', function (BotMan $bot) {
-//     $bot->reply('Hello I head, Only for testing.');
-// });
-
-
-// $botman->hears('Majaridio ya content', function (BotMan $bot) {
-//     $majaribio = Question::create('Ujumbe wa majaribio')
-//                     ->fallback('Unable to create a new test')
-//                     ->callbackId('majaribio');
-
-//     $majaribio->addButtons([
-//         Button::create('This is a default test')->value('Only for testing'),
-//         Button::create('Uzazi wa mpango')->value("Uzazi wa mpango")
-//     ]);
-
-//     $bot->reply($majaribio);
-// });
+$botman->hears('Only for testing', function (BotMan $bot) {
+    $bot->reply('Hello I head, Only for testing.');
+});
 
 $dialogflow = Dialogflow::create(env('DIALOGFLOW_KEY'))->listenForAction();
 
