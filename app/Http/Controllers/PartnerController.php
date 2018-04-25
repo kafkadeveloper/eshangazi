@@ -245,7 +245,7 @@ class PartnerController extends Controller
                     ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($partner->name)->type('postback'))
                     ->addButton(ElementButton::create('Piga simu')
-                        ->payload($partner->phone)->type('phone_number'))
+                        ->payload('+255 658040')->type('phone_number'))
             ]);
         }
 
