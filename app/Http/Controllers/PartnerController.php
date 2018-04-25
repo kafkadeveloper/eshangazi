@@ -237,7 +237,6 @@ class PartnerController extends Controller
                 $url = env('AWS_URL') . '/' . $partner->thumbnail;
             else
                 $url = env('APP_URL') . '/img/logo.jpg';
-            $number ='+255654958040';
             $template_list->addElements([
                 Element::create($partner->name)
                     ->subtitle($partner->bio)
@@ -245,7 +244,7 @@ class PartnerController extends Controller
                     ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($partner->name)->type('postback'))
                     ->addButton(ElementButton::create('Piga simu')
-                        ->payload($number)->type('phone_number'))
+                        ->payload($partner->phone)->type('phone_number'))
             ]);
         }
 
