@@ -237,7 +237,7 @@ class PartnerController extends Controller
                 $url = env('AWS_URL') . '/' . $partner->thumbnail;
             else
                 $url = env('APP_URL') . '/img/logo.jpg';
-            $number ='0654958040';
+            $number ='+255654958040';
             $template_list->addElements([
                 Element::create($partner->name)
                     ->subtitle($partner->bio)
