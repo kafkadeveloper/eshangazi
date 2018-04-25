@@ -242,6 +242,8 @@ class PartnerController extends Controller
                 Element::create($partner->name)
                     ->subtitle($partner->bio)
                     ->image($url)
+                    ->addButton(ElementButton::create('Fahamu zaidi')
+                        ->payload($partner->name)->type('postback'))
                     ->addButton(ElementButton::create('Piga simu')
                         ->payload($partner->phone)->type('phone_number'))
             ]);
