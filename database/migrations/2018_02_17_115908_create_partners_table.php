@@ -20,7 +20,7 @@ class CreatePartnersTable extends Migration
             $table->text('bio');
             $table->string('phone');
             $table->string('email');
-            $table->string('address')->nullable();
+            $table->text('address')->nullable();
             
             $table->integer('partner_category_id')->unsigned();
             $table->integer('district_id')->unsigned();

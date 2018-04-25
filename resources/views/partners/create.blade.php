@@ -56,9 +56,7 @@
         <div class="form-group">
             <label for="bio">Bio</label>
 
-            <textarea id="bio" class="form-control{{ $errors->has('bio') ? ' is-invalid' : '' }}" name="bio" required>
-                {{ old('bio') }}
-            </textarea>
+            <textarea id="bio" class="form-control{{ $errors->has('bio') ? ' is-invalid' : '' }}" name="bio" required>{{ old('bio') }}</textarea>
             
             @if ($errors->has('bio'))
                 <span class="invalid-feedback">
@@ -114,8 +112,8 @@
             <div class="form-group col-md-6">
                 <label for="address">Address</label>
 
-                <input type="text" id="address" value="{{ old('address') }}" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" required>
-                    
+                <textarea id="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" required>{{ old('address') }}</textarea>             
+                
                 @if ($errors->has('address'))
                     <span class="invalid-feedback">
                         <strong>{{ $errors->first('address') }}</strong>

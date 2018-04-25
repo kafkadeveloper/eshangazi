@@ -20,7 +20,7 @@ class CreateCentersTable extends Migration
             $table->text('description');
             $table->string('thumbnail');
             $table->string('phone');
-            $table->string('address')->nullable();
+            $table->text('address')->nullable();
             $table->string('email')->nullable();
             $table->string('website')->nullable();
 

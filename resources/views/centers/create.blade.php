@@ -70,8 +70,8 @@
                     Address
                 </label>
 
-                <input id="address" name="address" type="text" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" 
-                    value="{{ old('address') }}" placeholder="Physical Address" required>
+                <textarea id="address" name="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" 
+                row="3" required>{{ old('address') }}</textarea>
 
                 @if ($errors->has('address'))
                     <span class="invalid-feedback">

@@ -112,7 +112,7 @@
             <div class="form-group col-md-6">
                 <label for="address">Address</label>
 
-                <input type="text" id="address" value="{{ $partner->address }}" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" required>
+                <textarea id="address" class="form-control{{ $errors->has('address') ? ' is-invalid' : '' }}" name="address" required>{{ $partner->address }}</textarea>
                     
                 @if ($errors->has('address'))
                     <span class="invalid-feedback">
