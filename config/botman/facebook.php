@@ -98,7 +98,7 @@ return [
                             'payload'   => 'FEATURE_TWO_PAYLOAD',
                         ],
                         [
-                            'title'     => str_replace("]","",$features[0]),
+                            'title'     => str_replace("]","",$features[2]),
                             'type'      => 'postback',
                             'payload'   => 'FEATURE_THREE_PAYLOAD',
                         ],
