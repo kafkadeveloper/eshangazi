@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Permission;
 use App\Role;
 use App\User;
@@ -17,6 +18,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::paginate(5);
+
         return view('users.index', ['users' => $users]);
     }
 
@@ -27,18 +29,33 @@ class UserController extends Controller
      */
     public function create()
     {
-        //
+        return view('users.create', ['roles' => Role::all()]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:6|confirmed',
+        ]);
+
+        $user = User::create([
+            'name'          => request('name'),
+            'email'         => request('email'),
+            'password'      => bcrypt(request('password'))
+        ]);
+
+        $role = $request->input('role');
+        $user->attachRole($role);
+
+        return redirect()->route('index-user');
     }
 
     /**
@@ -61,17 +78,24 @@ class UserController extends Controller
     public function edit(User $user)
     {
         $roles = Role::all();
-        $permissions_ids = array();
+
         $roles_ids = $user->roles->pluck('id')->toArray();
         $permissions_ids = $user->permissions->pluck('id')->toArray();
+
         $permissions = Permission::all();
-        return view('users.edit', ['user'=> $user, 'roles' => $roles, 'permissions' => $permissions, 'permissions_ids' => $permissions_ids, 'roles_ids' => $roles_ids]);
+
+        return view('users.edit', ['user' => $user,
+            'roles' => $roles,
+            'permissions' => $permissions,
+            'permissions_ids' => $permissions_ids,
+            'roles_ids' => $roles_ids
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @param  User $user
      * @return \Illuminate\Http\Response
      */
@@ -81,26 +105,18 @@ class UserController extends Controller
             'name' => $request->name,
             'email' => $request->email,
         ]);
-        //getting the ids for the new roles to be assigned
+
         $role_ids = $request->get('roles_ids');
-        if($role_ids) {
-            foreach($user->roles as $role){
+
+        if ($role_ids) {
+            foreach ($user->roles as $role) {
                 $user->detachRole($role);
             }
-            foreach($role_ids as $role){
+
+            foreach ($role_ids as $role) {
                 $user->attachRole($role);
             }
         }
-
-//        $permission_ids = $request->get('permissions_ids');
-//        if($permission_ids){
-//            foreach($user->permissions as $permission){
-//                $user->detachPermission($permission);
-//            }
-//            foreach($permission_ids as $permission){
-//                $user->attachPermission($permission);
-//            }
-//        }
 
         return redirect()->route('index-user');
     }
@@ -108,7 +124,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

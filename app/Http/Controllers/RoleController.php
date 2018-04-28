@@ -15,7 +15,6 @@ class RoleController extends Controller
      */
     public function index()
     {
-        //
         $roles = Role::paginate(5);
         return view('roles.index', ['roles' => $roles]);
     }
@@ -27,7 +26,9 @@ class RoleController extends Controller
      */
     public function create()
     {
-        return view('roles.create');
+        return view('roles.create', [
+            'permissions' => Permission::all()
+        ]);
     }
 
     /**
@@ -43,6 +44,7 @@ class RoleController extends Controller
             'display_name' => $request->display_name,
             'description' => $request->description
         ]);
+
         return redirect()->route('index-role');
     }
 
@@ -67,7 +69,12 @@ class RoleController extends Controller
     {
         $permissions = Permission::all();
         $rolePermissions = $role->permissions->pluck('id')->toArray();
-        return view('roles.edit', ['role' => $role, 'permissions' => $permissions, 'rolePermissions'=>$rolePermissions]);
+
+        return view('roles.edit', [
+            'role' => $role,
+            'permissions' => $permissions,
+            'rolePermissions'=>$rolePermissions
+        ]);
     }
 
     /**
@@ -79,24 +86,27 @@ class RoleController extends Controller
      */
     public function update(Request $request, Role $role)
     {
-        if($role->permissions){
-            foreach($role->permissions as $permissionsAttached){
+        if($role->permissions) {
+            foreach($role->permissions as $permissionsAttached) {
                 $role->detachPermission($permissionsAttached);
             }
-            if($request->get('permissions_ids')){
-                foreach($request->get('permissions_ids') as $permissionsNew){
+
+            if($request->get('permissions_ids')) {
+                foreach($request->get('permissions_ids') as $permissionsNew) {
                     $role->attachPermission($permissionsNew);
                 }
             }
         }
+
         $role->update([
             'name' => $request->name,
             'display_name' => $request->display_name,
             'description' => $request->description
         ]);
-        
 
-        return redirect()->route('show-role', ['role' => $role->id]);
+        return redirect()->route('show-role', [
+            'role' => $role->id
+        ]);
     }
 
     /**
@@ -108,6 +118,7 @@ class RoleController extends Controller
     public function destroy(Role $role)
     {
         $role->delete();
+
         return redirect()->route('index-user');
     }
 }
