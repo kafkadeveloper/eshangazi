@@ -33,6 +33,8 @@
 
                         <th>Name</th>
 
+                        <th>Phone</th>
+
                         <th>Location</th>
 
                         <th class="text-center">Actions</th>
@@ -48,6 +50,10 @@
 
                             <td class="align-middle">
                                 {{ $center->name }}
+                            </td>
+
+                            <td class="align-middle">
+                                {{ $center->phone }}
                             </td>
 
                             <td class="align-middle">
