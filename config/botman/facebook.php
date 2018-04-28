@@ -1,5 +1,10 @@
 <?php
 
+
+$features = env('FEATURES');
+$features = explode(",",$features);
+$features = str_replace("'","",$features);
+
 return [
 
     /*
@@ -70,9 +75,10 @@ return [
     | Facebook Persistent Menu
     |--------------------------------------------------------------------------
     |
-    | Example items for your persistent Facebook menu.
+    | Items for your persistent Facebook menu.
     |
     */
+
     'persistent_menu' => [
         [
             'locale' => 'default',
@@ -82,17 +88,17 @@ return [
                     'type'  => 'nested',
                     'call_to_actions' => [
                         [
-                            'title'     => 'Ndoa za Utotoni',
+                            'title'     => str_replace("[","",$features[0]),
                             'type'      => 'postback',
                             'payload'   => 'FEATURE_ONE_PAYLOAD',
                         ],
                         [
-                            'title'     => 'Ukatili kwa Mwenza',
+                            'title'     => $features[1],
                             'type'      => 'postback',
                             'payload'   => 'FEATURE_TWO_PAYLOAD',
                         ],
                         [
-                            'title'     => 'Ukeketaji au Tohara',
+                            'title'     => str_replace("]","",$features[0]),
                             'type'      => 'postback',
                             'payload'   => 'FEATURE_THREE_PAYLOAD',
                         ],
