@@ -29,7 +29,9 @@ $botman->hears(env('APP_ACTION') . '.questions', BotManController::class.'@quizC
 $botman->hears(env('APP_ACTION') . '.help', BotManController::class.'@listener')->middleware($dialogflow);
 $botman->hears(env('APP_ACTION') . '.greetings.hello', BotManController::class.'@listener')->middleware($dialogflow);
 $botman->hears(env('APP_ACTION') . '.greetings.how_are_you', BotManController::class.'@listener')->middleware($dialogflow);
-$botman->hears(env('APP_ACTION') . '.greetings.bye', BotManController::class.'@listener')->middleware($dialogflow);
+$botman->hears(env('APP_ACTION') . '.greetings.shikamoo', BotManController::class.'@listener')->middleware($dialogflow);
+$botman->hears(env('APP_ACTION') . '.greetings.appraisal', BotManController::class.'@listener')->middleware($dialogflow);
+$botman->hears(env('APP_ACTION') . '.greetings.goodbye', BotManController::class.'@listener')->middleware($dialogflow);
 
 $botman->hears(env('APP_ACTION') . '.started', MemberController::class.'@started')->middleware($dialogflow);
 $botman->hears(env('APP_ACTION') . '.started.yes', MemberController::class.'@store')->middleware($dialogflow);

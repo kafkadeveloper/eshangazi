@@ -90,17 +90,17 @@ return [
                         [
                             'title'     => str_replace("[","",$features[0]),
                             'type'      => 'postback',
-                            'payload'   => 'FEATURE_ONE_PAYLOAD',
+                            'payload'   => 'Lengo Namba Moja',
                         ],
                         [
                             'title'     => $features[1],
                             'type'      => 'postback',
-                            'payload'   => 'FEATURE_TWO_PAYLOAD',
+                            'payload'   => 'Lengo Namba Mbili',
                         ],
                         [
                             'title'     => str_replace("]","",$features[2]),
                             'type'      => 'postback',
-                            'payload'   => 'FEATURE_THREE_PAYLOAD',
+                            'payload'   => 'Lengo Namba Tatu',
                         ],
                     ],
                 ],
