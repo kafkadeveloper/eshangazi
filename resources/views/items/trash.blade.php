@@ -40,7 +40,7 @@
 
             <th>Category</th>
 
-            <th class="text-center">Actions</th>
+            <th colspan="2" class="text-center">Actions</th>
           </tr>
         </thead>
 
@@ -69,11 +69,17 @@
                   {{ method_field('DELETE')}}
 
                     <div class="btn-group">
-                      <a href="{{ route('restore-item', $item) }}" class="btn btn-sm btn-outline-secondary">
-                        Restore
-                      </a>
-
                       <button type="submit" class="btn btn-sm btn-outline-secondary">Permanent Delete</button>
+                    </div>
+                </form>
+              </td>
+              <td class="text-center align-middle">
+                <form action="{{ route('restore-item', $item) }}" method="POST">
+                  {{ csrf_field() }}
+                  {{ method_field('PATCH')}}
+
+                    <div class="btn-group">
+                      <button type="submit" class="btn btn-sm btn-outline-secondary"> Restore </button>
                     </div>
                 </form>
               </td>
