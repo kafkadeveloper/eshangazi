@@ -174,12 +174,11 @@ class ItemController extends Controller
     /**
      * Show all deleted (Trashed) Items.
      *
-     * @return \Illuminate\Http\Response
      */
     public function trash()
     {
 
-        $items = DB::table('items')->whereNotNull('deleted_at')->paginate(10);
+        $items = Item::paginate(10);
 
         return view('items.trash', ['items' => $items ]);
     }
