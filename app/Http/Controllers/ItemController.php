@@ -191,7 +191,7 @@ class ItemController extends Controller
      */
     public function restoreTrashed(Item $item)
     {
-
+        return "are you sure!";
         $item->restore();
 
         return back();
