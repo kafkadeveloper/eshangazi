@@ -171,23 +171,15 @@ class ItemController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the deleted items.
      *
      * @return \Illuminate\Http\Response
      */
     public function indexDeleted()
     {
-        $items = Item::paginate(10);
+        $items = Item::onlyTrashed()->paginate(10);
 
-        return view('items.index', ['items' => $items ]);
-    }
-    
-    public function indexTrashed()
-    {
-        // $items = Item::paginate(10);
-
-        // return view('items.index', ['items' => $items ]);
-        return "Testing page";
+        return view('items.trash', ['items' => $items ]);
     }
 
     /**

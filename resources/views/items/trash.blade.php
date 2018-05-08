@@ -24,8 +24,8 @@
       Trash is empty, no trashed item.
     </p>
 
-    <a href="{{ route('create-item') }}" class="btn btn-primary">
-      Click here to add new Item 
+    <a href="{{ route('index-item') }}" class="btn btn-primary">
+      Go back to Items list 
     </a>       
   @else  
     <div class="table-responsive">
