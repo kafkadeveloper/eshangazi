@@ -172,9 +172,10 @@ class ItemController extends Controller
 
     public function indexTrashed()
     {
-        $items = Item::paginate(10);
+        // $items = Item::paginate(10);
 
-        return view('items.index', ['items' => $items ]);
+        // return view('items.index', ['items' => $items ]);
+        return "Testing page";
     }
 
     /**
