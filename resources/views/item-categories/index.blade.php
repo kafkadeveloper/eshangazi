@@ -12,7 +12,7 @@
         <a href="{{ route('create-item-category') }}" class="btn btn-sm btn-outline-secondary">
             New Category
         </a>
-        <a href="{{ route('trash-item-category') }}" class="btn btn-sm btn-outline-secondary">
+        <a href="{{ route('deleted-item-category') }}" class="btn btn-sm btn-outline-secondary">
             Trashed Categories
         </a>
       </div>

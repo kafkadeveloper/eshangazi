@@ -150,11 +150,11 @@ class ItemCategoryController extends Controller
     }
 
     /**
-     * Show all deleted (Trashed) Items.
+     * Display a listing of the deleted items.
      *
      * @return \Illuminate\Http\Response
      */
-    public function trash()
+    public function indexDeleted()
     {
 
         $item_categories = ItemCategory::onlyTrashed()->paginate(10);

@@ -37,14 +37,14 @@ Route::get('/feedback', 'FeedbackController@index')->name('index-feedback');
 Route::get('/conversations', 'ConversationController@index')->name('index-conversation');
 
 Route::get('/item-categories', 'ItemCategoryController@index')->name('index-item-category');
+Route::get('/item-categories/deleted', 'ItemCategoryController@indexDeleted')->name('deleted-item-category');
 Route::get('/item-categories/create', 'ItemCategoryController@create')->name('create-item-category');
 Route::post('/item-categories/store', 'ItemCategoryController@store')->name('store-item-category');
 Route::get('/item-categories/{item_category}/edit', 'ItemCategoryController@edit')->name('edit-item-category');
 Route::get('/item-categories/{item_category}', 'ItemCategoryController@show')->name('show-item-category');
 Route::patch('/item-categories/update/{item_category}', 'ItemCategoryController@update')->name('update-item-category');
 Route::delete('/item-categories/destroy/{item_category}', 'ItemCategoryController@destroy')->name('delete-item-category');
-Route::get('/item-categories/trash', 'ItemController@trash')->name('trash-item-category');
-Route::patch('/item-categories/restore/{item_category}', 'ItemController@restoreTrashed')->name('restore-item-category');
+Route::get('/item-categories/restore/{item_category}', 'ItemController@restoreTrashed')->name('restore-item-category');
 Route::delete('/item-categories/destroy/trash/{item_category}', 'ItemController@destroyTrashed')->name('destroy-trash-item-category');
 
 Route::get('/items', 'ItemController@index')->name('index-item');
@@ -56,7 +56,7 @@ Route::get('/items/{item}/edit', 'ItemController@edit')->name('edit-item');
 Route::patch('/items/update/{item}', 'ItemController@update')->name('update-item');
 Route::patch('/items/upload/{item}', 'ItemController@upload')->name('upload-item');
 Route::delete('/items/destroy/{item}', 'ItemController@destroy')->name('delete-item');
-Route::patch('/items/restore/{item}', 'ItemController@restoreTrashed')->name('restore-item');
+Route::get('/items/restore/{item}', 'ItemController@restoreTrashed')->name('restore-item');
 Route::delete('/items/destroy/trash/{item}', 'ItemController@destroyTrashed')->name('destroy-trash-item');
 
 Route::get('/ads/index', 'AdController@index')->name('index-ad');
