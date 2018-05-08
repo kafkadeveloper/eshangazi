@@ -172,10 +172,10 @@ class ItemController extends Controller
     }
 
     /**
-     * Show all deleted (Trashed) Items.
+     * Show all deleted Trashed Items.
      *
      */
-    public function trash()
+    public function trashItem()
     {
 
         $items = Item::paginate(10);
