@@ -170,6 +170,18 @@ class ItemController extends Controller
         return back();
     }
 
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function indexDeleted()
+    {
+        $items = Item::paginate(10);
+
+        return view('items.index', ['items' => $items ]);
+    }
+    
     public function indexTrashed()
     {
         // $items = Item::paginate(10);

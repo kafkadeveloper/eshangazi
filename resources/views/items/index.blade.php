@@ -12,7 +12,7 @@
         <a href="{{ route('create-item') }}" class="btn btn-sm btn-outline-secondary">
             New Item
         </a>
-        <a href="{{ route('trash-item') }}" class="btn btn-sm btn-outline-secondary">
+        <a href="{{ route('deleted-item') }}" class="btn btn-sm btn-outline-secondary">
             Trashed Items
         </a>
       </div>

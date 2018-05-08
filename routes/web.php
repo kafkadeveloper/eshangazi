@@ -48,6 +48,7 @@ Route::patch('/item-categories/restore/{item_category}', 'ItemController@restore
 Route::delete('/item-categories/destroy/trash/{item_category}', 'ItemController@destroyTrashed')->name('destroy-trash-item-category');
 
 Route::get('/items', 'ItemController@index')->name('index-item');
+Route::get('/items/deleted', 'ItemController@indexDeleted')->name('deleted-item');
 Route::get('/items/create', 'ItemController@create')->name('create-item');
 Route::post('/items/store', 'ItemController@store')->name('store-item');
 Route::get('/items/{item}', 'ItemController@show')->name('show-item');
