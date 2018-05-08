@@ -64,7 +64,7 @@
               </td>
               
               <td class="text-center align-middle">
-                <form action="{{ route('destroy-trash-item', $item) }}" method="POST">
+                <form action="{{ route('destroy-trash-item', $item->id) }}" method="POST">
                   {{ csrf_field() }}
                   {{ method_field('DELETE')}}
 

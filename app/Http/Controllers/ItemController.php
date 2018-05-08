@@ -205,11 +205,11 @@ class ItemController extends Controller
      */
     public function destroyTrashed($item)
     {
-
+        $item = Item::onlyTrashed()->find($item);
         if(Storage::disk('s3')->exists($item->thumbnail))
             Storage::disk('s3')->delete($item->thumbnail);
 
-        Item::onlyTrashed()->find($item)->forceDelete();
+        $item->forceDelete();
 
         return back();
     }

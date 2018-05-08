@@ -169,10 +169,9 @@ class ItemCategoryController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function restoreTrashed(ItemCategory $item_category)
+    public function restoreTrashed($item_category)
     {
-
-        $item_category->restore();
+        ItemCategory::onlyTrashed()->find($item_category)->restore();
 
         return back();
     }
@@ -184,9 +183,9 @@ class ItemCategoryController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function destroyTrashed(ItemCategory $item_category)
+    public function destroyTrashed($item_category)
     {
-
+        $item_category = ItemCategory::onlyTrashed()->find($item_category);
         if(Storage::disk('s3')->exists($item_category->thumbnail))
             Storage::disk('s3')->delete($item_category->thumbnail);
 

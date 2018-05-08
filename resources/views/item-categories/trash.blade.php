@@ -49,12 +49,12 @@
               </td>
               
               <td class="text-center align-middle">
-                <form action="{{ route('destroy-trash-item-category', $item_category) }}" method="POST">
+                <form action="{{ route('destroy-trash-item-category', $item_category->id) }}" method="POST">
                   {{ csrf_field() }}
                   {{ method_field('DELETE')}}
 
                     <div class="btn-group">
-                      <a href="{{ route('show-item-category', $item_category) }}" class="btn btn-sm btn-outline-secondary">
+                      <a href="{{ route('show-item-category', $item_category->id) }}" class="btn btn-sm btn-outline-secondary">
                         Restore
                       </a>
 
