@@ -191,8 +191,7 @@ class ItemController extends Controller
      */
     public function restoreTrashed($item)
     {
-        return "are you sure!";
-        $item->restore();
+        Item::onlyTrashed()->find($item)->restore();
 
         return back();
     }
@@ -204,13 +203,13 @@ class ItemController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function destroyTrashed(Item $item)
+    public function destroyTrashed($item)
     {
 
         if(Storage::disk('s3')->exists($item->thumbnail))
             Storage::disk('s3')->delete($item->thumbnail);
 
-        $item->forceDelete();
+        Item::onlyTrashed()->find($item)->forceDelete();
 
         return back();
     }
