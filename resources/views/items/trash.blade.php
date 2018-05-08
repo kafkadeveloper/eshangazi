@@ -4,7 +4,7 @@
 <div class="card-body">
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      Items
+      Trashed Items
     </h1>
 
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -12,8 +12,8 @@
         <a href="{{ route('create-item') }}" class="btn btn-sm btn-outline-secondary">
             New Item
         </a>
-        <a href="{{ route('trash-item') }}" class="btn btn-sm btn-outline-secondary">
-            Trashed Items
+        <a href="{{ route('index-item') }}" class="btn btn-sm btn-outline-secondary">
+            Items List
         </a>
       </div>
     </div>
@@ -21,7 +21,7 @@
 
   @if($items->isEmpty())
     <p class="lead text-muted">
-      No Items created at the moment.
+      Trash is empty, no trashed item.
     </p>
 
     <a href="{{ route('create-item') }}" class="btn btn-primary">
@@ -64,20 +64,16 @@
               </td>
               
               <td class="text-center align-middle">
-                <form action="{{ route('delete-item', $item) }}" method="POST">
+                <form action="{{ route('destroy-trash-item', $item) }}" method="POST">
                   {{ csrf_field() }}
                   {{ method_field('DELETE')}}
 
                     <div class="btn-group">
-                      <a href="{{ route('show-item', $item) }}" class="btn btn-sm btn-outline-secondary">
-                        Show
+                      <a href="{{ route('restore-item', $item) }}" class="btn btn-sm btn-outline-secondary">
+                        Restore
                       </a>
 
-                      <a href="{{ route('edit-item', $item) }}" class="btn btn-sm btn-outline-secondary">
-                        Edit
-                      </a>
-
-                      <button type="submit" class="btn btn-sm btn-outline-secondary">Delete</button>
+                      <button type="submit" class="btn btn-sm btn-outline-secondary">Permanent Delete</button>
                     </div>
                 </form>
               </td>
@@ -88,6 +84,6 @@
 
         {{ $items->links() }}
     </div>
-    @endif
+  @endif
 </div>
 @endsection

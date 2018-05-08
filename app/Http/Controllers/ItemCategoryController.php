@@ -144,10 +144,53 @@ class ItemCategoryController extends Controller
      */
     public function destroy(ItemCategory $item_category)
     {
-        if (Storage::disk('s3')->exists($item_category->thumbnail))
+        $item_category->delete();
+
+        return back();
+    }
+
+    /**
+     * Show all deleted (Trashed) Items.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function trash()
+    {
+
+        $item_categories = ItemCategory::onlyTrashed()->paginate(10);
+
+        return view('item-categories.trash', ['item_categories' => $item_categories ]);
+    }
+
+    /**
+     * Restore trashed Item.
+     *
+     * @param ItemCategory $item_category
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function restoreTrashed(ItemCategory $item_category)
+    {
+
+        $item_category->restore();
+
+        return back();
+    }
+
+    /**
+     * Permanent delete of trashed Item category.
+     *
+     * @param ItemCategory $item_category
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyTrashed(ItemCategory $item_category)
+    {
+
+        if(Storage::disk('s3')->exists($item_category->thumbnail))
             Storage::disk('s3')->delete($item_category->thumbnail);
 
-        $item_category->delete();
+        $item_category->forceDelete();
 
         return back();
     }

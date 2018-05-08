@@ -165,10 +165,53 @@ class ItemController extends Controller
      */
     public function destroy(Item $item)
     {
+        $item->delete();
+
+        return back();
+    }
+
+    /**
+     * Show all deleted (Trashed) Items.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function trash()
+    {
+
+        $items = Item::onlyTrashed()->paginate(10);
+
+        return view('items.trash', ['items' => $items ]);
+    }
+
+    /**
+     * Restore trashed Item.
+     *
+     * @param Item $item
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function restoreTrashed(Item $item)
+    {
+
+        $item->restore();
+
+        return back();
+    }
+
+    /**
+     * Permanent delete of trashed Item.
+     *
+     * @param Item $item
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function destroyTrashed(Item $item)
+    {
+
         if(Storage::disk('s3')->exists($item->thumbnail))
             Storage::disk('s3')->delete($item->thumbnail);
 
-        $item->delete();
+        $item->forceDelete();
 
         return back();
     }

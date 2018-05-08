@@ -4,7 +4,7 @@
 <div class="card-body">
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      Categories
+      Trashed Categories
     </h1>
 
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -12,15 +12,15 @@
         <a href="{{ route('create-item-category') }}" class="btn btn-sm btn-outline-secondary">
             New Category
         </a>
-        <a href="{{ route('trash-item-category') }}" class="btn btn-sm btn-outline-secondary">
-            Trashed Categories
+        <a href="{{ route('index-item-category') }}" class="btn btn-sm btn-outline-secondary">
+            Items List
         </a>
       </div>
     </div>
   </div>
   @if($item_categories->isEmpty())
     <p class="lead text-muted">
-      No data created at the moment.
+      Trash is empty, no trashed category.
     </p>
     <a href="{{ route('create-item-category') }}" class="btn btn-primary">Click here to add new Item Category </a>       
   @else   
@@ -49,20 +49,16 @@
               </td>
               
               <td class="text-center align-middle">
-                <form action="{{ route('delete-item-category', $item_category) }}" method="POST">
+                <form action="{{ route('destroy-trash-item-category', $item_category) }}" method="POST">
                   {{ csrf_field() }}
                   {{ method_field('DELETE')}}
 
                     <div class="btn-group">
                       <a href="{{ route('show-item-category', $item_category) }}" class="btn btn-sm btn-outline-secondary">
-                        Show
+                        Restore
                       </a>
 
-                      <a href="{{ route('edit-item-category', $item_category) }}" class="btn btn-sm btn-outline-secondary">
-                        Edit
-                      </a>
-
-                      <button type="submit" class="btn btn-sm btn-outline-secondary">Delete</button>
+                      <button type="submit" class="btn btn-sm btn-outline-secondary">Permanent Delete</button>
                     </div>
                 </form>
               </td>
