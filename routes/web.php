@@ -55,7 +55,7 @@ Route::get('/items/{item}/edit', 'ItemController@edit')->name('edit-item');
 Route::patch('/items/update/{item}', 'ItemController@update')->name('update-item');
 Route::patch('/items/upload/{item}', 'ItemController@upload')->name('upload-item');
 Route::delete('/items/destroy/{item}', 'ItemController@destroy')->name('delete-item');
-Route::get('/items/trashed', 'ItemController@trashItem')->name('trash-item');
+Route::get('/items/trashed', 'ItemController@indexTrashed')->name('trash-item');
 Route::patch('/items/restore/{item}', 'ItemController@restoreTrashed')->name('restore-item');
 Route::delete('/items/destroy/trash/{item}', 'ItemController@destroyTrashed')->name('destroy-trash-item');
 

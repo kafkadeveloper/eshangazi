@@ -8,7 +8,6 @@ use App\Conversation;
 use App\ItemCategory;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
 use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
@@ -171,16 +170,11 @@ class ItemController extends Controller
         return back();
     }
 
-    /**
-     * Show all deleted Trashed Items.
-     *
-     */
-    public function trashItem()
+    public function indexTrashed()
     {
-
         $items = Item::paginate(10);
 
-        return view('items.trash', ['items' => $items ]);
+        return view('items.index', ['items' => $items ]);
     }
 
     /**
