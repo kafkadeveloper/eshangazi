@@ -157,7 +157,7 @@ class ItemCategoryController extends Controller
     public function trash()
     {
 
-        $item_categories = ItemCategory::onlyTrashed()->get();
+        $item_categories = ItemCategory::onlyTrashed()->paginate(10);
 
         return view('item-categories.trash', ['item_categories' => $item_categories ]);
     }
