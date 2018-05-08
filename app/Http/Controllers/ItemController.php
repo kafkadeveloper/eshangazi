@@ -189,7 +189,7 @@ class ItemController extends Controller
      * 
      * @return \Illuminate\Http\Response
      */
-    public function restoreTrashed(Item $item)
+    public function restoreTrashed($item)
     {
         return "are you sure!";
         $item->restore();

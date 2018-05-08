@@ -69,7 +69,7 @@
                   {{ method_field('DELETE')}}
 
                     <div class="btn-group">
-                      <a href="{{ route('restore-item', $item) }}" class="btn btn-sm btn-outline-secondary">
+                      <a href="{{ route('restore-item', $item->id) }}" class="btn btn-sm btn-outline-secondary">
                         Restore
                       </a>
 
