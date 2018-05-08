@@ -178,7 +178,7 @@ class ItemController extends Controller
     public function trash()
     {
 
-        $items = Item::withTrashed()->paginate(10);
+        $items = Item::whereNotNull('deleted_at')->paginate(10);
 
         return view('items.trash', ['items' => $items ]);
     }
