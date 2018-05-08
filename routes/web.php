@@ -44,12 +44,11 @@ Route::get('/item-categories/{item_category}/edit', 'ItemCategoryController@edit
 Route::get('/item-categories/{item_category}', 'ItemCategoryController@show')->name('show-item-category');
 Route::patch('/item-categories/update/{item_category}', 'ItemCategoryController@update')->name('update-item-category');
 Route::delete('/item-categories/destroy/{item_category}', 'ItemCategoryController@destroy')->name('delete-item-category');
-Route::get('/item-categories/restore/{item_category}', 'ItemController@restoreTrashed')->name('restore-item-category');
+Route::patch('/item-categories/restore/{item_category}', 'ItemController@restoreTrashed')->name('restore-item-category');
 Route::delete('/item-categories/destroy/trash/{item_category}', 'ItemController@destroyTrashed')->name('destroy-trash-item-category');
 
 Route::get('/items', 'ItemController@index')->name('index-item');
 Route::get('/items/deleted', 'ItemController@indexDeleted')->name('deleted-item');
-Route::patch('/items/restore/{item}', 'ItemController@restoreTrashed')->name('restore-item');
 Route::get('/items/create', 'ItemController@create')->name('create-item');
 Route::post('/items/store', 'ItemController@store')->name('store-item');
 Route::get('/items/{item}', 'ItemController@show')->name('show-item');
@@ -57,6 +56,7 @@ Route::get('/items/{item}/edit', 'ItemController@edit')->name('edit-item');
 Route::patch('/items/update/{item}', 'ItemController@update')->name('update-item');
 Route::patch('/items/upload/{item}', 'ItemController@upload')->name('upload-item');
 Route::delete('/items/destroy/{item}', 'ItemController@destroy')->name('delete-item');
+Route::patch('/items/restore/{item}', 'ItemController@restoreTrashed')->name('restore-item');
 Route::delete('/items/destroy/trash/{item}', 'ItemController@destroyTrashed')->name('destroy-trash-item');
 
 Route::get('/ads/index', 'AdController@index')->name('index-ad');
