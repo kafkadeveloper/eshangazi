@@ -49,7 +49,7 @@ Route::delete('/item-categories/destroy/trash/{item_category}', 'ItemController@
 
 Route::get('/items', 'ItemController@index')->name('index-item');
 Route::get('/items/deleted', 'ItemController@indexDeleted')->name('deleted-item');
-Route::patch('/items/restore/{item}', 'ItemController@restoreTrashed')->name('restore-item');
+Route::get('/items/restore/{item}', 'ItemController@restoreTrashed')->name('restore-item');
 Route::get('/items/create', 'ItemController@create')->name('create-item');
 Route::post('/items/store', 'ItemController@store')->name('store-item');
 Route::get('/items/{item}', 'ItemController@show')->name('show-item');
