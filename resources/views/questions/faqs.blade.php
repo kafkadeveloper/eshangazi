@@ -30,7 +30,7 @@
             <div class="card">
               <div class="card-header" id="heading-{{$loop->iteration}}">
                 <h5 class="mb-0">
-                  <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-{{$loop->iteration}}" aria-expanded="true">
+                  <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse-{{$loop->iteration}}" aria-expanded="{{ $loop->first ? 'true' : 'false' }}">
                     {{ $question->question }}
                   </button>
                 </h5>

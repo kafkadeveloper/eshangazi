@@ -117,7 +117,7 @@ class QuestionController extends Controller
      */
     public function faqs()
     {
-        $questions = Question::with('answers')->has('answers', '=', 1)->paginate(10);
+        $questions = Question::with('answers')->has('answers', '=', 1)->paginate(7);
 
         return view('questions.faqs', ['questions' => $questions]);
     }
