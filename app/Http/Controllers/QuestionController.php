@@ -111,6 +111,18 @@ class QuestionController extends Controller
     }
 
     /**
+     * Display a listing of the FAQs.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function faqs()
+    {
+        $questions = Question::with('answers')->has('answers', '=', 1)->paginate(10);
+
+        return view('questions.faqs', ['questions' => $questions]);
+    }
+
+    /**
      * Remove the specified resource from storage.
      *
      * @param  \App\Question  $question

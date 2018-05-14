@@ -142,6 +142,7 @@ Route::post('/questions/categories', 'QuestionCategoryController@store')->name('
 Route::delete('/questions/categories/{question_category}', 'QuestionCategoryController@destroy')->name('delete-question-category');
 
 Route::get('/questions', 'QuestionController@index')->name('index-question');
+Route::get('/questions/faqs', 'QuestionController@faqs')->name('faqs-question');
 Route::get('/questions/create', 'QuestionController@create')->name('create-question');
 Route::get('/questions/{question}', 'QuestionController@show')->name('show-question');
 Route::get('/questions/{question}/edit', 'QuestionController@edit')->name('edit-question');
