@@ -46,7 +46,7 @@ class QuizConversation extends Conversation
     public function askQuestion()
     {
         if($this->iterations == 0)
-            $this->data = Question::with('answers')->inRandomOrder()->take(5)->get();
+            $this->data = Question::with('answers')->has('answers', '>=', 2)->inRandomOrder()->take(5)->get();
 
         if(! $this->data->isEmpty())
         {
