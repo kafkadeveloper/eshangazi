@@ -357,7 +357,7 @@ class MemberController extends Controller
 
         $bot = app('botman');
         
-        $message = '<b>'.$request->title.'</b> \n'.$request->description;
+        $message = "<b>".$request->title."</b> \n".$request->description;
         $driver = $member->platform->driver_class;
         $bot->say($message, $member->user_platform_id, \BotMan\Drivers\Facebook\FacebookDriver::class);
         
