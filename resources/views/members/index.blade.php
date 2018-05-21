@@ -70,7 +70,7 @@
                                         Show
                                     </a>
 
-                                    <a href="#" class="btn btn-sm btn-outline-secondary">
+                                    <a href="{{ route('createmessage-member', $member) }}" class="btn btn-sm btn-outline-secondary">
                                         Send Message
                                     </a>
 

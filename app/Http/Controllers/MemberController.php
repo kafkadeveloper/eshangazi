@@ -332,4 +332,36 @@ class MemberController extends Controller
         }
     }
 
+    /**
+     * function to create a message to a single member
+     * @param Member $member
+     * 
+     */
+    public function createMessage(Member $member)
+    {
+        return view('members.send', ['member' => $member]);
+    }
+
+    /**
+     * function to send a message to a single member
+     * @param Member $member
+     * 
+     */
+    public function sendMessage(Request $request, Member $member)
+    {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required'
+        ]);
+
+        $bot = app('botman');
+        
+        $message = '<b>'.$request->title.'</b> \n'.$request->description;
+        $driver = $member->platform->driver_class;
+        $bot->say($message, $member->user_platform_id, '\\BotMan\\Drivers\\'.$driver);
+        
+        return back();
+
+    }
+
 }
