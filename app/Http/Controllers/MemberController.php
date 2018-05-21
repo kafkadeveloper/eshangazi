@@ -359,7 +359,7 @@ class MemberController extends Controller
         
         $message = $request->title."\n".$request->description;
         $driver = "\BotMan\Drivers\\".$member->platform->driver_class;
-        $bot->say($message, $member->user_platform_id, $driver);
+        $bot->say($message."/n".$driver, $member->user_platform_id, \BotMan\Drivers\Facebook\FacebookDriver::class);
         
         return back();
 
