@@ -9,7 +9,6 @@ use App\ItemCategory;
 use App\Conversation;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
-use BotMan\Drivers\Facebook\FacebookDriver;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
@@ -360,7 +359,7 @@ class MemberController extends Controller
         
         $message = '<b>'.$request->title.'</b> \n'.$request->description;
         $driver = $member->platform->driver_class;
-        $bot->say($message, $member->user_platform_id, FacebookDriver::class);
+        $bot->say($message, $member->user_platform_id, \BotMan\Drivers\Facebook\FacebookDriver::class);
         
         return back();
 
