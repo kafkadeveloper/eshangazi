@@ -8,6 +8,7 @@ use App\District;
 use App\ItemCategory;
 use App\Conversation;
 use BotMan\BotMan\BotMan;
+use Illuminate\Http\Request;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
