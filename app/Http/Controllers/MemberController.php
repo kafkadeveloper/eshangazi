@@ -359,20 +359,24 @@ class MemberController extends Controller
         ]);
     
         $bot = app('botman');
-        $full_url='';
+
         if ($request->hasFile('thumbnail')){
-            $path = $request->file('thumbnail')->store('thumbnails');
-            $full_url = env('AWS_URL') . '/' . $path;
-            //$attachment = new Image(env('AWS_URL') . '/' . $path);
-            //$message = OutgoingMessage::create($item->description)->withAttachment($attachment)
+            $thumbnail_path = Storage::disk('s3')
+                ->putFile('public/member-message-thumbnails', $request->file('thumbnail'), 'public');
+                
+            $attachment = new Image(env('AWS_URL') . '/' . $path);
+            $image_message = OutgoingMessage::create($request->title)->withAttachment($attachment);
         }
         $message = $request->title."\n".$request->description;
         $driver = "\BotMan\Drivers\\".$member->platform->driver_class;
         if($member->platform->name == 'Facebook'){
+            if($request->hasFile('thumbnail')) $bot->say($image_message, $member->user_platform_id, \BotMan\Drivers\Facebook\FacebookDriver::class);
             $bot->say($message."\n".$full_url, $member->user_platform_id, \BotMan\Drivers\Facebook\FacebookDriver::class);
         }elseif($member->platform->name == 'Slack'){
+            if($request->hasFile('thumbnail')) $bot->say($image_message, $member->user_platform_id, \BotMan\Drivers\Slack\SlackDriver::class);
             $bot->say($message, $member->user_platform_id, \BotMan\Drivers\Slack\SlackDriver::class);
         }elseif($member->platform->name == 'Telegram'){
+            if($request->hasFile('thumbnail')) $bot->say($image_message, $member->user_platform_id, \BotMan\Drivers\Telegram\TelegramDriver::class);
             $bot->say($message, $member->user_platform_id, \BotMan\Drivers\Telegram\TelegramDriver::class);
         }
         return back();
