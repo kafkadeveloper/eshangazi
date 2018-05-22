@@ -372,7 +372,7 @@ class MemberController extends Controller
         $driver = "\BotMan\Drivers\\".$member->platform->driver_class;
         if($member->platform->name == 'Facebook'){
             if($request->hasFile('thumbnail')) $bot->say($image_message, $member->user_platform_id, \BotMan\Drivers\Facebook\FacebookDriver::class);
-            $bot->say($message."\n".$full_url, $member->user_platform_id, \BotMan\Drivers\Facebook\FacebookDriver::class);
+            $bot->say($message, $member->user_platform_id, \BotMan\Drivers\Facebook\FacebookDriver::class);
         }elseif($member->platform->name == 'Slack'){
             if($request->hasFile('thumbnail')) $bot->say($image_message, $member->user_platform_id, \BotMan\Drivers\Slack\SlackDriver::class);
             $bot->say($message, $member->user_platform_id, \BotMan\Drivers\Slack\SlackDriver::class);
