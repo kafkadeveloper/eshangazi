@@ -10,8 +10,10 @@ use App\Conversation;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use BotMan\BotMan\Messages\Outgoing\Question;
+use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
 
@@ -352,15 +354,22 @@ class MemberController extends Controller
     {
         $request->validate([
             'title' => 'required',
-            'description' => 'required'
+            'description' => 'required',
+            'thumbnail' => 'image'
         ]);
-
+    
         $bot = app('botman');
-        
+        $full_url='';
+        if ($request->hasFile('thumbnail')){
+            $path = $request->file('thumbnail')->store('thumbnails');
+            $full_url = env('AWS_URL') . '/' . $path;
+            //$attachment = new Image(env('AWS_URL') . '/' . $path);
+            //$message = OutgoingMessage::create($item->description)->withAttachment($attachment)
+        }
         $message = $request->title."\n".$request->description;
         $driver = "\BotMan\Drivers\\".$member->platform->driver_class;
         if($member->platform->name == 'Facebook'){
-            $bot->say($message, $member->user_platform_id, \BotMan\Drivers\Facebook\FacebookDriver::class);
+            $bot->say($message."\n".$full_url, $member->user_platform_id, \BotMan\Drivers\Facebook\FacebookDriver::class);
         }elseif($member->platform->name == 'Slack'){
             $bot->say($message, $member->user_platform_id, \BotMan\Drivers\Slack\SlackDriver::class);
         }elseif($member->platform->name == 'Telegram'){
