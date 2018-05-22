@@ -365,7 +365,7 @@ class MemberController extends Controller
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/member-message-thumbnails', $request->file('thumbnail'), 'public');
                 
-            $attachment = new Image(env('AWS_URL') . '/' . $path);
+            $attachment = new Image(env('AWS_URL') . '/' . $thumbnail_path);
             $image_message = OutgoingMessage::create($request->title)->withAttachment($attachment);
         }
         $message = $request->title."\n".$request->description;
