@@ -9,6 +9,7 @@ use App\ItemCategory;
 use App\Conversation;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use BotMan\BotMan\Messages\Outgoing\Question;
 use BotMan\BotMan\Messages\Attachments\Image;
 use BotMan\Drivers\Facebook\Extensions\Element;
