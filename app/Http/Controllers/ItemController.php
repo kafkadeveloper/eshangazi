@@ -391,7 +391,8 @@ class ItemController extends Controller
             ->addButtons([
                 Button::create('🏡 Kwa msaada zaidi')->value('msaada'),
                 Button::create('🏡 Vituo vya huduma')->value('Vituo vya huduma'),
-                Button::create('🔁 Rudi mwanzo')->value('features')
+                Button::create('🔁 Rudi mwanzo')->value('features'),
+                Button::create('👋 Asante')->value('asante')
             ]);
 
         return $features;
