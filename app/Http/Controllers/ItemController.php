@@ -335,7 +335,7 @@ class ItemController extends Controller
      */
     public function toWeb($item)
     {
-        $child_items = $item->items()->inRandomOrder()->take(3)->get();
+        $child_items = $item->items()->inRandomOrder()->take(5)->get();
 
         $message = "";
         $count = 1;
