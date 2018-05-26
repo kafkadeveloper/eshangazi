@@ -1,25 +1,17 @@
 <?php
 
-use App\ItemCategory;
-use BotMan\BotMan\BotMan;
 use App\Http\Controllers\ItemController;
 use BotMan\BotMan\Middleware\Dialogflow;
 use App\Http\Controllers\BotManController;
-use App\Http\Controllers\MemberController;
 use App\Http\Controllers\CenterController;
+use App\Http\Controllers\MemberController;
 use App\Http\Controllers\MessageController;
-use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\PartnerController;
-use BotMan\BotMan\Messages\Outgoing\Question;
+use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ItemCategoryController;
 use App\Http\Controllers\MessageDetailController;
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 
 $botman = resolve('botman');
-
-$botman->hears('Only for testing', function (BotMan $bot) {
-    $bot->reply('Hello I head, Only for testing.');
-});
 
 $dialogflow = Dialogflow::create(env('DIALOGFLOW_KEY'))->listenForAction();
 
@@ -32,6 +24,7 @@ $botman->hears(env('APP_ACTION') . '.greetings.how_are_you', BotManController::c
 $botman->hears(env('APP_ACTION') . '.greetings.shikamoo', BotManController::class.'@listener')->middleware($dialogflow);
 $botman->hears(env('APP_ACTION') . '.greetings.appraisal', BotManController::class.'@listener')->middleware($dialogflow);
 $botman->hears(env('APP_ACTION') . '.greetings.goodbye', BotManController::class.'@listener')->middleware($dialogflow);
+$botman->hears(env('APP_ACTION') . '.call.request', BotManController::class.'@listener')->middleware($dialogflow);
 
 $botman->hears(env('APP_ACTION') . '.started', MemberController::class.'@started')->middleware($dialogflow);
 $botman->hears(env('APP_ACTION') . '.started.yes', MemberController::class.'@store')->middleware($dialogflow);
