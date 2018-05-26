@@ -159,6 +159,8 @@ Route::post('/answers', 'AnswerController@store')->name('store-answer');
 Route::delete('/answers/{answer}', 'AnswerController@destroy')->name('delete-answer');
 
 Route::get('/members', 'MemberController@index')->name('index-member')->middleware('auth');
+Route::get('/members/{member}/create-message', 'MemberController@createMessage')->name('createmessage-member')->middleware('auth');
+Route::post('/members/{member}/send', 'MemberController@sendMessage')->name('sendmessage-member')->middleware('auth');
 
 Route::get('/integrations', 'HomeController@integrations')->name('integration');
 

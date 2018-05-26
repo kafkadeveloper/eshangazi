@@ -242,6 +242,7 @@ class ItemController extends Controller
             if($item->items->isEmpty()){
                 if($driver == 'Web'){
                     $bot->reply($item->description);
+                    $bot->reply($this->customFeaturesSms());
                 }else{
                     $bot->reply($message);
                     $bot->typesAndWaits(2);
@@ -335,7 +336,7 @@ class ItemController extends Controller
      */
     public function toWeb($item)
     {
-        $child_items = $item->items()->inRandomOrder()->take(3)->get();
+        $child_items = $item->items()->inRandomOrder()->take(5)->get();
 
         $message = "";
         $count = 1;
@@ -361,7 +362,7 @@ class ItemController extends Controller
      */
     public function toWebb($item)
     {
-        $child_items = $item->items()->inRandomOrder()->take(3)->get();
+        $child_items = $item->items()->inRandomOrder()->take(5)->get();
         $features = Question::create($item->description)
             ->fallback('Kumradhi, sijaweza pata taarifa zaidi kuhusu' . $item->title)
             ->callbackId('item');
@@ -371,6 +372,28 @@ class ItemController extends Controller
                 Button::create($itemm->display_title)->value($itemm->title)
             ]);
         }
+
+        return $features;
+    }
+
+    /**
+     * Show a list of other items.
+     *
+     * @param $bot->getUser()
+     *
+     * @return string
+     */
+    public function customFeaturesSms()
+    {
+        $features = Question::create('Pia unaweza angalia vitu hivi!')
+            ->fallback('Kumradhi, sijaweza kuuliza')
+            ->callbackId('item')
+            ->addButtons([
+                Button::create('🏡 Kwa msaada zaidi')->value('msaada'),
+                Button::create('🏡 Vituo vya huduma')->value('Vituo vya huduma'),
+                Button::create('🔁 Rudi mwanzo')->value('features'),
+                Button::create('👋 Asante')->value('asante')
+            ]);
 
         return $features;
     }

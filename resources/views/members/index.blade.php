@@ -69,10 +69,15 @@
                                     <a href="#" class="btn btn-sm btn-outline-secondary">
                                         Show
                                     </a>
-
-                                    <a href="#" class="btn btn-sm btn-outline-secondary">
-                                        Send Message
-                                    </a>
+                                    @if(is_null($member->platform_id))
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">
+                                            Send Message
+                                        </a>
+                                    @else
+                                        <a href="{{ route('createmessage-member', $member) }}" class="btn btn-sm btn-outline-secondary">
+                                            Send Message
+                                        </a>
+                                    @endif
 
                                     <button type="submit" class="btn btn-sm btn-outline-secondary">Unsubcribe</button>
                                 </div>
