@@ -8,6 +8,9 @@ use App\District;
 use App\ItemCategory;
 use App\Conversation;
 use BotMan\BotMan\BotMan;
+use BotMan\Drivers\Facebook\FacebookDriver;
+use BotMan\Drivers\Slack\SlackDriver;
+use BotMan\Drivers\Telegram\TelegramDriver;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use BotMan\BotMan\Messages\Outgoing\Question;
@@ -48,7 +51,7 @@ class MemberController extends Controller
 
         $bot->typesAndWaits(1);
 
-        if (! $this->check($user)) {
+        if (!$this->check($user)) {
             $incomplete = $extras['apiActionIncomplete'];
 
             if ($incomplete) {
@@ -56,8 +59,11 @@ class MemberController extends Controller
             } else {
                 $this->subscribe($user, $extras, $driver);
 
-                if ($driver === 'Facebook') $bot->reply($apiReply);
-                    $bot->reply($this->features($apiReply, $driver));
+                if ($driver === 'Facebook') {
+                    $bot->reply($apiReply);
+                }
+
+                $bot->reply($this->features($apiReply, $driver));
             }
         } else {
             $bot->reply($this->features($apiReply, $driver));
@@ -73,14 +79,13 @@ class MemberController extends Controller
      */
     public function reject(BotMan $bot)
     {
-        $user = $bot->getUser();
         $driver = $bot->getDriver()->getName();
         $extras = $bot->getMessage()->getExtras();
 
         $apiReply = $extras['apiReply'];
 
-        //$this->subscribe($user, $extras, $driver);
         $bot->typesAndWaits(1);
+
         $bot->reply($apiReply);
         $bot->reply($this->features($apiReply, $driver));
     }
@@ -88,7 +93,7 @@ class MemberController extends Controller
     /**
      * Check if Member exists.
      *
-     * @return \Illuminate\Http\Response
+     * @return bool
      */
     public function check($user)
     {
@@ -117,7 +122,6 @@ class MemberController extends Controller
         if ($driver === 'Web') {
             $bot->reply($this->features($apiReply, $driver));
         } else {
-
             if ($this->check($user)) {
                 $bot->reply('Karibu tena ' . $user->getFirstName());
                 $bot->reply($this->features($apiReply, $driver));
@@ -155,9 +159,9 @@ class MemberController extends Controller
         $gender = $this->getUserGender($user, $driver);
 
         $district = District::where('name', '=', $district)->first();
-        if($district) {
+        if ($district) {
             $district_id = $district->id;
-        }else{
+        } else {
             $district_id = null;
         }
 
@@ -196,6 +200,7 @@ class MemberController extends Controller
             $extras = $bot->getMessage()->getExtras();
 
             $apiReply = $extras['apiReply'];
+
             $bot->typesAndWaits(1);
             $bot->reply($apiReply);
 
@@ -277,7 +282,7 @@ class MemberController extends Controller
      * @param $user
      * @param $driver
      *
-     * @return profile_pc
+     * @return string
      *
      */
     public function getUserProfilePic($user, $driver)
@@ -288,11 +293,6 @@ class MemberController extends Controller
             return $profile_pic = $user->getInfo()["profile"]["image_original"];
         }
 
-//        elseif($driver === 'Telegram')
-//        {
-//            return $profile_pic = $user->getInfo()["profile"]["image_original"];
-//        }
-
         return null;
     }
 
@@ -302,7 +302,7 @@ class MemberController extends Controller
      * @param $user
      * @param $driver
      *
-     * @return gender
+     * @return string
      *
      */
     public function getUserGender($user, $driver)
@@ -326,11 +326,14 @@ class MemberController extends Controller
         $extras = $bot->getMessage()->getExtras();
 
         $apiReply = $extras['apiReply'];
+
         if ($driver == 'Web') {
             $bot->reply($this->features($apiReply, $driver));
         } else {
             $bot->typesAndWaits(1);
+
             $bot->reply($user->getFirstName() . ' ' . $apiReply);
+
             $bot->typesAndWaits(2);
             $bot->reply($this->features($apiReply, $driver));
         }
@@ -339,7 +342,8 @@ class MemberController extends Controller
     /**
      * function to create a message to a single member
      * @param Member $member
-     * 
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function createMessage(Member $member)
     {
@@ -349,7 +353,8 @@ class MemberController extends Controller
     /**
      * function to send a message to a single member
      * @param Member $member
-     * 
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function sendMessage(Request $request, Member $member)
     {
@@ -358,30 +363,40 @@ class MemberController extends Controller
             'description' => 'required',
             'thumbnail' => 'image'
         ]);
-    
+
         $bot = app('botman');
 
-        if ($request->hasFile('thumbnail')){
+        if ($request->hasFile('thumbnail')) {
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/member-message-thumbnails', $request->file('thumbnail'), 'public');
-                
+
             $attachment = new Image(env('AWS_URL') . '/' . $thumbnail_path);
+
             $image_message = OutgoingMessage::create($request->title)->withAttachment($attachment);
         }
-        $message = $request->title."\n".$request->description;
-        $driver = "\BotMan\Drivers\\".$member->platform->driver_class;
-        if($member->platform->name == 'Facebook'){
-            if($request->hasFile('thumbnail')) $bot->say($image_message, $member->user_platform_id, \BotMan\Drivers\Facebook\FacebookDriver::class);
-            $bot->say($message, $member->user_platform_id, \BotMan\Drivers\Facebook\FacebookDriver::class);
-        }elseif($member->platform->name == 'Slack'){
-            if($request->hasFile('thumbnail')) $bot->say($image_message, $member->user_platform_id, \BotMan\Drivers\Slack\SlackDriver::class);
-            $bot->say($message, $member->user_platform_id, \BotMan\Drivers\Slack\SlackDriver::class);
-        }elseif($member->platform->name == 'Telegram'){
-            if($request->hasFile('thumbnail')) $bot->say($image_message, $member->user_platform_id, \BotMan\Drivers\Telegram\TelegramDriver::class);
-            $bot->say($message, $member->user_platform_id, \BotMan\Drivers\Telegram\TelegramDriver::class);
+
+        $message = $request->title . "\n" . $request->description;
+        $driver = "\BotMan\Drivers\\" . $member->platform->driver_class;
+
+        if ($member->platform->name == 'Facebook') {
+            if ($request->hasFile('thumbnail')) {
+                $bot->say($image_message, $member->user_platform_id, FacebookDriver::class);
+            }
+
+            $bot->say($message, $member->user_platform_id, FacebookDriver::class);
+        } elseif ($member->platform->name == 'Slack') {
+            if ($request->hasFile('thumbnail')) {
+                $bot->say($image_message, $member->user_platform_id, SlackDriver::class);
+            }
+
+            $bot->say($message, $member->user_platform_id, SlackDriver::class);
+        } elseif ($member->platform->name == 'Telegram') {
+            if ($request->hasFile('thumbnail')) {
+                $bot->say($image_message, $member->user_platform_id, TelegramDriver::class);
+            }
+
+            $bot->say($message, $member->user_platform_id, TelegramDriver::class);
         }
         return back();
-
     }
-
 }

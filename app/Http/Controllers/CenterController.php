@@ -44,53 +44,52 @@ class CenterController extends Controller
      */
     public function create()
     {
-        $wards      = Ward::all('id', 'name');
-        $partners   = Partner::all('id', 'name');
+        $wards = Ward::all('id', 'name');
+        $partners = Partner::all('id', 'name');
 
         return view('centers.create', [
-            'wards'     => $wards,
-            'partners'  => $partners,
+            'wards' => $wards,
+            'partners' => $partners,
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * 
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $thumbnail_path = null;
 
-        if ($request->hasFile('thumbnail'))
-        {
+        if ($request->hasFile('thumbnail')) {
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/center-thumbnails', $request->file('thumbnail'), 'public');
         }
 
         Center::create([
-            'name'          => $request->name,
-            'description'   => $request->description,
-            'thumbnail'     => $thumbnail_path,
-            'phone'         => $request->phone,
-            'address'       => $request->address,
-            'email'         => $request->email,
-            'website'       => $request->website,
-            'ward_id'       => $request->ward_id,
-            'partner_id'    => $request->partner_id,
-            'created_by'    => auth()->id()
+            'name' => $request->name,
+            'description' => $request->description,
+            'thumbnail' => $thumbnail_path,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'email' => $request->email,
+            'website' => $request->website,
+            'ward_id' => $request->ward_id,
+            'partner_id' => $request->partner_id,
+            'created_by' => auth()->id()
         ]);
 
-        return back(); 
+        return back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  Center  $center
-     * 
+     * @param  Center $center
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Center $center)
@@ -102,50 +101,49 @@ class CenterController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Center $center
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Center $center)
     {
-        $wards      = Ward::all('id', 'name');
-        $partners   = Partner::all('id', 'name');
+        $wards = Ward::all('id', 'name');
+        $partners = Partner::all('id', 'name');
 
         return view('centers.edit', [
-            'center'    => $center,
-            'wards'     => $wards,
-            'partners'  => $partners,
+            'center' => $center,
+            'wards' => $wards,
+            'partners' => $partners,
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @param  Center $center
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Center $center)
     {
         $thumbnail_path = null;
 
-        if ($request->hasFile('thumbnail'))
-        {
+        if ($request->hasFile('thumbnail')) {
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/center-thumbnails', $request->file('thumbnail'), 'public');
         }
 
         $center->update([
-            'name'          => $request->name,
-            'description'   => $request->description,
-            'thumbnail'     => $thumbnail_path ? $thumbnail_path : $center->thumbnail,
-            'phone'         => $request->phone,
-            'address'       => $request->address,
-            'email'         => $request->email,
-            'website'       => $request->website,
-            'ward_id'       => $request->ward_id,
-            'partner_id'    => $request->partner_id,
-            'updated_by'    => auth()->id()
+            'name' => $request->name,
+            'description' => $request->description,
+            'thumbnail' => $thumbnail_path ? $thumbnail_path : $center->thumbnail,
+            'phone' => $request->phone,
+            'address' => $request->address,
+            'email' => $request->email,
+            'website' => $request->website,
+            'ward_id' => $request->ward_id,
+            'partner_id' => $request->partner_id,
+            'updated_by' => auth()->id()
         ]);
 
         return redirect()->route('show-center', $center);
@@ -155,12 +153,12 @@ class CenterController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Center $center
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Center $center)
     {
-        if(Storage::disk('s3')->exists($center->thumbnail))
+        if (Storage::disk('s3')->exists($center->thumbnail))
             Storage::disk('s3')->delete($center->thumbnail);
 
         $center->delete();
@@ -172,7 +170,7 @@ class CenterController extends Controller
      * Display Generic Template .
      *
      * @param  BotMan $bot
-     * 
+     *
      * @return void
      */
     public function showBotMan(BotMan $bot)
@@ -185,28 +183,30 @@ class CenterController extends Controller
         $bot->typesAndWaits(1);
         $bot->reply($apiReply);
 
-        if($name)
-        {
+        if ($name) {
             $center = Center::with('services')->where('name', '=', $name)->first();
 
             $bot->typesAndWaits(1);
             $bot->reply($center->description);
-        } 
-        else
-        {
+        } else {
 
             $centers = Center::inRandomOrder()->take(5)->get();
 
             $bot->typesAndWaits(1);
-            $bot->reply($this->centers($centers));
+
+            if ($centers) {
+                $bot->reply($this->centers($centers));
+            } else {
+                $bot->reply('Kumradhi, sijaweza pata vituo kwa sasa.');
+            }
+
         }
 
         $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
 
-        if($member)
-        {
+        if ($member) {
             Conversation::create([
-                'intent'    => 'Service delivery points',
+                'intent' => 'Service delivery points',
                 'member_id' => $member->id
             ]);
         }
@@ -221,17 +221,17 @@ class CenterController extends Controller
      *
      */
     public function centers($centers)
-    {                           
+    {
         $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
-             
-        foreach($centers as $center)
-        {
+
+        foreach ($centers as $center) {
             $url = null;
 
-            if ($center->thumbnail)
+            if ($center->thumbnail) {
                 $url = env('AWS_URL') . '/' . $center->thumbnail;
-            else
+            } else {
                 $url = env('APP_URL') . '/img/logo.jpg';
+            }
 
             $template_list->addElements([
                 Element::create($center->name)
@@ -240,9 +240,9 @@ class CenterController extends Controller
                     ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($center->name)->type('postback'))
                     ->addButton(ElementButton::create('Piga Simu')
-                            ->payload($center->phone)->type('phone_number'))
+                        ->payload($center->phone)->type('phone_number'))
             ]);
-        } 
+        }
 
         return $template_list;
     }
@@ -256,11 +256,10 @@ class CenterController extends Controller
      *
      */
     public function services($center)
-    {                           
+    {
         $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
-             
-        foreach($center->services as $service)
-        {
+
+        foreach ($center->services as $service) {
             $url = null;
 
             if ($service->thumbnail)
@@ -275,7 +274,7 @@ class CenterController extends Controller
                     ->addButton(ElementButton::create('Fahamu zaidi')
                         ->payload($service->name)->type('postback'))
             ]);
-        } 
+        }
 
         return $template_list;
     }

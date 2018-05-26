@@ -9,20 +9,19 @@ use App\ItemCategory;
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
-use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\BotMan\Messages\Attachments\Image;
-use BotMan\BotMan\Messages\Outgoing\Actions\Button;
 use BotMan\BotMan\Messages\Outgoing\Question;
-use BotMan\Drivers\Facebook\Extensions\Element;
+use BotMan\BotMan\Messages\Outgoing\Actions\Button;
+use BotMan\BotMan\Messages\Outgoing\OutgoingMessage;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
-use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
+use BotMan\Drivers\Facebook\Extensions\ButtonTemplate;
+
 
 class ItemController extends Controller
 {
     /**
      * Item Controller constructor
-     * 
+     *
      */
     public function __construct()
     {
@@ -38,7 +37,7 @@ class ItemController extends Controller
     {
         $items = Item::paginate(10);
 
-        return view('items.index', ['items' => $items ]);
+        return view('items.index', ['items' => $items]);
     }
 
     /**
@@ -52,38 +51,37 @@ class ItemController extends Controller
         $item_categories = ItemCategory::all('id', 'name');
 
         return view('items.create', [
-            'items'             => $items,
-            'item_categories'   => $item_categories
+            'items' => $items,
+            'item_categories' => $item_categories
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * 
+     * @param  \Illuminate\Http\Request $request
+     *
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $thumbnail_path = null;
 
-        if ($request->hasFile('thumbnail'))
-        {
+        if ($request->hasFile('thumbnail')) {
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/item-thumbnails', $request->file('thumbnail'), 'public');
         }
-        
+
         Item::create([
-            'title'             => $request->title,
-            'description'       => $request->description,
-            'thumbnail'         => $thumbnail_path,
-            'gender'            => $request->gender,
-            'minimum_age'       => $request->minimum_age,
-            'display_title'     => $request->display_title,
-            'item_category_id'  => $request->item_category_id,
-            'item_id'           => $request->item_id,
-            'created_by'        => auth()->id()
+            'title' => $request->title,
+            'description' => $request->description,
+            'thumbnail' => $thumbnail_path,
+            'gender' => $request->gender,
+            'minimum_age' => $request->minimum_age,
+            'display_title' => $request->display_title,
+            'item_category_id' => $request->item_category_id,
+            'item_id' => $request->item_id,
+            'created_by' => auth()->id()
         ]);
 
         return back();
@@ -93,7 +91,7 @@ class ItemController extends Controller
      * Display the specified resource.
      *
      * @param  Item $item
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function show(Item $item)
@@ -105,7 +103,7 @@ class ItemController extends Controller
      * Show the form for editing the specified resource.
      *
      * @param  Item $item
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function edit(Item $item)
@@ -115,42 +113,43 @@ class ItemController extends Controller
         $item_categories = ItemCategory::all('id', 'name');
 
         return view('items.edit', [
-            'item'              => $item,
-            'items'             => $items,
-            'item_categories'   => $item_categories
+            'item' => $item,
+            'items' => $items,
+            'item_categories' => $item_categories
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \Illuminate\Http\Request $request
      * @param  Item $item
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Item $item)
     {
         $thumbnail_path = null;
 
-        if ($request->hasFile('thumbnail'))
-        {
-            if(Storage::disk('s3')->exists($item->thumbnail)) Storage::disk('s3')->delete($item->thumbnail);
-            
+        if ($request->hasFile('thumbnail')) {
+            if (Storage::disk('s3')->exists($item->thumbnail)) {
+                Storage::disk('s3')->delete($item->thumbnail);
+            }
+
             $thumbnail_path = Storage::disk('s3')
                 ->putFile('public/item-thumbnails', $request->file('thumbnail'), 'public');
         }
 
         $item->update([
-            'title'             => $request->title,
-            'description'       => $request->description,
-            'thumbnail'         => $thumbnail_path ? $thumbnail_path : $item->thumbnail,
-            'gender'            => $request->gender,
-            'minimum_age'       => $request->minimum_age,
-            'display_title'     => $request->display_title,
-            'item_category_id'  => $request->item_category_id,
-            'item_id'           => $request->item_id,
-            'updated_by'        => auth()->id()
+            'title' => $request->title,
+            'description' => $request->description,
+            'thumbnail' => $thumbnail_path ? $thumbnail_path : $item->thumbnail,
+            'gender' => $request->gender,
+            'minimum_age' => $request->minimum_age,
+            'display_title' => $request->display_title,
+            'item_category_id' => $request->item_category_id,
+            'item_id' => $request->item_id,
+            'updated_by' => auth()->id()
         ]);
 
         return redirect()->route('show-item', $item);
@@ -160,7 +159,7 @@ class ItemController extends Controller
      * Remove the specified resource from storage.
      *
      * @param  Item $item
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroy(Item $item)
@@ -179,14 +178,14 @@ class ItemController extends Controller
     {
         $items = Item::onlyTrashed()->paginate(10);
 
-        return view('items.trash', ['items' => $items ]);
+        return view('items.trash', ['items' => $items]);
     }
 
     /**
      * Restore trashed Item.
      *
      * @param Item $item
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function restoreTrashed($item)
@@ -200,14 +199,16 @@ class ItemController extends Controller
      * Permanent delete of trashed Item.
      *
      * @param Item $item
-     * 
+     *
      * @return \Illuminate\Http\Response
      */
     public function destroyTrashed($item)
     {
         $item = Item::onlyTrashed()->find($item);
-        if(Storage::disk('s3')->exists($item->thumbnail))
+
+        if (Storage::disk('s3')->exists($item->thumbnail)) {
             Storage::disk('s3')->delete($item->thumbnail);
+        }
 
         $item->forceDelete();
 
@@ -231,52 +232,54 @@ class ItemController extends Controller
 
         $item = Item::where('title', 'ilike', $title)->first();
 
-        //$bot->typesAndWaits(1);
-        //$bot->reply($item->title);
-
         $bot->typesAndWaits(1);
-        if($item)
-        {
+
+        if ($item) {
             $attachment = new Image(env('AWS_URL') . '/' . $item->thumbnail);
             $message = OutgoingMessage::create($item->description)->withAttachment($attachment);
-            if($item->items->isEmpty()){
-                if($driver == 'Web'){
+
+            if ($item->items->isEmpty()) {
+                if ($driver == 'Web') {
                     $bot->reply($item->description);
                     $bot->reply($this->customFeaturesSms());
-                }else{
+                } else {
                     $bot->reply($message);
+
                     $bot->typesAndWaits(2);
+
                     $bot->reply($item->description);
+
                     $bot->typesAndWaits(2);
+
                     $bot->reply($this->customFeatures($user));
                 }
-            }else{
-                if ($driver == 'Facebook'){
+            } else {
+                if ($driver == 'Facebook') {
                     $bot->reply($message);
+
                     $bot->typesAndWaits(2);
+
                     $bot->reply($this->toFacebook($item));
-                }
-                elseif ($driver == 'Slack' || $driver == 'Telegram'){
+                } elseif ($driver == 'Slack' || $driver == 'Telegram') {
                     $bot->reply($message);
+
                     $bot->typesAndWaits(2);
+
                     $bot->reply($this->toSlackTelegram($item));
-                }
-                else {
+                } else {
                     $bot->reply($this->toWebb($item));
                 }
             }
+        } else {
+            $bot->reply('Naendelea kukusanya taarifa zaidi, kuhusu ' . $title);
         }
-        else{
-            $bot->reply('Naendele kukusanya taarifa zaidi, kuhusu '.$title);
-        }
-        
+
 
         $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
 
-        if($member)
-        {
+        if ($member) {
             Conversation::create([
-                'intent'    => $title,
+                'intent' => $title,
                 'member_id' => $member->id
             ]);
         }
@@ -285,13 +288,15 @@ class ItemController extends Controller
     /**
      * Show a list of Items found for a particular category request from Slack or Telegram Driver.
      *
-     * @param $category
+     * @param $item
      *
      * @return Question
+     *
      */
     public function toSlackTelegram($item)
     {
         $child_items = $item->items()->inRandomOrder()->take(5)->get();
+
         $features = Question::create($item->description)
             ->fallback('Kumradhi, sijaweza pata taarifa zaidi kuhusu' . $item->title)
             ->callbackId('item');
@@ -308,9 +313,10 @@ class ItemController extends Controller
     /**
      * Show a list of Items found for a particular category request from Facebook Driver.
      *
-     * @param $category
+     * @param $item
      *
      * @return ButtonTemplate
+     *
      */
     public function toFacebook($item)
     {
@@ -330,9 +336,10 @@ class ItemController extends Controller
     /**
      * Show a list of Items found for a particular category request from Web Driver.
      *
-     * @param $category
+     * @param $item
      *
      * @return string
+     *
      */
     public function toWeb($item)
     {
@@ -342,17 +349,17 @@ class ItemController extends Controller
         $count = 1;
 
         foreach ($child_items as $itemm) {
-            if($count == 1)
+            if ($count == 1)
                 $message .= $itemm->title;
-            else{
-                $message .= ", \n".$itemm->title;
+            else {
+                $message .= ", \n" . $itemm->title;
             }
             $count++;
         }
 
         return $message;
     }
-    
+
     /**
      * Show a list of Items found for a particular item request from Web Driver.
      *
@@ -363,6 +370,7 @@ class ItemController extends Controller
     public function toWebb($item)
     {
         $child_items = $item->items()->inRandomOrder()->take(5)->get();
+
         $features = Question::create($item->description)
             ->fallback('Kumradhi, sijaweza pata taarifa zaidi kuhusu' . $item->title)
             ->callbackId('item');
@@ -379,9 +387,8 @@ class ItemController extends Controller
     /**
      * Show a list of other items.
      *
-     * @param $bot->getUser()
-     *
      * @return string
+     *
      */
     public function customFeaturesSms()
     {
@@ -401,13 +408,14 @@ class ItemController extends Controller
     /**
      * Show a list of other items.
      *
-     * @param $bot->getUser()
+     * @param $user
      *
      * @return string
+     *
      */
     public function customFeatures($user)
     {
-        $features = Question::create($user->getFirstName().' pia unaweza angalia vitu hivi!')
+        $features = Question::create($user->getFirstName() . ' pia unaweza angalia vitu hivi!')
             ->fallback('Kumradhi, sijaweza kuuliza')
             ->callbackId('item')
             ->addButtons([
