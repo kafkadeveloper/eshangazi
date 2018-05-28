@@ -225,7 +225,7 @@ class MemberController extends Controller
      */
     public function features($reply, $driver)
     {
-        $categories = ItemCategory::inRandomOrder()->take(5)->get();
+        $categories = ItemCategory::inRandomOrder()->take(7)->get();
 
         if ($driver === 'Facebook') {
             $features = GenericTemplate::create()
