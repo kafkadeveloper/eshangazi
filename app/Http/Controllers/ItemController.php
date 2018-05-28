@@ -369,12 +369,8 @@ class ItemController extends Controller
      */
     public function toWebb($item)
     {
-<<<<<<< HEAD
         $child_items = $item->items()->inRandomOrder()->take(7)->get();
-=======
-        $child_items = $item->items()->inRandomOrder()->take(5)->get();
 
->>>>>>> 19fa4472de062ba996f71cbd9732370ebd610fbc
         $features = Question::create($item->description)
             ->fallback('Kumradhi, sijaweza pata taarifa zaidi kuhusu' . $item->title)
             ->callbackId('item');
