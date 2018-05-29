@@ -154,6 +154,7 @@ class PartnerController extends Controller
     {
         $extras = $bot->getMessage()->getExtras();        
         $apiReply = $extras['apiReply'];
+        $driver = $bot->getDriver()->getName();
 
         $bot->typesAndWaits(1);
         $bot->reply($apiReply);  
@@ -172,7 +173,7 @@ class PartnerController extends Controller
         // }
             
 
-        $bot->reply($this->partners($partners));
+        $bot->reply($this->partners($partners, $driver));
 
         //$this->getNearExperts($bot, $partners, $user, $member);
     }
@@ -188,6 +189,7 @@ class PartnerController extends Controller
     {
         $extras = $bot->getMessage()->getExtras();        
         $apiReply = $extras['apiReply'];
+        $driver = $bot->getDriver()->getName();
 
         $district = $extras['apiParameters'][env('APP_ACTION') . '-districts'];
 
@@ -201,7 +203,7 @@ class PartnerController extends Controller
             $partners = Partner::where('district_id', '=', $district->id)->inRandomOrder()->take(5)->get();
 
             $bot->typesAndWaits(2);
-            $bot->reply($this->partners($partners));
+            $bot->reply($this->partners($partners,  $driver));
         } 
         else
         {           
@@ -214,7 +216,7 @@ class PartnerController extends Controller
             $partners = Partner::where('district_id', '=', $district->id)->inRandomOrder()->take(5)->get();         
             
             $bot->typesAndWaits(1);
-            $bot->reply($this->partners($partners));                      
+            $bot->reply($this->partners($partners,  $driver));                      
         }        
     }
 
@@ -225,25 +227,38 @@ class PartnerController extends Controller
      *
      * @return \BotMan\Drivers\Facebook\Extensions\GenericTemplate
      */
-    public function partners($partners)
-    {                           
-        $template_list = GenericTemplate::create()
-                            ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
-        
-        $url = null;
-        foreach($partners as $partner)
-        {
-            if ($partner->thumbnail)
-                $url = env('AWS_URL') . '/' . $partner->thumbnail;
-            else
-                $url = env('APP_URL') . '/img/logo.jpg';
-            $template_list->addElements([
-                Element::create($partner->name)
-                    ->subtitle($partner->bio)
-                    ->image($url)
-                    ->addButton(ElementButton::create('Piga simu')
-                        ->payload($partner->phone)->type('phone_number'))
-            ]);
+    public function partners($partners, $driver)
+    {
+        if($driver === 'Web'){
+            $template_list = Question::create('Wataalamu')
+                ->fallback('Unable to show  features')
+                ->callbackId('features_list');
+
+            foreach ($partners as $partner) {
+                $message = $partner->name." ,namba ya simu ".$partner->phone;
+                $template_list->addButtons([
+                    Button::create($message)->value($partner->name)
+                ]);
+            }
+        }else{                   
+            $template_list = GenericTemplate::create()
+                                ->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
+            
+            $url = null;
+            foreach($partners as $partner)
+            {
+                if ($partner->thumbnail)
+                    $url = env('AWS_URL') . '/' . $partner->thumbnail;
+                else
+                    $url = env('APP_URL') . '/img/logo.jpg';
+                $template_list->addElements([
+                    Element::create($partner->name)
+                        ->subtitle($partner->bio)
+                        ->image($url)
+                        ->addButton(ElementButton::create('Piga simu')
+                            ->payload($partner->phone)->type('phone_number'))
+                ]);
+            }
         }
 
         return $template_list;
@@ -261,8 +276,9 @@ class PartnerController extends Controller
      */
     public function getNearExperts(BotMan $bot, $partners, $user, $member)
     {
+        $driver = $bot->getDriver()->getName();
         if (!$partners->isEmpty()) {
-            $bot->reply($this->partners($partners));
+            $bot->reply($this->partners($partners, $driver));
         } else {
 //            $bot->reply('Hey ' . $user->getFirstName() .
 //                ', I could not find Experts at ' . $member->district->name .
@@ -271,7 +287,7 @@ class PartnerController extends Controller
             $partners = Partner::inRandomOrder()->take(5)->get();
 
             $bot->typesAndWaits(1);
-            $bot->reply($this->partners($partners));
+            $bot->reply($this->partners($partners, $driver));
         }
     }
 }
