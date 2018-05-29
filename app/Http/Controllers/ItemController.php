@@ -399,7 +399,7 @@ class ItemController extends Controller
                 Button::create('Kwa msaada zaidi')->value('msaada'),
                 Button::create('Vituo vya huduma')->value('Vituo vya huduma'),
                 Button::create('Rudi mwanzo')->value('features'),
-                Button::create('👋 Asante inatosha')->value('asante')
+                Button::create('Asante inatosha')->value('asante')
             ]);
 
         return $features;
