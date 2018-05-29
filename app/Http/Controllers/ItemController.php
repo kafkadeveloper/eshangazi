@@ -396,10 +396,10 @@ class ItemController extends Controller
             ->fallback('Kumradhi, sijaweza kuuliza')
             ->callbackId('item')
             ->addButtons([
-                Button::create('🏡 Kwa msaada zaidi')->value('msaada'),
-                Button::create('🏡 Vituo vya huduma')->value('Vituo vya huduma'),
-                Button::create('🔁 Rudi mwanzo')->value('features'),
-                Button::create('👋 Asante')->value('asante')
+                Button::create('Kwa msaada zaidi')->value('msaada'),
+                Button::create('Vituo vya huduma')->value('Vituo vya huduma'),
+                Button::create('Rudi mwanzo')->value('features'),
+                Button::create('Asante inatosha kwa sasa')->value('asante')
             ]);
 
         return $features;
