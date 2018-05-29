@@ -237,7 +237,7 @@ class PartnerController extends Controller
                 ->callbackId('features_list');
 
             foreach ($partners as $partner) {
-                $message = $partner->name." ,namba ya simu ".$partner->phone;
+                $message = $partner->name.". namba ya simu ".$partner->phone;
                 $template_list->addButtons([
                     Button::create($message)->value($partner->name)
                 ]);
