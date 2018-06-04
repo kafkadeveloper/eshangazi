@@ -23,8 +23,6 @@
                 <table class="table table-striped table-sm">
                     <thead>
                         <tr>
-                            <th>NO.</th>
-
                             <th>Name</th>
 
                             <th>Count</th>
@@ -35,15 +33,11 @@
                         @foreach($conversations as $conversation)
                             <tr>
                                 <td class="align-middle">
-                                  $loop->iteration
-                                </td>
-
-                                <td class="align-middle">
                                     {{ $conversation->intent }}
                                 </td>
 
                                 <td class="align-middle text-capitalize">
-                                    {{ $conversation->intent }}
+                                    {{ $conversation->hits }}
                                 </td>
                             </tr>
                         @endforeach

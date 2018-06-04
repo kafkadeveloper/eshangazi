@@ -103,7 +103,6 @@ class ConversationController extends Controller
                                         ->groupBy('intent')
                                         ->orderBy('hits', 'desc')
                                         ->paginate(10);
-        return $conversations;
 
         return view('conversations.conv_statistics', ['conversations' => $conversations]);
 
