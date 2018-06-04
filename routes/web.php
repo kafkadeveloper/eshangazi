@@ -35,6 +35,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/feedback', 'FeedbackController@index')->name('index-feedback');
 
 Route::get('/conversations', 'ConversationController@index')->name('index-conversation');
+Route::get('/conversations/statistics', 'ConversationController@convStatistics')->name('conv-statistics');
 
 Route::get('/item-categories', 'ItemCategoryController@index')->name('index-item-category');
 Route::get('/item-categories/deleted', 'ItemCategoryController@indexDeleted')->name('deleted-item-category');
