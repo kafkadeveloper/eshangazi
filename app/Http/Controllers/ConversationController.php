@@ -101,7 +101,7 @@ class ConversationController extends Controller
     {
         $conversations = Conversation::select('intent', DB::raw('count(*) as hits'))
                                         ->groupBy('intent')
-                                        ->orderBy('hits')
+                                        ->orderBy('hits', 'desc')
                                         ->paginate(10);
         return $conversations;
 
