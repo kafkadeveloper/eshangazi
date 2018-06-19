@@ -369,7 +369,7 @@ class ItemController extends Controller
      */
     public function toWebb($item)
     {
-        $child_items = $item->items()->inRandomOrder()->take(5)->get();
+        $child_items = $item->items()->inRandomOrder()->take(7)->get();
 
         $features = Question::create($item->description)
             ->fallback('Kumradhi, sijaweza pata taarifa zaidi kuhusu' . $item->title)
@@ -396,10 +396,10 @@ class ItemController extends Controller
             ->fallback('Kumradhi, sijaweza kuuliza')
             ->callbackId('item')
             ->addButtons([
-                Button::create('🏡 Kwa msaada zaidi')->value('msaada'),
-                Button::create('🏡 Vituo vya huduma')->value('Vituo vya huduma'),
-                Button::create('🔁 Rudi mwanzo')->value('features'),
-                Button::create('👋 Asante')->value('asante')
+                Button::create('Kwa msaada zaidi')->value('msaada wa mtaalamu'),
+                Button::create('Vituo vya huduma')->value('Vituo vya huduma'),
+                Button::create('Rudi mwanzo')->value('features'),
+                Button::create('Asante inatosha')->value('asante')
             ]);
 
         return $features;

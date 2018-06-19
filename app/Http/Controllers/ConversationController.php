@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Conversation;
 use Illuminate\Http\Request;
 
@@ -91,5 +92,19 @@ class ConversationController extends Controller
     public function destroy(Conversation $conversation)
     {
         //
+    }
+
+    /**
+     * Showing which conversation is more vissited.
+     */
+    public function convStatistics()
+    {
+        $conversations = Conversation::select('intent', DB::raw('count(*) as hits'))
+                                        ->groupBy('intent')
+                                        ->orderBy('hits', 'desc')
+                                        ->paginate(10);
+
+        return view('conversations.conv_statistics', ['conversations' => $conversations]);
+
     }
 }
