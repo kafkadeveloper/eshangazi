@@ -205,7 +205,8 @@ class CenterController extends Controller
                 ]);
             }
 
-            return $template_list;
+            $bot->typesAndWaits(1);
+            $bot->reply($template_list);
         } else {
             if ($name) {
                 $center = Center::with('services')->where('name', '=', $name)->first();
