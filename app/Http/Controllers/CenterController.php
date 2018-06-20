@@ -195,11 +195,11 @@ class CenterController extends Controller
                 $url = env('APP_URL') . '/img/logo.jpg';
 
                 $template_list->addElements([
-                    Element::create($center->FACILITY_NAME)
-                        ->subtitle('Kituo kipo ' . $center->COUNCIL)
+                    Element::create($center['FACILITY_NAME'])
+                        ->subtitle('Kituo kipo ' . $center['COUNCIL'])
                         ->image($url)
                         ->addButton(ElementButton::create('Fahamu zaidi')
-                            ->payload($center->FACILITY_NAME)->type('postback'))
+                            ->payload($center['FACILITY_NAME'])->type('postback'))
                 ]);
             }
 
