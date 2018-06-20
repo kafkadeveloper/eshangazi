@@ -184,7 +184,7 @@ class CenterController extends Controller
         $bot->typesAndWaits(1);
         $bot->reply($apiReply);
 
-        if(env('APP_NAME') == 'eshangazi') {
+        if(env('APP_NAME') == 'eShangazi') {
             $response = Zttp::get('http://opendata.go.tz/api/action/datastore_search?resource_id=83b7cd61-0a03-4b9a-8572-7eb4eb2f3af7&limit=5');
 
             $centers = $response->json()['result']['records'];
