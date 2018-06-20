@@ -35,4 +35,8 @@ return [
         'secret' => env('STRIPE_SECRET'),
     ],
 
+    'opendata' => [
+        'url' => env('OPENDATA')
+    ]
+
 ];

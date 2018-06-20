@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use BotMan\Drivers\Facebook\Extensions\Element;
 use BotMan\Drivers\Facebook\Extensions\ElementButton;
 use BotMan\Drivers\Facebook\Extensions\GenericTemplate;
+use Zttp\Zttp;
 
 class CenterController extends Controller
 {
@@ -183,24 +184,46 @@ class CenterController extends Controller
         $bot->typesAndWaits(1);
         $bot->reply($apiReply);
 
-        if ($name) {
-            $center = Center::with('services')->where('name', '=', $name)->first();
+        if(env('APP_NAME') == 'eshangazi') {
+            $response = Zttp::get('http://opendata.go.tz/api/action/datastore_search?resource_id=83b7cd61-0a03-4b9a-8572-7eb4eb2f3af7&limit=5');
 
-            $bot->typesAndWaits(1);
-            $bot->reply($center->description);
-        } else {
+            $centers = $response->json()['result']['records'];
 
-            $centers = Center::inRandomOrder()->take(5)->get();
+            $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
 
-            $bot->typesAndWaits(1);
+            foreach ($centers as $center) {
+                $url = env('APP_URL') . '/img/logo.jpg';
 
-            if ($centers) {
-                $bot->reply($this->centers($centers));
-            } else {
-                $bot->reply('Kumradhi, sijaweza pata vituo kwa sasa.');
+                $template_list->addElements([
+                    Element::create($center->FACILITY_NAME)
+                        ->subtitle('Kituo kipo ' . $center->COUNCIL)
+                        ->image($url)
+                        ->addButton(ElementButton::create('Fahamu zaidi')
+                            ->payload($center->FACILITY_NAME)->type('postback'))
+                ]);
             }
 
+            return $template_list;
+        } else {
+            if ($name) {
+                $center = Center::with('services')->where('name', '=', $name)->first();
+
+                $bot->typesAndWaits(1);
+                $bot->reply($center->description);
+            } else {
+
+                $centers = Center::inRandomOrder()->take(5)->get();
+
+                $bot->typesAndWaits(1);
+
+                if ($centers) {
+                    $bot->reply($this->centers($centers));
+                } else {
+                    $bot->reply('Kumradhi, sijaweza pata vituo kwa sasa.');
+                }
+            }
         }
+
 
         $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
 
