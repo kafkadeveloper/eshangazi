@@ -191,14 +191,16 @@ class CenterController extends Controller
 
             $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
 
-            foreach ($centers as $center) {
-                $url = env('APP_URL') . '/img/logo.jpg';
+            $url = env('APP_URL') . '/img/logo.jpg';
 
+            foreach ($centers as $center) {
                 $template_list->addElements([
                     Element::create($center['FACILITY_NAME'])
-                        ->subtitle('Kituo kipo ' . $center['COUNCIL'])
+                        ->subtitle($center['FACILITY_NAME'])
                         ->image($url)
                         ->addButton(ElementButton::create('Fahamu zaidi')
+                            ->payload($center['FACILITY_NAME'])->type('postback'))
+                        ->addButton(ElementButton::create('Piga Simu')
                             ->payload($center['FACILITY_NAME'])->type('postback'))
                 ]);
             }
