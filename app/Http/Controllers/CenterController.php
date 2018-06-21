@@ -192,7 +192,7 @@ class CenterController extends Controller
             $url = 'https://s3.us-east-2.amazonaws.com/eshangazi-bot/public/center-thumbnail/maps.jpg';
 
             if ($member) {
-                $district = District::where('id', $member->district_id)->with('region')->get();
+                $district = District::with('region')->where('id', $member->district_id)->first();
 
                 $response = Zttp::get('http://opendata.go.tz/api/action/datastore_search?resource_id=1fbc4c63-9c74-4337-ba04-f52b3d6adb0e&q='. $district->region->name . '&limit=5');
                 $centers = $response->json()['result']['records'];
