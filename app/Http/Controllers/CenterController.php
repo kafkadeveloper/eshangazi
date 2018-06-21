@@ -203,7 +203,7 @@ class CenterController extends Controller
                             ->subtitle('Kituo hiki kipo ' . $center['COUNCIL'] . ' mkoani ' . $center['REGION'])
                             ->image($url)
                             ->addButton(ElementButton::create('Ona Ramani')
-                                ->payload('http://maps.google.com/?q=' . $center['LATITUDE'] . ',' . $center['LONGITUDE'])->type('web_url'))
+                                ->url('http://maps.google.com/?q=' . $center['LATITUDE'] . ',' . $center['LONGITUDE']))
                     ]);
                 }
             } else {
@@ -216,7 +216,7 @@ class CenterController extends Controller
                             ->subtitle('Kituo hiki kipo ' . $center['COUNCIL'] . ' mkoani ' . $center['REGION'])
                             ->image($url)
                             ->addButton(ElementButton::create('Ona Ramani')
-                                ->payload('http://maps.google.com/?q=' . $center['LATITUDE'] . ',' . $center['LONGITUDE'])->type('web_url'))
+                                ->url('http://maps.google.com/?q=' . $center['LATITUDE'] . ',' . $center['LONGITUDE']))
                     ]);
                 }
             }
