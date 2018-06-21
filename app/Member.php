@@ -45,7 +45,7 @@ class Member extends Model
     /**
      * A Member may have a number of Conversations.
      * 
-     * @return \Illuminate\Database\Eloquent\Relations\HasManys
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function conversations()
     {

@@ -181,28 +181,44 @@ class CenterController extends Controller
 
         $name = $extras['apiParameters'][env('APP_ACTION') . '-centers'];
 
+
         $bot->typesAndWaits(1);
         $bot->reply($apiReply);
 
+        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
+
         if(env('APP_NAME') == 'eShangazi') {
-            $response = Zttp::get('http://opendata.go.tz/api/action/datastore_search?resource_id=83b7cd61-0a03-4b9a-8572-7eb4eb2f3af7&limit=5');
-
-            $centers = $response->json()['result']['records'];
-
             $template_list = GenericTemplate::create()->addImageAspectRatio(GenericTemplate::RATIO_HORIZONTAL);
+            $url = 'https://s3.us-east-2.amazonaws.com/eshangazi-bot/public/center-thumbnail/maps.jpg';
 
-            $url = env('APP_URL') . '/img/logo.jpg';
+            if ($member) {
+                $district = District::where('id', $member->district_id)->with('region')->get();
 
-            foreach ($centers as $center) {
-                $template_list->addElements([
-                    Element::create($center['FACILITY_NAME'])
-                        ->subtitle($center['FACILITY_NAME'])
-                        ->image($url)
-                        ->addButton(ElementButton::create('Fahamu zaidi')
-                            ->payload($center['FACILITY_NAME'])->type('postback'))
-                        ->addButton(ElementButton::create('Piga Simu')
-                            ->payload($center['FACILITY_NAME'])->type('postback'))
-                ]);
+                $response = Zttp::get('http://opendata.go.tz/api/action/datastore_search?resource_id=1fbc4c63-9c74-4337-ba04-f52b3d6adb0e&q='. $district->region->name . '&limit=5');
+                $centers = $response->json()['result']['records'];
+
+                foreach ($centers as $center) {
+                    $template_list->addElements([
+                        Element::create($center['FACILITY_NAME'])
+                            ->subtitle('Kituo hiki kipo ' . $center['COUNCIL'] . ' mkoani ' . $center['REGION'])
+                            ->image($url)
+                            ->addButton(ElementButton::create('Ona Ramani')
+                                ->payload('http://maps.google.com/?q=' . $center['LATITUDE'] . ',' . $center['LONGITUDE'])->type('web_url'))
+                    ]);
+                }
+            } else {
+                $response = Zttp::get('http://opendata.go.tz/api/action/datastore_search?resource_id=83b7cd61-0a03-4b9a-8572-7eb4eb2f3af7&limit=5');
+                $centers = $response->json()['result']['records'];
+
+                foreach ($centers as $center) {
+                    $template_list->addElements([
+                        Element::create($center['FACILITY_NAME'])
+                            ->subtitle('Kituo hiki kipo ' . $center['COUNCIL'] . ' mkoani ' . $center['REGION'])
+                            ->image($url)
+                            ->addButton(ElementButton::create('Ona Ramani')
+                                ->payload('http://maps.google.com/?q=' . $center['LATITUDE'] . ',' . $center['LONGITUDE'])->type('web_url'))
+                    ]);
+                }
             }
 
             $bot->typesAndWaits(1);
@@ -226,9 +242,6 @@ class CenterController extends Controller
                 }
             }
         }
-
-
-        $member = Member::where('user_platform_id', '=', $bot->getUser()->getId())->first();
 
         if ($member) {
             Conversation::create([

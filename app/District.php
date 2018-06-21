@@ -61,7 +61,7 @@ class District extends Model
     /**
      * District has many Targets.
      * 
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\MorphMany
      */
     public function targets()
     {
